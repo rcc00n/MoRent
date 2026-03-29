@@ -4,126 +4,183 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
 }
 
-function gaussian(distance, width) {
-  return Math.exp(-((distance * distance) / (2 * width * width)))
-}
-
 function smoothstep(edge0, edge1, value) {
   const x = clamp((value - edge0) / (edge1 - edge0), 0, 1)
 
   return x * x * (3 - 2 * x)
 }
 
-function buildPoints(width, compactMode) {
-  const columns = compactMode ? 30 : width < 920 ? 42 : 62
-  const rows = compactMode ? 14 : width < 920 ? 18 : 26
+function fract(value) {
+  return value - Math.floor(value)
+}
+
+function pseudoRandom(seed) {
+  return fract(Math.sin(seed * 127.1) * 43758.5453123)
+}
+
+function sampleLine(start, end, count, accent = 0) {
   const points = []
 
-  for (let row = 0; row < rows; row += 1) {
-    for (let column = 0; column < columns; column += 1) {
-      const nx = columns === 1 ? 0.5 : column / (columns - 1)
-      const ny = rows === 1 ? 0.5 : row / (rows - 1)
+  for (let index = 0; index < count; index += 1) {
+    const t = count === 1 ? 0.5 : index / (count - 1)
 
-      points.push({
-        accent: Math.random() > 0.955,
-        depth: 0.72 + Math.random() * 0.62,
-        nx: clamp(nx + (Math.random() - 0.5) * 0.014, 0.03, 0.97),
-        ny: clamp(ny + (Math.random() - 0.5) * 0.022, 0.08, 0.92),
-        seed: Math.random() * Math.PI * 2,
-      })
-    }
+    points.push({
+      accent,
+      x: start.x + (end.x - start.x) * t,
+      y: start.y + (end.y - start.y) * t,
+    })
   }
 
   return points
 }
 
-function getSilhouetteTarget(nx, ny, compactMode) {
-  let totalWeight = 0
-  let weightedX = 0
-  let weightedY = 0
-  let accentWeight = 0
+function sampleQuadratic(start, control, end, count, accent = 0) {
+  const points = []
 
-  const addTarget = (targetX, targetY, weight, accent = 0) => {
-    if (weight <= 0.002) {
-      return
-    }
+  for (let index = 0; index < count; index += 1) {
+    const t = count === 1 ? 0.5 : index / (count - 1)
+    const inverse = 1 - t
 
-    totalWeight += weight
-    weightedX += targetX * weight
-    weightedY += targetY * weight
-    accentWeight = Math.max(accentWeight, accent * weight)
+    points.push({
+      accent,
+      x: inverse * inverse * start.x + 2 * inverse * t * control.x + t * t * end.x,
+      y: inverse * inverse * start.y + 2 * inverse * t * control.y + t * t * end.y,
+    })
   }
 
-  if (nx >= 0.18 && nx <= 0.82) {
-    const t = (nx - 0.18) / 0.64
-    const roofY = 0.47 - Math.sin(t * Math.PI) * 0.18
-    const bodyY = 0.58 - Math.sin(t * Math.PI) * 0.018
-    const roofWeight =
-      gaussian(ny - roofY, compactMode ? 0.028 : 0.022) *
-      Math.pow(Math.sin(t * Math.PI), 0.9) *
-      1.55
-    const bodyWeight =
-      gaussian(ny - bodyY, compactMode ? 0.026 : 0.02) *
-      (0.58 + Math.sin(t * Math.PI) * 0.18)
+  return points
+}
 
-    addTarget(nx, roofY, roofWeight)
-    addTarget(nx, bodyY, bodyWeight)
+function sampleArc(center, radiusX, radiusY, startAngle, endAngle, count, accent = 0) {
+  const points = []
+
+  for (let index = 0; index < count; index += 1) {
+    const t = count === 1 ? 0.5 : index / (count - 1)
+    const angle = startAngle + (endAngle - startAngle) * t
+
+    points.push({
+      accent,
+      x: center.x + Math.cos(angle) * radiusX,
+      y: center.y + Math.sin(angle) * radiusY,
+    })
   }
 
-  if (nx >= 0.77 && nx <= 0.9) {
-    const t = (nx - 0.77) / 0.13
-    const noseY = 0.46 + Math.pow(t, 0.78) * 0.16
-    const noseWeight = gaussian(ny - noseY, compactMode ? 0.028 : 0.022) * 1.16
+  return points
+}
 
-    addTarget(0.77 + t * 0.12, noseY, noseWeight, 0.9)
-  }
+function scaleCount(count, density) {
+  return Math.max(5, Math.round(count * density))
+}
 
-  if (nx >= 0.1 && nx <= 0.24) {
-    const t = (nx - 0.1) / 0.14
-    const tailY = 0.57 - Math.pow(t, 0.82) * 0.12
-    const tailWeight = gaussian(ny - tailY, compactMode ? 0.03 : 0.024) * 0.94
-
-    addTarget(0.1 + t * 0.12, tailY, tailWeight, 0.35)
-  }
-
-  const wheelRadius = compactMode ? 0.078 : 0.065
-  const wheelDepth = compactMode ? 0.048 : 0.058
-
-  for (const centerX of [0.36, 0.66]) {
-    const distance = Math.abs(nx - centerX)
-
-    if (distance < wheelRadius) {
-      const wheelArc = Math.sqrt(1 - (distance / wheelRadius) ** 2)
-      const wheelY = 0.64 - wheelArc * wheelDepth
-      const wheelWeight =
-        gaussian(ny - wheelY, compactMode ? 0.026 : 0.02) * 1.18
-
-      addTarget(nx, wheelY, wheelWeight)
-    }
-  }
-
-  if (nx >= 0.16 && nx <= 0.88) {
-    const t = (nx - 0.16) / 0.72
-    const roadY = 0.77 + Math.sin(t * Math.PI) * 0.014
-    const roadWeight = gaussian(ny - roadY, compactMode ? 0.036 : 0.028) * 0.38
-
-    addTarget(nx, roadY, roadWeight)
-  }
-
-  if (totalWeight <= 0.001) {
-    return {
-      accent: 0,
-      strength: 0,
-      targetX: nx,
-      targetY: ny,
-    }
-  }
+function buildSilhouetteModel(compactMode) {
+  const density = compactMode ? 0.62 : 1
+  const guides = [
+    sampleQuadratic(
+      { x: 0.1, y: 0.66 },
+      { x: 0.13, y: 0.55 },
+      { x: 0.2, y: 0.5 },
+      scaleCount(18, density),
+      0.34,
+    ),
+    sampleQuadratic(
+      { x: 0.2, y: 0.5 },
+      { x: 0.4, y: 0.27 },
+      { x: 0.6, y: 0.37 },
+      scaleCount(40, density),
+      0.9,
+    ),
+    sampleQuadratic(
+      { x: 0.6, y: 0.37 },
+      { x: 0.77, y: 0.38 },
+      { x: 0.86, y: 0.54 },
+      scaleCount(28, density),
+      0.96,
+    ),
+    sampleLine(
+      { x: 0.86, y: 0.54 },
+      { x: 0.93, y: 0.64 },
+      scaleCount(10, density),
+      1,
+    ),
+    sampleLine(
+      { x: 0.12, y: 0.67 },
+      { x: 0.24, y: 0.67 },
+      scaleCount(14, density),
+      0.18,
+    ),
+    sampleArc(
+      { x: 0.34, y: 0.67 },
+      0.1,
+      compactMode ? 0.088 : 0.1,
+      Math.PI,
+      0,
+      scaleCount(28, density),
+      0.5,
+    ),
+    sampleLine(
+      { x: 0.44, y: 0.67 },
+      { x: 0.58, y: 0.67 },
+      scaleCount(18, density),
+      0.18,
+    ),
+    sampleArc(
+      { x: 0.68, y: 0.67 },
+      0.1,
+      compactMode ? 0.088 : 0.1,
+      Math.PI,
+      0,
+      scaleCount(28, density),
+      0.5,
+    ),
+    sampleLine(
+      { x: 0.78, y: 0.67 },
+      { x: 0.91, y: 0.67 },
+      scaleCount(16, density),
+      0.34,
+    ),
+    sampleLine(
+      { x: 0.31, y: 0.49 },
+      { x: 0.47, y: 0.41 },
+      scaleCount(16, density),
+      0.18,
+    ),
+    sampleLine(
+      { x: 0.52, y: 0.41 },
+      { x: 0.69, y: 0.45 },
+      scaleCount(18, density),
+      0.18,
+    ),
+  ]
 
   return {
-    accent: clamp(accentWeight, 0, 1),
-    strength: clamp(totalWeight, 0, 1.1),
-    targetX: weightedX / totalWeight,
-    targetY: weightedY / totalWeight,
+    guides,
+    targets: guides.flat(),
+  }
+}
+
+function buildPoints(compactMode) {
+  const silhouette = buildSilhouetteModel(compactMode)
+  const points = silhouette.targets.map((target, index) => {
+    const scatterX = 0.05 + pseudoRandom(index * 1.37 + 2.1) * 0.9
+    const scatterY = 0.12 + pseudoRandom(index * 2.41 + 4.3) * 0.76
+    const driftBiasX = (pseudoRandom(index * 5.17 + 3.8) - 0.5) * (compactMode ? 16 : 22)
+    const driftBiasY = (pseudoRandom(index * 7.91 + 1.2) - 0.5) * (compactMode ? 14 : 18)
+
+    return {
+      accent: target.accent,
+      driftBiasX,
+      driftBiasY,
+      scatterX,
+      scatterY,
+      seed: pseudoRandom(index * 6.71 + 0.91) * Math.PI * 2,
+      targetX: target.x,
+      targetY: target.y,
+    }
+  })
+
+  return {
+    guides: silhouette.guides,
+    points,
   }
 }
 
@@ -163,6 +220,7 @@ function DotFieldCanvas() {
     const state = {
       compactMode: compactModeQuery.matches,
       frameId: 0,
+      guides: [],
       height: 0,
       points: [],
       reducedMotion: reducedMotionQuery.matches,
@@ -174,7 +232,7 @@ function DotFieldCanvas() {
       state.width = container.clientWidth
       state.height = container.clientHeight
 
-      const dpr = Math.min(window.devicePixelRatio || 1, state.compactMode ? 1.25 : 1.8)
+      const dpr = Math.min(window.devicePixelRatio || 1, state.compactMode ? 1.2 : 1.7)
 
       canvas.width = Math.floor(state.width * dpr)
       canvas.height = Math.floor(state.height * dpr)
@@ -182,7 +240,33 @@ function DotFieldCanvas() {
       canvas.style.height = `${state.height}px`
 
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
-      state.points = buildPoints(state.width, state.compactMode)
+
+      const dotField = buildPoints(state.compactMode)
+      state.guides = dotField.guides
+      state.points = dotField.points
+    }
+
+    const renderGuide = (guide, alpha) => {
+      if (guide.length < 2 || alpha <= 0.002) {
+        return
+      }
+
+      context.beginPath()
+
+      guide.forEach((node, index) => {
+        const x = node.x * state.width
+        const y = node.y * state.height
+
+        if (index === 0) {
+          context.moveTo(x, y)
+        } else {
+          context.lineTo(x, y)
+        }
+      })
+
+      context.lineWidth = state.compactMode ? 0.8 : 1
+      context.strokeStyle = `rgba(126, 177, 255, ${alpha})`
+      context.stroke()
     }
 
     const render = (timestamp) => {
@@ -198,86 +282,71 @@ function DotFieldCanvas() {
         0,
         1,
       )
-      const centerPulse = 1 - Math.abs(progress - 0.5) / 0.5
-      const choreography = Math.pow(clamp(centerPulse, 0, 1), 1.18)
-      const convergence = state.reducedMotion ? choreography * 0.55 : choreography
-      const ambientTime = timestamp * (state.reducedMotion ? 0.00008 : 0.00016)
-      const fieldCompression = 1 - convergence * 0.09
+      const organizeIn = smoothstep(0.08, 0.4, progress)
+      const organizeOut = 1 - smoothstep(0.62, 0.94, progress)
+      const formation = organizeIn * organizeOut
+      const focus = Math.pow(clamp(1 - Math.abs(progress - 0.5) / 0.2, 0, 1), 1.2)
+      const resolve = state.reducedMotion ? formation * 0.8 : formation
+      const ambientTime = timestamp * (state.reducedMotion ? 0.00006 : 0.00013)
 
       context.clearRect(0, 0, state.width, state.height)
 
       const glowGradient = context.createRadialGradient(
-        state.width * 0.68,
+        state.width * 0.52,
         state.height * 0.48,
         0,
-        state.width * 0.68,
+        state.width * 0.52,
         state.height * 0.48,
-        state.width * 0.48,
+        state.width * 0.42,
       )
 
-      glowGradient.addColorStop(0, `rgba(102, 156, 255, ${0.08 + choreography * 0.1})`)
-      glowGradient.addColorStop(0.55, 'rgba(56, 94, 183, 0.05)')
+      glowGradient.addColorStop(0, `rgba(96, 156, 255, ${0.04 + focus * 0.14})`)
+      glowGradient.addColorStop(0.65, 'rgba(46, 78, 149, 0.05)')
       glowGradient.addColorStop(1, 'rgba(5, 10, 19, 0)')
 
       context.fillStyle = glowGradient
       context.fillRect(0, 0, state.width, state.height)
+
+      state.guides.forEach((guide) => {
+        const guideAlpha = (0.02 + focus * 0.18) * (0.45 + guide[0].accent * 0.55)
+        renderGuide(guide, guideAlpha * resolve)
+      })
+
       context.globalCompositeOperation = 'screen'
 
       for (const point of state.points) {
-        const compressedY = ((point.ny - 0.5) * fieldCompression + 0.5) * state.height
-        const baseX = point.nx * state.width
-        const baseY = compressedY
-        const silhouette = getSilhouetteTarget(point.nx, point.ny, state.compactMode)
-        const organizeStrength = silhouette.strength * convergence
-        const fieldInfluence =
-          Math.exp(-((point.ny - 0.52) ** 2) / 0.11) * (0.12 + convergence * 0.18)
-        const ambientShift = Math.sin(ambientTime + point.seed) * point.depth
-        const resolveWindow = smoothstep(0.08, 0.42, progress) * (1 - smoothstep(0.62, 0.94, progress))
-        const flowX =
-          Math.sin(
-            (point.ny * 2.8 + point.seed + progress * 1.45) * Math.PI * 2 + ambientTime,
-          ) *
-          12 *
-          (0.18 + (1 - convergence) * 0.82)
-        const flowY =
-          Math.cos(
-            (point.nx * 2.2 - progress * 1.1 + point.seed * 0.34) * Math.PI * 2 +
-              ambientTime * 1.1,
-          ) *
-          14 *
-          (0.22 + (1 - convergence) * 0.64)
-        const settleShift =
-          ambientShift * (state.reducedMotion ? 1.1 : 1.9) * (1 - convergence * 0.52)
-        const targetX = silhouette.targetX * state.width
-        const targetY = silhouette.targetY * state.height
-        const x =
-          baseX +
-          flowX +
-          ambientShift * 0.34 +
-          (targetX - baseX) * organizeStrength * 0.92 +
-          Math.sin(point.seed + ambientTime * 0.72) * 3.2 * resolveWindow * (1 - organizeStrength)
-        const y =
-          baseY +
-          flowY +
-          settleShift * 0.34 +
-          Math.sin(point.seed + ambientTime * 0.8) * 4.2 * fieldInfluence +
-          (targetY - baseY) * organizeStrength * 0.96
+        const scatterX = point.scatterX * state.width
+        const scatterY = point.scatterY * state.height
+        const targetX = point.targetX * state.width
+        const targetY = point.targetY * state.height
+        const ambientX =
+          Math.sin(ambientTime + point.seed) *
+          (state.compactMode ? 7 : 10) *
+          (1 - resolve * 0.9)
+        const ambientY =
+          Math.cos(ambientTime * 1.16 + point.seed * 0.82) *
+          (state.compactMode ? 6 : 9) *
+          (1 - resolve * 0.88)
+        const dissolveX = point.driftBiasX * (1 - formation)
+        const dissolveY = point.driftBiasY * (1 - formation)
+        const x = scatterX + (targetX - scatterX) * resolve + ambientX + dissolveX
+        const y = scatterY + (targetY - scatterY) * resolve + ambientY + dissolveY
         const radius =
-          (state.compactMode ? 0.7 : 0.82) +
-          point.depth * 0.2 +
-          organizeStrength * 1.18
+          (state.compactMode ? 1.05 : 1.18) +
+          point.accent * 0.45 +
+          focus * 0.52
         const alpha = clamp(
-          0.08 + point.depth * 0.05 + organizeStrength * 0.58 + fieldInfluence * 0.11,
-          0.08,
-          0.82,
+          0.2 + point.accent * 0.16 + resolve * 0.34 + focus * 0.2,
+          0.18,
+          0.88,
         )
 
-        let fill = `rgba(146, 192, 255, ${alpha})`
+        let fill = `rgba(142, 190, 255, ${alpha})`
 
-        if (silhouette.accent > 0.12 && organizeStrength > 0.18 && point.accent) {
-          fill = `rgba(255, 208, 152, ${Math.min(alpha * 0.82, 0.46)})`
-        } else if (organizeStrength > 0.18) {
-          fill = `rgba(120, 172, 255, ${Math.min(alpha * 1.02, 0.72)})`
+        if (point.accent > 0.88 && resolve > 0.38) {
+          fill = `rgba(255, 210, 160, ${Math.min(alpha * 0.82, 0.54)})`
+        } else if (point.accent > 0.42 && resolve > 0.3) {
+          fill = `rgba(118, 175, 255, ${Math.min(alpha * 1.04, 0.8)})`
         }
 
         context.fillStyle = fill
