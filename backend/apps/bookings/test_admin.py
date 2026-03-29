@@ -48,3 +48,12 @@ class AdminExperienceTests(TestCase):
         self.assertContains(response, "CRM")
         self.assertContains(response, "Rental window")
         self.assertContains(response, "car_page")
+
+    def test_admin_login_uses_custom_branding(self):
+        self.client.logout()
+
+        response = self.client.get(reverse("admin:login"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "MoRent Control Room")
+        self.assertContains(response, "Lead desk, bookings, and fleet operations.")
