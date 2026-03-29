@@ -11,6 +11,8 @@ import CarCard from '../components/CarCard'
 import DotFieldCanvas from '../components/DotFieldCanvas'
 import LoadingFleet from '../components/LoadingFleet'
 import MagneticAction from '../components/MagneticAction'
+import coastalResortScene from '../assets/coastal-resort-scene.webp'
+import coastalRoadHero from '../assets/coastal-road-hero.webp'
 import { getCars } from '../shared/api'
 import {
   resetInteractiveGlow,
@@ -21,6 +23,7 @@ const MotionArticle = motion.article
 const MotionAnchor = motion.a
 const MotionDiv = motion.div
 const MotionHeading = motion.h1
+const MotionImage = motion.img
 const MotionSection = motion.section
 
 const premiumEase = [0.22, 1, 0.36, 1]
@@ -376,6 +379,7 @@ function Home() {
   const driftAmount = shouldReduceMotion ? 0 : 12
   const glowY = useTransform(scrollYProgress, [0, 1], [0, driftAmount])
   const beamY = useTransform(scrollYProgress, [0, 1], [0, -8])
+  const coastalY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : 18])
   const visualY = useTransform(scrollYProgress, [0, 1], [0, -6])
 
   useEffect(() => {
@@ -410,7 +414,19 @@ function Home() {
 
   return (
     <div className="home-page">
-      <section className="hero hero--premium" ref={heroRef}>
+      <section
+        className="hero hero--premium"
+        ref={heroRef}
+        style={{ '--hero-destination-image': `url(${coastalRoadHero})` }}
+      >
+        <MotionDiv
+          className="hero__destination-plane"
+          style={{ y: coastalY }}
+        />
+        <MotionDiv
+          className="hero__horizon-glow"
+          style={{ y: glowY }}
+        />
         <MotionDiv
           className="hero__beam hero__beam--one"
           style={{ y: glowY }}
@@ -436,12 +452,11 @@ function Home() {
             variants={heroContentVariants}
           >
             <MotionHeading className="hero__headline">
-              Premium car rental with clear rates and fast booking.
+              Premium coastal car rental with visible rates and a fast booking path.
             </MotionHeading>
 
             <p className="hero__description">
-              Browse the fleet, open the car you want, and send your request in
-              minutes.
+              Choose the car, check the day rate, and send the request before pickup.
             </p>
 
             <div className="button-row button-row--hero">
@@ -579,6 +594,39 @@ function Home() {
             ))}
           </MotionDiv>
         </div>
+      </MotionSection>
+
+      <MotionSection
+        className="destination-section scene scene--destination"
+        initial="hidden"
+        variants={sectionRevealVariants}
+        viewport={viewportSettings}
+        whileInView="visible"
+      >
+        <MotionDiv
+          className="destination-section__media interactive-surface interactive-surface--scene"
+          onPointerLeave={resetInteractiveGlow}
+          onPointerMove={updateInteractiveGlow}
+          variants={sectionSlideVariants}
+        >
+          <MotionImage
+            alt="Seafront resort with a calm bay and sunset light"
+            className="destination-section__image"
+            decoding="async"
+            loading="lazy"
+            src={coastalResortScene}
+            transition={{ duration: 0.7, ease: premiumEase }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.035, y: -4 }}
+          />
+        </MotionDiv>
+
+        <MotionDiv className="destination-section__content" variants={sectionRevealVariants}>
+          <h2>Warm seafront light. Quiet pickup. Premium cars ready for the coast.</h2>
+          <p>
+            MoRent keeps the booking path direct while bringing the feeling of a
+            destination arrival: ocean air, late sun, and a calm handoff.
+          </p>
+        </MotionDiv>
       </MotionSection>
 
       <MotionSection

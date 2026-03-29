@@ -10,7 +10,9 @@
   --color-primary-bright: #8dc3ff;
   --color-primary-dark: #1846ba;
   --color-primary-indigo: #5a63ff;
+  --color-accent-sea: rgba(111, 209, 198, 0.16);
   --color-accent-warm: rgba(255, 191, 122, 0.16);
+  --color-accent-sun: rgba(255, 214, 163, 0.18);
   --color-text: #f4f7ff;
   --color-text-muted: #9aa8c8;
   --color-text-subtle: #7483a5;
@@ -59,10 +61,10 @@ body {
   margin: 0;
   color: var(--color-text);
   background:
-    radial-gradient(circle at 8% 0%, rgba(78, 142, 255, 0.24), transparent 24%),
-    radial-gradient(circle at 88% 12%, rgba(95, 88, 255, 0.13), transparent 22%),
-    radial-gradient(circle at 72% 82%, rgba(255, 191, 122, 0.08), transparent 18%),
-    linear-gradient(180deg, #070d19 0%, #09101d 36%, #08101c 100%);
+    radial-gradient(circle at 12% -4%, rgba(98, 156, 255, 0.18), transparent 26%),
+    radial-gradient(circle at 88% 10%, rgba(117, 212, 201, 0.11), transparent 24%),
+    radial-gradient(circle at 76% 78%, rgba(255, 199, 144, 0.11), transparent 22%),
+    linear-gradient(180deg, #07101d 0%, #09101c 34%, #08111d 66%, #09131f 100%);
   letter-spacing: -0.01em;
 }
 
@@ -220,6 +222,7 @@ code {
 
 .scene--fleet,
 .scene--benefits,
+.scene--destination,
 .scene--closing {
   display: grid;
   gap: 26px;
@@ -229,28 +232,41 @@ code {
 .scene--proof {
   padding: 14px;
   background:
-    radial-gradient(circle at 10% 0%, rgba(114, 177, 255, 0.1), transparent 24%),
+    radial-gradient(circle at 12% 0%, rgba(114, 177, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 88% 40%, rgba(255, 202, 148, 0.08), transparent 22%),
     linear-gradient(180deg, rgba(11, 18, 35, 0.78), rgba(12, 20, 38, 0.9));
 }
 
 .scene--fleet {
   background:
     radial-gradient(circle at 88% 8%, rgba(92, 120, 255, 0.11), transparent 20%),
-    radial-gradient(circle at 14% 100%, rgba(90, 162, 255, 0.1), transparent 22%),
+    radial-gradient(circle at 14% 100%, rgba(111, 209, 198, 0.09), transparent 22%),
+    radial-gradient(circle at 84% 78%, rgba(255, 205, 154, 0.08), transparent 20%),
     linear-gradient(180deg, rgba(14, 22, 40, 0.86), rgba(10, 18, 33, 0.82));
 }
 
 .scene--benefits {
   background:
-    radial-gradient(circle at 85% 15%, rgba(100, 90, 255, 0.14), transparent 24%),
+    radial-gradient(circle at 85% 15%, rgba(100, 90, 255, 0.12), transparent 24%),
     radial-gradient(circle at 15% 100%, rgba(101, 161, 255, 0.09), transparent 22%),
+    radial-gradient(circle at 72% 82%, rgba(255, 210, 166, 0.06), transparent 20%),
     linear-gradient(180deg, rgba(17, 21, 43, 0.9), rgba(10, 17, 35, 0.84));
+}
+
+.scene--destination {
+  grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+  align-items: center;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(255, 204, 150, 0.1), transparent 22%),
+    radial-gradient(circle at 84% 88%, rgba(111, 209, 198, 0.12), transparent 26%),
+    linear-gradient(180deg, rgba(11, 19, 35, 0.9), rgba(9, 17, 31, 0.84));
 }
 
 .scene--closing {
   background:
     radial-gradient(circle at 10% 20%, rgba(255, 191, 122, 0.12), transparent 18%),
     radial-gradient(circle at 88% 12%, rgba(87, 144, 255, 0.11), transparent 22%),
+    radial-gradient(circle at 74% 72%, rgba(111, 209, 198, 0.08), transparent 20%),
     linear-gradient(180deg, rgba(9, 15, 28, 0.96), rgba(10, 16, 30, 0.9));
 }
 
@@ -268,11 +284,38 @@ code {
   max-height: 85vh;
   padding: clamp(28px, 4vw, 48px);
   background:
-    radial-gradient(circle at top left, rgba(92, 148, 255, 0.24), transparent 34%),
-    radial-gradient(circle at 78% 14%, rgba(91, 92, 255, 0.15), transparent 24%),
-    radial-gradient(circle at 84% 78%, rgba(255, 191, 122, 0.08), transparent 16%),
-    linear-gradient(145deg, rgba(31, 84, 194, 0.24) 0%, rgba(24, 26, 61, 0.12) 36%, rgba(9, 17, 33, 0.76) 100%),
+    radial-gradient(circle at top left, rgba(92, 148, 255, 0.22), transparent 34%),
+    radial-gradient(circle at 76% 14%, rgba(91, 92, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 82% 76%, rgba(255, 205, 154, 0.12), transparent 18%),
+    linear-gradient(145deg, rgba(31, 84, 194, 0.18) 0%, rgba(24, 26, 61, 0.1) 36%, rgba(9, 17, 33, 0.78) 100%),
     linear-gradient(180deg, rgba(8, 14, 27, 0.99) 0%, rgba(7, 14, 28, 0.96) 42%, rgba(6, 12, 23, 0.95) 100%);
+}
+
+.hero__destination-plane,
+.hero__horizon-glow {
+  position: absolute;
+  pointer-events: none;
+}
+
+.hero__destination-plane {
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(6, 11, 21, 0.84) 8%, rgba(6, 11, 21, 0.46) 44%, rgba(6, 11, 21, 0.78) 100%),
+    linear-gradient(180deg, rgba(8, 12, 22, 0.18), rgba(8, 12, 22, 0.82) 92%),
+    var(--hero-destination-image) center right / cover no-repeat;
+  opacity: 0.32;
+  mix-blend-mode: screen;
+  mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.92) 28%, rgba(0, 0, 0, 1));
+}
+
+.hero__horizon-glow {
+  left: 8%;
+  bottom: 12%;
+  width: clamp(260px, 28vw, 440px);
+  height: clamp(100px, 12vw, 180px);
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255, 210, 160, 0.18), rgba(111, 209, 198, 0.08) 54%, transparent 74%);
+  filter: blur(34px);
 }
 
 .hero__mesh,
@@ -311,7 +354,7 @@ code {
 .hero__beam--two {
   bottom: -8%;
   right: 10%;
-  background: linear-gradient(135deg, rgba(255, 214, 158, 0.12), rgba(115, 172, 255, 0.02));
+  background: linear-gradient(135deg, rgba(255, 214, 158, 0.16), rgba(115, 172, 255, 0.03));
 }
 
 .hero__glow {
@@ -327,7 +370,7 @@ code {
   right: -8%;
   width: 360px;
   height: 360px;
-  background: radial-gradient(circle, rgba(46, 125, 255, 0.45) 0%, transparent 68%);
+  background: radial-gradient(circle, rgba(46, 125, 255, 0.34) 0%, transparent 68%);
 }
 
 .hero__glow--two {
@@ -335,7 +378,7 @@ code {
   left: -10%;
   width: 280px;
   height: 280px;
-  background: radial-gradient(circle, rgba(97, 165, 255, 0.22) 0%, transparent 68%);
+  background: radial-gradient(circle, rgba(255, 207, 160, 0.16) 0%, transparent 68%);
 }
 
 .hero__grid {
@@ -404,7 +447,7 @@ code {
 
 .hero__description {
   margin: 0;
-  color: rgba(232, 239, 255, 0.78);
+  color: rgba(232, 239, 255, 0.82);
 }
 
 .section-header p {
@@ -427,8 +470,9 @@ code {
   border: 1px solid rgba(182, 210, 255, 0.18);
   border-radius: 28px;
   background:
-    linear-gradient(180deg, rgba(16, 27, 50, 0.16) 0%, rgba(16, 27, 50, 0.74) 100%),
-    radial-gradient(circle at top, rgba(46, 125, 255, 0.42), transparent 40%);
+    linear-gradient(180deg, rgba(16, 27, 50, 0.14) 0%, rgba(16, 27, 50, 0.78) 100%),
+    radial-gradient(circle at top, rgba(46, 125, 255, 0.32), transparent 40%),
+    radial-gradient(circle at 82% 18%, rgba(255, 205, 154, 0.16), transparent 24%);
   box-shadow: 0 26px 80px rgba(4, 10, 24, 0.42);
 }
 
@@ -499,7 +543,7 @@ code {
   padding: 14px 16px;
   border: 1px solid rgba(151, 180, 234, 0.1);
   border-radius: 20px;
-  background: linear-gradient(180deg, rgba(8, 14, 27, 0.76), rgba(12, 18, 34, 0.72));
+  background: linear-gradient(180deg, rgba(8, 14, 27, 0.66), rgba(12, 18, 34, 0.72));
   backdrop-filter: blur(16px);
 }
 
@@ -763,6 +807,14 @@ code {
   );
 }
 
+.interactive-surface--scene::after {
+  background: radial-gradient(
+    320px circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(255, 214, 163, 0.14),
+    transparent 62%
+  );
+}
+
 .car-card {
   position: relative;
   cursor: pointer;
@@ -775,10 +827,59 @@ code {
 }
 
 .benefits-section,
+.destination-section,
 .signal-section,
 .closing-cta {
   content-visibility: auto;
   contain-intrinsic-size: 1px 640px;
+}
+
+.destination-section__media {
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  border-radius: 26px;
+  border: 1px solid rgba(180, 205, 244, 0.14);
+  background:
+    radial-gradient(circle at 16% 16%, rgba(255, 210, 160, 0.12), transparent 26%),
+    rgba(10, 18, 32, 0.88);
+}
+
+.destination-section__media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(6, 11, 21, 0.02), rgba(6, 11, 21, 0.34) 56%, rgba(6, 11, 21, 0.68) 100%),
+    linear-gradient(90deg, rgba(6, 11, 21, 0.14), rgba(6, 11, 21, 0));
+}
+
+.destination-section__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.destination-section__content {
+  display: grid;
+  gap: 16px;
+  align-content: center;
+  max-width: 430px;
+}
+
+.destination-section__content h2 {
+  margin: 0;
+  font-size: clamp(2rem, 3.3vw, 3rem);
+  line-height: 0.98;
+  letter-spacing: -0.05em;
+}
+
+.destination-section__content p {
+  margin: 0;
+  color: rgba(226, 234, 249, 0.76);
+  line-height: 1.58;
 }
 
 .signal-section {
@@ -1428,6 +1529,7 @@ code {
   .hero__grid,
   .section-header--split,
   .benefits-section__frame,
+  .scene--destination,
   .closing-cta__panel,
   .car-page {
     grid-template-columns: 1fr;
@@ -1499,6 +1601,10 @@ code {
   .hero__visual-note {
     right: 18px;
     bottom: 18px;
+  }
+
+  .hero__destination-plane {
+    opacity: 0.26;
   }
 
   .proof-strip__item {
