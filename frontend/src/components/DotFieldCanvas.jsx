@@ -285,13 +285,17 @@ function DotFieldCanvas() {
         0,
         1,
       )
-      const organizeIn = smoothstep(0.12, 0.38, progress)
-      const organizeOut = 1 - smoothstep(0.68, 0.9, progress)
+      const organizeIn = smoothstep(0.18, 0.42, progress)
+      const organizeOut = 1 - smoothstep(0.58, 0.8, progress)
       const formation = organizeIn * organizeOut
-      const focus = Math.pow(clamp(1 - Math.abs(progress - 0.5) / 0.18, 0, 1), 1.12)
+      const centerDistance = Math.abs(progress - 0.5)
+      const centerFocus = 1 - smoothstep(0.03, 0.16, centerDistance)
+      const peakLock = 1 - smoothstep(0.02, 0.11, centerDistance)
+      const focus = Math.pow(centerFocus, 1.18)
       const resolve = state.reducedMotion
-        ? formation * 0.84
-        : Math.min(1, Math.pow(formation, 0.86) * 1.08)
+        ? formation * (0.62 + peakLock * 0.22)
+        : Math.min(1, Math.pow(formation, 1.02) * (0.72 + peakLock * 0.4))
+      const disassembly = 1 - Math.pow(resolve, 0.92)
       const ambientTime = timestamp * (state.reducedMotion ? 0.00006 : 0.00012)
 
       context.clearRect(0, 0, state.width, state.height)
@@ -332,8 +336,8 @@ function DotFieldCanvas() {
           Math.cos(ambientTime * 1.16 + point.seed * 0.82) *
           (state.compactMode ? 6 : 9) *
           (1 - resolve * 0.94)
-        const dissolveX = point.driftBiasX * (1 - formation)
-        const dissolveY = point.driftBiasY * (1 - formation)
+        const dissolveX = point.driftBiasX * disassembly
+        const dissolveY = point.driftBiasY * disassembly
         const x = scatterX + (targetX - scatterX) * resolve + ambientX + dissolveX
         const y = scatterY + (targetY - scatterY) * resolve + ambientY + dissolveY
         const radius =
