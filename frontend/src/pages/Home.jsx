@@ -327,13 +327,36 @@ const closingStepVariants = {
   },
 }
 
+let featuredCarsCache = null
+let featuredCarsRequest = null
+
 function formatPrice(price) {
   return `${Number(price).toFixed(0)} / day`
 }
 
+function loadFeaturedCars() {
+  if (featuredCarsCache !== null) {
+    return Promise.resolve(featuredCarsCache)
+  }
+
+  if (!featuredCarsRequest) {
+    featuredCarsRequest = getCars()
+      .then(({ data }) => {
+        featuredCarsCache = data.slice(0, 3)
+
+        return featuredCarsCache
+      })
+      .finally(() => {
+        featuredCarsRequest = null
+      })
+  }
+
+  return featuredCarsRequest
+}
+
 function Home() {
-  const [cars, setCars] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
+  const [cars, setCars] = useState(() => featuredCarsCache ?? [])
+  const [isLoading, setIsLoading] = useState(() => featuredCarsCache === null)
   const [errorMessage, setErrorMessage] = useState('')
   const heroRef = useRef(null)
   const shouldReduceMotion = useReducedMotion()
@@ -349,30 +372,37 @@ function Home() {
   const visualY = useTransform(scrollYProgress, [0, 1], [0, -6])
 
   useEffect(() => {
-    let isMounted = true
+    let active = true
 
-    async function loadCars() {
-      try {
-        const { data } = await getCars()
-
-        if (isMounted) {
-          setCars(data.slice(0, 3))
-        }
-      } catch {
-        if (isMounted) {
-          setErrorMessage('Unable to load featured cars.')
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoading(false)
-        }
+    if (featuredCarsCache !== null) {
+      return () => {
+        active = false
       }
     }
 
-    loadCars()
+    loadFeaturedCars()
+      .then((nextCars) => {
+        if (!active) {
+          return
+        }
+
+        setCars(nextCars)
+      })
+      .catch(() => {
+        if (!active) {
+          return
+        }
+
+        setErrorMessage('Unable to load featured cars.')
+      })
+      .finally(() => {
+        if (active) {
+          setIsLoading(false)
+        }
+      })
 
     return () => {
-      isMounted = false
+      active = false
     }
   }, [])
 
@@ -492,45 +522,12 @@ function Home() {
       </MotionSection>
 
       <MotionSection
-        className="destination-section scene scene--destination"
-        initial="hidden"
-        variants={sectionRevealVariants}
-        viewport={viewportSettings}
-        whileInView="visible"
-      >
-        <MotionDiv
-          className="destination-section__media interactive-surface interactive-surface--scene"
-          onPointerLeave={resetInteractiveGlow}
-          onPointerMove={updateInteractiveGlow}
-          variants={sectionSlideVariants}
-        >
-          <MotionImage
-            alt="Seafront resort with a calm bay and sunset light"
-            className="destination-section__image"
-            decoding="async"
-            loading="lazy"
-            src={coastalResortScene}
-            transition={{ duration: 0.7, ease: premiumEase }}
-            whileHover={shouldReduceMotion ? undefined : { scale: 1.035, y: -4 }}
-          />
-        </MotionDiv>
-
-        <MotionDiv className="destination-section__content" variants={sectionRevealVariants}>
-          <h2>Seafront light. Calm pickup. Premium cars ready for the coast.</h2>
-          <p>
-            Resort calm, direct booking, and a clean handoff from arrival to the road.
-          </p>
-        </MotionDiv>
-      </MotionSection>
-
-      <MotionSection
         aria-labelledby="featured-cars-heading"
         className="scene scene--fleet"
         id="featured-cars"
-        initial="hidden"
+        animate="visible"
+        initial={shouldReduceMotion ? false : 'hidden'}
         variants={fleetSectionVariants}
-        viewport={viewportSettings}
-        whileInView="visible"
       >
         <MotionDiv
           className="section-header section-header--split"
@@ -571,6 +568,38 @@ function Home() {
             </MagneticAction>
           </MotionDiv>
         ) : null}
+      </MotionSection>
+
+      <MotionSection
+        className="destination-section scene scene--destination"
+        initial="hidden"
+        variants={sectionRevealVariants}
+        viewport={viewportSettings}
+        whileInView="visible"
+      >
+        <MotionDiv
+          className="destination-section__media interactive-surface interactive-surface--scene"
+          onPointerLeave={resetInteractiveGlow}
+          onPointerMove={updateInteractiveGlow}
+          variants={sectionSlideVariants}
+        >
+          <MotionImage
+            alt="Seafront resort with a calm bay and sunset light"
+            className="destination-section__image"
+            decoding="async"
+            loading="lazy"
+            src={coastalResortScene}
+            transition={{ duration: 0.7, ease: premiumEase }}
+            whileHover={shouldReduceMotion ? undefined : { scale: 1.035, y: -4 }}
+          />
+        </MotionDiv>
+
+        <MotionDiv className="destination-section__content" variants={sectionRevealVariants}>
+          <h2>Seafront light. Calm pickup. Premium cars ready for the coast.</h2>
+          <p>
+            Resort calm, direct booking, and a clean handoff from arrival to the road.
+          </p>
+        </MotionDiv>
       </MotionSection>
 
       <MotionSection

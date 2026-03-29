@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation, useNavigationType } from 'react-router-dom'
 
 import CustomCursor from '../components/CustomCursor'
 import Navbar from '../components/Navbar'
@@ -32,13 +32,35 @@ const pageTransitionVariants = {
 
 function AppLayout() {
   const location = useLocation()
+  const navigationType = useNavigationType()
 
   useEffect(() => {
+    if (location.hash) {
+      const frameId = window.requestAnimationFrame(() => {
+        const target = document.getElementById(
+          decodeURIComponent(location.hash.slice(1)),
+        )
+
+        target?.scrollIntoView({
+          block: 'start',
+        })
+      })
+
+      return () => window.cancelAnimationFrame(frameId)
+    }
+
+    if (navigationType === 'POP') {
+      return undefined
+    }
+
     window.scrollTo({
       top: 0,
-      behavior: 'smooth',
+      left: 0,
+      behavior: 'auto',
     })
-  }, [location.pathname])
+
+    return undefined
+  }, [location.hash, location.pathname, navigationType])
 
   return (
     <div className="app-shell">
