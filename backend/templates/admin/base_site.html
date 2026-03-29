@@ -3,20 +3,30 @@
 
 {% block title %}{{ title }} | {{ site_title|default:_("MoRent Admin") }}{% endblock %}
 
+{% block extrahead %}
+  {{ block.super }}
+  <link rel="icon" href="{% static 'morent_admin/img/brand-mark.svg' %}" type="image/svg+xml">
+{% endblock %}
+
 {% block extrastyle %}
   {{ block.super }}
-  <link rel="stylesheet" href="{% static 'bookings/admin/morent-admin.css' %}">
+  <link rel="stylesheet" href="{% static 'morent_admin/css/theme.css' %}">
 {% endblock %}
+
+{% block bodyclass %}{{ block.super }} morent-admin-shell{% endblock %}
 
 {% block branding %}
   <div class="morent-branding">
-    <div>
-      <p class="morent-kicker">MoRent</p>
-      <h1 id="site-name">
-        <a href="{% url 'admin:index' %}">{{ site_header }}</a>
-      </h1>
-      <p class="morent-tagline">{{ morent_admin_tagline }}</p>
-    </div>
+    <a class="morent-branding__identity" href="{% url 'admin:index' %}">
+      <span class="morent-brand-mark" aria-hidden="true">
+        <img alt="" src="{% static 'morent_admin/img/brand-mark.svg' %}">
+      </span>
+      <span class="morent-branding__copy">
+        <p class="morent-kicker">MoRent</p>
+        <h1 id="site-name">{{ site_header }}</h1>
+        <p class="morent-tagline">{{ morent_admin_tagline }}</p>
+      </span>
+    </a>
 
     <div class="morent-branding__meta">
       {% if morent_service_hours %}

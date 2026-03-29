@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
+  <title>MoRent Admin</title>
+  <desc>MoRent control room brand mark.</desc>
+  <defs>
+    <linearGradient id="bg" x1="8" y1="6" x2="56" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#13233a" />
+      <stop offset="1" stop-color="#07111d" />
+    </linearGradient>
+    <linearGradient id="accent" x1="18" y1="12" x2="48" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#d8bb83" />
+      <stop offset="1" stop-color="#8fb7ff" />
+    </linearGradient>
+  </defs>
+  <rect x="4" y="4" width="56" height="56" rx="18" fill="url(#bg)" />
+  <path d="M16 46V18h6.4l9.6 12.8L41.7 18H48v28h-5.8V27.7l-9.8 12.9h-.8L21.8 27.8V46H16Z" fill="#f4f7ff" />
+  <path d="M48 16L20 48" stroke="url(#accent)" stroke-width="3.4" stroke-linecap="round" opacity=".9" />
+</svg>

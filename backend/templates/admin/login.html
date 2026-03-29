@@ -1,0 +1,126 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block title %}{% if form.errors %}{% translate "Error:" %} {% endif %}{{ block.super }}{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'admin/css/login.css' %}">
+  <link rel="stylesheet" href="{% static 'morent_admin/css/login.css' %}">
+  {{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login morent-admin-login{% endblock %}
+
+{% block usertools %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block content %}
+  <div class="morent-login-shell">
+    <div class="morent-login-stage">
+      <section class="morent-login-stage__brand">
+        <span class="morent-branding__pill morent-login-badge">MoRent control room</span>
+        <div>
+          <h1 class="morent-login-title">Secure operator access for bookings, fleet, and content.</h1>
+          <p class="morent-login-description">
+            Review new leads, update the public fleet, and edit bilingual site content from one branded workspace.
+          </p>
+        </div>
+
+        <div class="morent-login-grid">
+          <article class="morent-login-card">
+            <span>Workspace</span>
+            <strong>{{ site_header }}</strong>
+          </article>
+          {% if morent_service_hours %}
+            <article class="morent-login-card">
+              <span>Service hours</span>
+              <strong>{{ morent_service_hours }}</strong>
+            </article>
+          {% endif %}
+        </div>
+
+        <ul class="morent-login-points">
+          <li>
+            <strong>Lead desk</strong>
+            <span>Booking, consultation, and support enquiries stay in one queue.</span>
+          </li>
+          <li>
+            <strong>Fleet operations</strong>
+            <span>Cars, featured placement, visibility, and galleries remain operator-editable.</span>
+          </li>
+          <li>
+            <strong>Site content</strong>
+            <span>Business settings, bilingual pages, FAQ, and legal content are managed from admin.</span>
+          </li>
+        </ul>
+
+        {% if morent_contact_channels %}
+          <div class="morent-login-grid">
+            {% for channel in morent_contact_channels %}
+              <article class="morent-login-card">
+                <span>{{ channel.label }}</span>
+                <strong>{{ channel.value }}</strong>
+              </article>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </section>
+
+      <section class="morent-login-stage__panel">
+        <h2 class="morent-login-heading">Sign in</h2>
+
+        {% if form.errors and not form.non_field_errors %}
+          <p class="errornote">
+            {% blocktranslate count counter=form.errors.items|length %}Please correct the error below.{% plural %}Please correct the errors below.{% endblocktranslate %}
+          </p>
+        {% endif %}
+
+        {% if form.non_field_errors %}
+          {% for error in form.non_field_errors %}
+            <p class="errornote">{{ error }}</p>
+          {% endfor %}
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <p class="errornote">
+            {% blocktranslate trimmed %}
+              You are authenticated as {{ username }}, but are not authorized to access this page. Would you like to login to a different account?
+            {% endblocktranslate %}
+          </p>
+        {% endif %}
+
+        <form action="{{ app_path }}" class="morent-login-form" id="login-form" method="post">
+          {% csrf_token %}
+          <div class="form-row">
+            {{ form.username.errors }}
+            {{ form.username.label_tag }}
+            {{ form.username }}
+          </div>
+          <div class="form-row">
+            {{ form.password.errors }}
+            {{ form.password.label_tag }}
+            {{ form.password }}
+            <input name="next" type="hidden" value="{{ next }}">
+          </div>
+          {% url 'admin_password_reset' as password_reset_url %}
+          {% if password_reset_url %}
+            <div class="password-reset-link">
+              <a href="{{ password_reset_url }}">{% translate 'Forgotten your login credentials?' %}</a>
+            </div>
+          {% endif %}
+          <div class="submit-row">
+            <input type="submit" value="{% translate 'Log in' %}">
+          </div>
+        </form>
+
+        <p class="morent-login-footnote">
+          Use the same admin account to manage leads, fleet visibility, content, and operating settings without leaving the control room.
+        </p>
+      </section>
+    </div>
+  </div>
+{% endblock %}

@@ -56,4 +56,6 @@ class AdminExperienceTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "MoRent Control Room")
-        self.assertContains(response, "Lead desk, bookings, and fleet operations.")
+        self.assertContains(response, "Premium control panel for leads, fleet, and site content.")
+        self.assertContains(response, "Secure operator access for bookings, fleet, and content.")
+        self.assertContains(response, "/static/morent_admin/css/theme.css")

@@ -12,6 +12,18 @@ class MoRentAdminSite(AdminSite):
     index_template = "admin/morent_index.html"
     enable_nav_sidebar = True
 
+    @staticmethod
+    def compact_channel_value(channel_type: str, raw_value: str) -> str:
+        value = str(raw_value or "").strip()
+
+        if not value:
+            return ""
+
+        if channel_type in {"whatsapp", "telegram"}:
+            return "Connected"
+
+        return value
+
     def each_context(self, request):
         context = super().each_context(request)
         contact_channels = []
@@ -21,7 +33,7 @@ class MoRentAdminSite(AdminSite):
             contact_channels.append(
                 {
                     "label": "Phone",
-                    "value": site_settings.phone,
+                    "value": self.compact_channel_value("phone", site_settings.phone),
                 }
             )
 
@@ -29,7 +41,7 @@ class MoRentAdminSite(AdminSite):
             contact_channels.append(
                 {
                     "label": "Email",
-                    "value": site_settings.email,
+                    "value": self.compact_channel_value("email", site_settings.email),
                 }
             )
 
@@ -37,7 +49,7 @@ class MoRentAdminSite(AdminSite):
             contact_channels.append(
                 {
                     "label": "WhatsApp",
-                    "value": site_settings.whatsapp_url,
+                    "value": self.compact_channel_value("whatsapp", site_settings.whatsapp_url),
                 }
             )
 
@@ -45,13 +57,13 @@ class MoRentAdminSite(AdminSite):
             contact_channels.append(
                 {
                     "label": "Telegram",
-                    "value": site_settings.telegram_url,
+                    "value": self.compact_channel_value("telegram", site_settings.telegram_url),
                 }
             )
 
         context.update(
             {
-                "morent_admin_tagline": "Lead desk, bookings, and fleet operations.",
+                "morent_admin_tagline": "Premium control panel for leads, fleet, and site content.",
                 "morent_contact_channels": contact_channels,
                 "morent_service_hours": site_settings.working_hours_en
                 or site_settings.working_hours_ru,
