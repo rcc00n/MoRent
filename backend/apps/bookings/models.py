@@ -9,6 +9,8 @@ class Booking(models.Model):
     car = models.ForeignKey(Car, on_delete=models.PROTECT, related_name="bookings")
     start_date = models.DateField()
     end_date = models.DateField()
+    source = models.CharField(max_length=100, blank=True, default="website")
+    source_context = models.JSONField(blank=True, default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

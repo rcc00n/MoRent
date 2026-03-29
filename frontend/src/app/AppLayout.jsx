@@ -4,7 +4,10 @@ import { Outlet, useLocation, useNavigationType } from 'react-router-dom'
 
 import CustomCursor from '../components/CustomCursor'
 import Navbar from '../components/Navbar'
+import Seo from '../components/Seo'
 import SiteFooter from '../components/SiteFooter'
+import { getPageMetadata } from '../seo/pageMetadata'
+import { getRuntimeSiteUrl } from '../seo/site'
 
 const MotionMain = motion.main
 
@@ -34,6 +37,8 @@ const pageTransitionVariants = {
 function AppLayout() {
   const location = useLocation()
   const navigationType = useNavigationType()
+  const siteUrl = getRuntimeSiteUrl()
+  const pageMetadata = getPageMetadata(location.pathname, siteUrl)
 
   useEffect(() => {
     if (location.hash) {
@@ -66,6 +71,7 @@ function AppLayout() {
   return (
     <div className="app-shell">
       <CustomCursor />
+      <Seo {...pageMetadata} />
       <Navbar />
       <AnimatePresence initial={false} mode="wait">
         <MotionMain

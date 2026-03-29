@@ -1,5 +1,5 @@
 import { startTransition, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { createBooking } from '../shared/api'
 
@@ -65,6 +65,7 @@ function BookingForm({ carId, carName }) {
   const [touchedFields, setTouchedFields] = useState(initialTouchedState)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [feedback, setFeedback] = useState(null)
+  const location = useLocation()
   const navigate = useNavigate()
   const today = new Date().toISOString().slice(0, 10)
   const fieldErrors = validateBookingForm(formData)
@@ -116,6 +117,13 @@ function BookingForm({ carId, carName }) {
       await createBooking({
         ...formData,
         car: carId,
+        source: 'car-page',
+        source_context: {
+          entry_point: 'booking-form',
+          car_name: carName,
+          page_path: location.pathname,
+          page_title: document.title,
+        },
       })
 
       const successState = {
