@@ -125,6 +125,24 @@ const heroFadeVariants = {
   }),
 }
 
+const heroVisualVariants = {
+  hidden: {
+    opacity: 0,
+    y: 34,
+    scale: 0.95,
+  },
+  visible: (delay = 0) => ({
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.82,
+      delay,
+      ease: premiumEase,
+    },
+  }),
+}
+
 const sectionRevealVariants = {
   hidden: {
     opacity: 0,
@@ -155,12 +173,21 @@ const sectionSlideVariants = {
   },
 }
 
-const proofContainerVariants = {
-  hidden: {},
+const proofSectionVariants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+    scale: 0.985,
+  },
   visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
     transition: {
+      duration: 0.7,
+      ease: premiumEase,
       staggerChildren: 0.09,
-      delayChildren: 0.08,
+      delayChildren: 0.12,
     },
   },
 }
@@ -182,17 +209,32 @@ const proofItemVariants = {
   },
 }
 
-const cardsContainerVariants = {
-  hidden: {},
+const fleetSectionVariants = {
+  hidden: {
+    opacity: 0,
+    y: 34,
+  },
   visible: {
+    opacity: 1,
+    y: 0,
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.12,
+      duration: 0.76,
+      ease: premiumEase,
     },
   },
 }
 
-const cardRevealVariants = {
+const fleetCardsContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.18,
+    },
+  },
+}
+
+const fleetCardRevealVariants = {
   hidden: {
     opacity: 0,
     y: 26,
@@ -204,6 +246,108 @@ const cardRevealVariants = {
     scale: 1,
     transition: {
       duration: 0.62,
+      ease: premiumEase,
+    },
+  },
+}
+
+const benefitsSectionVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.985,
+    y: 20,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      duration: 0.82,
+      ease: premiumEase,
+    },
+  },
+}
+
+const benefitsIntroVariants = {
+  hidden: {
+    opacity: 0,
+    x: -18,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.72,
+      delay: 0.08,
+      ease: premiumEase,
+    },
+  },
+}
+
+const benefitCardsContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.18,
+    },
+  },
+}
+
+const benefitCardRevealVariants = {
+  hidden: {
+    opacity: 0,
+    y: 18,
+    scale: 0.96,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.66,
+      ease: premiumEase,
+    },
+  },
+}
+
+const closingPanelVariants = {
+  hidden: {
+    opacity: 0,
+    y: 42,
+    scale: 0.96,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.94,
+      ease: premiumEase,
+    },
+  },
+}
+
+const closingStepsVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.2,
+    },
+  },
+}
+
+const closingStepVariants = {
+  hidden: {
+    opacity: 0,
+    x: 18,
+  },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 0.6,
       ease: premiumEase,
     },
   },
@@ -423,7 +567,7 @@ function Home() {
             className="hero__visual-stage"
             custom={0.62}
             initial="hidden"
-            variants={heroFadeVariants}
+            variants={heroVisualVariants}
           >
             <MotionDiv
               className="hero__visual-shell"
@@ -482,9 +626,9 @@ function Home() {
       </section>
 
       <MotionSection
-        className="proof-strip"
+        className="proof-strip scene scene--proof"
         initial="hidden"
-        variants={proofContainerVariants}
+        variants={proofSectionVariants}
         viewport={viewportSettings}
         whileInView="visible"
       >
@@ -505,8 +649,10 @@ function Home() {
 
       <MotionSection
         aria-labelledby="featured-cars-heading"
+        className="scene scene--fleet"
         id="featured-cars"
         initial="hidden"
+        variants={fleetSectionVariants}
         viewport={viewportSettings}
         whileInView="visible"
       >
@@ -531,13 +677,10 @@ function Home() {
         {!isLoading && !errorMessage ? (
           <MotionDiv
             className="cars-grid"
-            initial="hidden"
-            variants={cardsContainerVariants}
-            viewport={viewportSettings}
-            whileInView="visible"
+            variants={fleetCardsContainerVariants}
           >
             {cars.map((car) => (
-              <MotionDiv key={car.id} variants={cardRevealVariants}>
+              <MotionDiv key={car.id} variants={fleetCardRevealVariants}>
                 <CarCard car={car} />
               </MotionDiv>
             ))}
@@ -558,15 +701,16 @@ function Home() {
       </MotionSection>
 
       <MotionSection
-        className="benefits-section"
+        className="benefits-section scene scene--benefits"
         initial="hidden"
+        variants={benefitsSectionVariants}
         viewport={viewportSettings}
         whileInView="visible"
       >
         <div className="benefits-section__frame">
           <MotionDiv
             className="benefits-section__intro"
-            variants={sectionRevealVariants}
+            variants={benefitsIntroVariants}
           >
             <span className="eyebrow">Why choose us</span>
             <h2>Premium booking should feel calm, clear, and personal.</h2>
@@ -586,12 +730,12 @@ function Home() {
             </div>
           </MotionDiv>
 
-          <MotionDiv className="benefits-grid" variants={cardsContainerVariants}>
+          <MotionDiv className="benefits-grid" variants={benefitCardsContainerVariants}>
             {benefitItems.map((item) => (
               <MotionArticle
                 className="benefit-card"
                 key={item.title}
-                variants={cardRevealVariants}
+                variants={benefitCardRevealVariants}
               >
                 <div
                   aria-hidden="true"
@@ -610,13 +754,13 @@ function Home() {
       </MotionSection>
 
       <MotionSection
-        className="closing-cta"
+        className="closing-cta scene scene--closing"
         id="booking-path"
         initial="hidden"
         viewport={viewportSettings}
         whileInView="visible"
       >
-        <MotionDiv className="closing-cta__panel" variants={sectionRevealVariants}>
+        <MotionDiv className="closing-cta__panel" variants={closingPanelVariants}>
           <div className="closing-cta__content">
             <span className="eyebrow">Ready to book</span>
             <h2>Choose the dates, send the request, and let the manager confirm the rest.</h2>
@@ -628,14 +772,14 @@ function Home() {
           </div>
 
           <div className="closing-cta__actions">
-            <div className="closing-cta__steps">
+            <MotionDiv className="closing-cta__steps" variants={closingStepsVariants}>
               {bookingSteps.map((step, index) => (
-                <div className="closing-cta__step" key={step}>
+                <MotionDiv className="closing-cta__step" key={step} variants={closingStepVariants}>
                   <span>{index + 1}</span>
                   <p>{step}</p>
-                </div>
+                </MotionDiv>
               ))}
-            </div>
+            </MotionDiv>
 
             <div className="button-row">
               <Link className="button button--primary" to="/catalog">

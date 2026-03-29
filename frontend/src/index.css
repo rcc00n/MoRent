@@ -6,12 +6,15 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  --color-primary: #2e7dff;
-  --color-primary-bright: #61a5ff;
-  --color-primary-dark: #0b43b9;
+  --color-primary: #4d8fff;
+  --color-primary-bright: #8dc3ff;
+  --color-primary-dark: #1846ba;
+  --color-primary-indigo: #5a63ff;
+  --color-accent-warm: rgba(255, 191, 122, 0.16);
   --color-text: #f4f7ff;
-  --color-text-muted: #a8b6d4;
-  --color-border: rgba(151, 180, 234, 0.18);
+  --color-text-muted: #9aa8c8;
+  --color-text-subtle: #7483a5;
+  --color-border: rgba(166, 193, 243, 0.18);
   --color-surface: rgba(11, 18, 34, 0.72);
   --color-surface-strong: rgba(15, 24, 42, 0.94);
   --color-surface-muted: rgba(255, 255, 255, 0.08);
@@ -50,9 +53,10 @@ body {
   margin: 0;
   color: var(--color-text);
   background:
-    radial-gradient(circle at top left, rgba(46, 125, 255, 0.3), transparent 30%),
-    radial-gradient(circle at top right, rgba(0, 117, 255, 0.16), transparent 22%),
-    linear-gradient(180deg, #0a1221 0%, #09101d 42%, #07101d 100%);
+    radial-gradient(circle at 8% 0%, rgba(78, 142, 255, 0.24), transparent 24%),
+    radial-gradient(circle at 88% 12%, rgba(95, 88, 255, 0.13), transparent 22%),
+    radial-gradient(circle at 72% 82%, rgba(255, 191, 122, 0.08), transparent 18%),
+    linear-gradient(180deg, #070d19 0%, #09101d 36%, #08101c 100%);
   letter-spacing: -0.01em;
 }
 
@@ -175,7 +179,75 @@ code {
 .catalog-layout,
 .car-page {
   display: grid;
-  gap: 36px;
+  gap: 44px;
+}
+
+.scene {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(167, 193, 242, 0.12);
+  border-radius: 32px;
+}
+
+.scene::before,
+.scene::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.scene::before {
+  inset: 1px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0));
+}
+
+.scene::after {
+  inset: auto 26px 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(179, 207, 255, 0.2), transparent);
+}
+
+.scene > * {
+  position: relative;
+  z-index: 1;
+}
+
+.scene--fleet,
+.scene--benefits,
+.scene--closing {
+  display: grid;
+  gap: 26px;
+  padding: 28px;
+}
+
+.scene--proof {
+  padding: 14px;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(114, 177, 255, 0.1), transparent 24%),
+    linear-gradient(180deg, rgba(11, 18, 35, 0.78), rgba(12, 20, 38, 0.9));
+}
+
+.scene--fleet {
+  background:
+    radial-gradient(circle at 88% 8%, rgba(92, 120, 255, 0.11), transparent 20%),
+    radial-gradient(circle at 14% 100%, rgba(90, 162, 255, 0.1), transparent 22%),
+    linear-gradient(180deg, rgba(14, 22, 40, 0.86), rgba(10, 18, 33, 0.82));
+}
+
+.scene--benefits {
+  background:
+    radial-gradient(circle at 85% 15%, rgba(100, 90, 255, 0.14), transparent 24%),
+    radial-gradient(circle at 15% 100%, rgba(101, 161, 255, 0.09), transparent 22%),
+    linear-gradient(180deg, rgba(17, 21, 43, 0.9), rgba(10, 17, 35, 0.84));
+}
+
+.scene--closing {
+  background:
+    radial-gradient(circle at 10% 20%, rgba(255, 191, 122, 0.12), transparent 18%),
+    radial-gradient(circle at 88% 12%, rgba(87, 144, 255, 0.11), transparent 22%),
+    linear-gradient(180deg, rgba(9, 15, 28, 0.96), rgba(10, 16, 30, 0.9));
 }
 
 .hero {
@@ -193,9 +265,10 @@ code {
   padding: clamp(28px, 4vw, 48px);
   background:
     radial-gradient(circle at top left, rgba(92, 148, 255, 0.24), transparent 34%),
-    radial-gradient(circle at 78% 14%, rgba(42, 116, 255, 0.2), transparent 24%),
-    linear-gradient(145deg, rgba(31, 84, 194, 0.24) 0%, rgba(10, 17, 33, 0.04) 34%, rgba(9, 17, 33, 0.74) 100%),
-    linear-gradient(180deg, rgba(8, 14, 27, 0.98) 0%, rgba(7, 14, 28, 0.95) 42%, rgba(7, 13, 25, 0.94) 100%);
+    radial-gradient(circle at 78% 14%, rgba(91, 92, 255, 0.15), transparent 24%),
+    radial-gradient(circle at 84% 78%, rgba(255, 191, 122, 0.08), transparent 16%),
+    linear-gradient(145deg, rgba(31, 84, 194, 0.24) 0%, rgba(24, 26, 61, 0.12) 36%, rgba(9, 17, 33, 0.76) 100%),
+    linear-gradient(180deg, rgba(8, 14, 27, 0.99) 0%, rgba(7, 14, 28, 0.96) 42%, rgba(6, 12, 23, 0.95) 100%);
 }
 
 .hero__mesh,
@@ -234,7 +307,7 @@ code {
 .hero__beam--two {
   bottom: -8%;
   right: 10%;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(115, 172, 255, 0.02));
+  background: linear-gradient(135deg, rgba(255, 214, 158, 0.12), rgba(115, 172, 255, 0.02));
 }
 
 .hero__glow {
@@ -350,6 +423,7 @@ code {
 
 .hero__description {
   margin: 0;
+  color: rgba(232, 239, 255, 0.78);
 }
 
 .section-header p {
@@ -375,6 +449,15 @@ code {
     linear-gradient(180deg, rgba(16, 27, 50, 0.16) 0%, rgba(16, 27, 50, 0.74) 100%),
     radial-gradient(circle at top, rgba(46, 125, 255, 0.42), transparent 40%);
   box-shadow: 0 26px 80px rgba(4, 10, 24, 0.42);
+}
+
+.hero__visual::before {
+  content: '';
+  position: absolute;
+  inset: 14% 12% 18%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(112, 175, 255, 0.22) 0%, rgba(112, 175, 255, 0.06) 34%, transparent 72%);
+  filter: blur(18px);
 }
 
 .hero__visual-shell {
@@ -435,7 +518,7 @@ code {
   padding: 14px 16px;
   border: 1px solid rgba(151, 180, 234, 0.14);
   border-radius: 20px;
-  background: rgba(8, 14, 27, 0.72);
+  background: linear-gradient(180deg, rgba(8, 14, 27, 0.76), rgba(12, 18, 34, 0.72));
   backdrop-filter: blur(16px);
 }
 
@@ -454,9 +537,9 @@ code {
   display: grid;
   gap: 4px;
   padding: 12px 14px;
-  border: 1px solid rgba(194, 219, 255, 0.16);
+  border: 1px solid rgba(194, 219, 255, 0.15);
   border-radius: 18px;
-  background: rgba(240, 247, 255, 0.08);
+  background: linear-gradient(180deg, rgba(242, 248, 255, 0.1), rgba(242, 248, 255, 0.04));
   backdrop-filter: blur(16px);
 }
 
@@ -499,6 +582,7 @@ code {
 .section-cta {
   justify-content: space-between;
   padding-top: var(--space-3);
+  border-top: 1px solid rgba(176, 202, 250, 0.12);
 }
 
 .button {
@@ -513,6 +597,11 @@ code {
   line-height: 1;
   white-space: nowrap;
   cursor: pointer;
+  transition:
+    transform 180ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease;
 }
 
 .button:hover {
@@ -533,18 +622,27 @@ code {
 .button--primary {
   color: #f8fbff;
   background:
-    linear-gradient(135deg, #3b8bff 0%, #2c6bf0 54%, #123fba 100%);
-  box-shadow: 0 18px 40px rgba(46, 125, 255, 0.24);
+    linear-gradient(135deg, #78b5ff 0%, #3a84ff 36%, #5667ff 100%);
+  box-shadow:
+    0 18px 40px rgba(46, 125, 255, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .button--primary:hover {
-  box-shadow: 0 24px 52px rgba(46, 125, 255, 0.28);
+  box-shadow:
+    0 24px 54px rgba(46, 125, 255, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
 .button--secondary {
   color: var(--color-text);
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
   border-color: rgba(177, 205, 255, 0.16);
+}
+
+.button--secondary:hover {
+  border-color: rgba(196, 219, 255, 0.26);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
 }
 
 .hero__booking-path {
@@ -600,9 +698,9 @@ code {
   gap: 14px;
   align-items: start;
   padding: 16px 18px;
-  border: 1px solid rgba(151, 180, 234, 0.1);
+  border: 1px solid rgba(181, 207, 255, 0.12);
   border-radius: 22px;
-  background: rgba(240, 247, 255, 0.04);
+  background: linear-gradient(180deg, rgba(243, 248, 255, 0.06), rgba(243, 248, 255, 0.03));
   backdrop-filter: blur(16px);
 }
 
@@ -633,6 +731,10 @@ code {
   gap: 10px;
 }
 
+.section-header h2 {
+  max-width: 12ch;
+}
+
 .section-header--split {
   grid-template-columns: minmax(0, 1fr) minmax(280px, 420px);
   align-items: end;
@@ -661,6 +763,10 @@ code {
 
 .car-card {
   overflow: hidden;
+  transition:
+    box-shadow 240ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease;
 }
 
 .benefits-section,
@@ -744,6 +850,32 @@ code {
   transform: translateY(-4px);
   border-color: rgba(186, 213, 255, 0.22);
   background: rgba(17, 28, 49, 0.8);
+}
+
+.scene--proof .proof-strip__item {
+  background:
+    linear-gradient(180deg, rgba(244, 249, 255, 0.07), rgba(244, 249, 255, 0.02));
+}
+
+.scene--fleet .car-card {
+  background:
+    linear-gradient(180deg, rgba(18, 28, 47, 0.78), rgba(10, 18, 33, 0.88));
+}
+
+.scene--fleet .car-card:hover {
+  border-color: rgba(191, 217, 255, 0.22);
+  box-shadow: 0 30px 72px rgba(4, 10, 24, 0.38);
+}
+
+.scene--benefits .benefit-card,
+.scene--benefits .benefits-section__stat {
+  background:
+    linear-gradient(180deg, rgba(20, 25, 51, 0.78), rgba(13, 18, 39, 0.88));
+}
+
+.scene--closing .closing-cta__panel {
+  border-color: rgba(190, 213, 255, 0.16);
+  box-shadow: 0 28px 76px rgba(3, 9, 20, 0.46);
 }
 
 .benefit-card__tag {
@@ -1005,6 +1137,7 @@ code {
   padding: 28px;
   background:
     radial-gradient(circle at top right, rgba(91, 147, 255, 0.14), transparent 28%),
+    radial-gradient(circle at 12% 20%, rgba(255, 191, 122, 0.08), transparent 18%),
     rgba(13, 22, 40, 0.84);
 }
 

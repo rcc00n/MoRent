@@ -14,10 +14,10 @@ const cardMotion = {
     scale: 1,
   },
   hover: {
-    y: -8,
-    scale: 1.008,
+    y: -5,
+    scale: 1.014,
     transition: {
-      duration: 0.32,
+      duration: 0.34,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -28,9 +28,9 @@ const imageMotion = {
     scale: 1,
   },
   hover: {
-    scale: 1.05,
+    scale: 1.03,
     transition: {
-      duration: 0.42,
+      duration: 0.44,
       ease: [0.22, 1, 0.36, 1],
     },
   },
