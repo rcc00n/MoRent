@@ -1,16 +1,32 @@
+import { Suspense, lazy } from 'react'
 import { createBrowserRouter } from 'react-router-dom'
 
 import AppLayout from './AppLayout'
-import About from '../pages/About'
-import Catalog from '../pages/Catalog'
-import CarPage from '../pages/CarPage'
-import Contacts from '../pages/Contacts'
-import FAQ from '../pages/FAQ'
 import Home from '../pages/Home'
-import HowItWorks from '../pages/HowItWorks'
-import Privacy from '../pages/Privacy'
-import RequestReceived from '../pages/RequestReceived'
-import Terms from '../pages/Terms'
+
+const Catalog = lazy(() => import('../pages/Catalog'))
+const CarPage = lazy(() => import('../pages/CarPage'))
+const Contacts = lazy(() => import('../pages/Contacts'))
+const FAQ = lazy(() => import('../pages/FAQ'))
+const About = lazy(() => import('../pages/About'))
+const Privacy = lazy(() => import('../pages/Privacy'))
+const Terms = lazy(() => import('../pages/Terms'))
+const HowItWorks = lazy(() => import('../pages/HowItWorks'))
+const RequestReceived = lazy(() => import('../pages/RequestReceived'))
+
+function RouteFallback() {
+  return (
+    <div className="loading-shell loading-shell--panel" aria-hidden="true">
+      <div className="loading-line loading-line--wide"></div>
+      <div className="loading-line"></div>
+      <div className="loading-line loading-line--short"></div>
+    </div>
+  )
+}
+
+function withRouteSuspense(element) {
+  return <Suspense fallback={<RouteFallback />}>{element}</Suspense>
+}
 
 const router = createBrowserRouter([
   {
@@ -23,39 +39,39 @@ const router = createBrowserRouter([
       },
       {
         path: 'catalog',
-        element: <Catalog />,
+        element: withRouteSuspense(<Catalog />),
       },
       {
         path: 'how-it-works',
-        element: <HowItWorks />,
+        element: withRouteSuspense(<HowItWorks />),
       },
       {
         path: 'about',
-        element: <About />,
+        element: withRouteSuspense(<About />),
       },
       {
         path: 'contacts',
-        element: <Contacts />,
+        element: withRouteSuspense(<Contacts />),
       },
       {
         path: 'faq',
-        element: <FAQ />,
+        element: withRouteSuspense(<FAQ />),
       },
       {
         path: 'terms',
-        element: <Terms />,
+        element: withRouteSuspense(<Terms />),
       },
       {
         path: 'privacy',
-        element: <Privacy />,
+        element: withRouteSuspense(<Privacy />),
       },
       {
         path: 'request-received',
-        element: <RequestReceived />,
+        element: withRouteSuspense(<RequestReceived />),
       },
       {
         path: 'car/:id',
-        element: <CarPage />,
+        element: withRouteSuspense(<CarPage />),
       },
     ],
   },

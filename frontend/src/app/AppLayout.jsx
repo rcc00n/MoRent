@@ -1,6 +1,11 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { Outlet, useLocation, useNavigationType } from 'react-router-dom'
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  useNavigationType,
+} from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import CustomCursor from '../components/CustomCursor'
@@ -8,7 +13,7 @@ import Navbar from '../components/Navbar'
 import Seo from '../components/Seo'
 import SiteFooter from '../components/SiteFooter'
 import { getPageMetadata } from '../seo/pageMetadata'
-import { getRuntimeSiteUrl } from '../seo/site'
+import { getRuntimeSiteUrl, getSearchWithLanguage } from '../seo/site'
 
 const MotionMain = motion.main
 
@@ -38,6 +43,7 @@ const pageTransitionVariants = {
 function AppLayout() {
   const { i18n } = useTranslation()
   const location = useLocation()
+  const navigate = useNavigate()
   const navigationType = useNavigationType()
   const siteUrl = getRuntimeSiteUrl()
   const pageMetadata = getPageMetadata(
@@ -45,6 +51,31 @@ function AppLayout() {
     siteUrl,
     i18n.resolvedLanguage,
   )
+
+  useEffect(() => {
+    const nextSearch = getSearchWithLanguage(location.search, i18n.resolvedLanguage)
+
+    if (nextSearch === location.search) {
+      return undefined
+    }
+
+    navigate(
+      {
+        pathname: location.pathname,
+        search: nextSearch,
+        hash: location.hash,
+      },
+      { replace: true },
+    )
+
+    return undefined
+  }, [
+    i18n.resolvedLanguage,
+    location.hash,
+    location.pathname,
+    location.search,
+    navigate,
+  ])
 
   useEffect(() => {
     if (location.hash) {

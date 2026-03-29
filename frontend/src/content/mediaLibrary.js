@@ -13,8 +13,19 @@ export const pageMedia = {
     `${wikiBase}/thumb/1/1e/Sunset_at_Pickering_Point_Lookout%2C_Great_Ocean_Road_%2853402059667%29.jpg/1920px-Sunset_at_Pickering_Point_Lookout%2C_Great_Ocean_Road_%2853402059667%29.jpg`,
 }
 
+function normalizeRegistryValue(value) {
+  return String(value || '')
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+}
+
+function buildRegistryKey(brand, model) {
+  return `${normalizeRegistryValue(brand)}|${normalizeRegistryValue(model)}`
+}
+
 const carMediaRegistry = {
-  'BMW|X5': {
+  [buildRegistryKey('BMW', 'X5')]: {
     translationKey: 'bmwX5',
     primaryImage:
       `${wikiBase}/thumb/e/e9/BMW_G05_LCI_X5_xDrive50e_M_Sport_Dravit_Grey_Metallic_%281%29.jpg/1920px-BMW_G05_LCI_X5_xDrive50e_M_Sport_Dravit_Grey_Metallic_%281%29.jpg`,
@@ -24,7 +35,7 @@ const carMediaRegistry = {
       `${wikiBase}/thumb/5/58/BMW_G05_X5_xDrive40i_M_Sport_Merino_Leather_Coffee_%2812%29.jpg/1920px-BMW_G05_X5_xDrive40i_M_Sport_Merino_Leather_Coffee_%2812%29.jpg`,
     ],
   },
-  'Mercedes-Benz|E-Class': {
+  [buildRegistryKey('Mercedes-Benz', 'E-Class')]: {
     translationKey: 'mercedesEClass',
     primaryImage:
       `${wikiBase}/thumb/0/06/MERCEDES-BENZ_E-CLASS_%28W213%29_China.jpg/1920px-MERCEDES-BENZ_E-CLASS_%28W213%29_China.jpg`,
@@ -34,7 +45,7 @@ const carMediaRegistry = {
       `${wikiBase}/thumb/3/33/Mercedes-Benz_W213_%28E-class%29_interior.jpg/1920px-Mercedes-Benz_W213_%28E-class%29_interior.jpg`,
     ],
   },
-  'Porsche|Cayenne': {
+  [buildRegistryKey('Porsche', 'Cayenne')]: {
     translationKey: 'porscheCayenne',
     primaryImage:
       `${wikiBase}/thumb/8/87/2023_Porsche_Cayenne_S_IMG_0521.jpg/1920px-2023_Porsche_Cayenne_S_IMG_0521.jpg`,
@@ -47,7 +58,7 @@ const carMediaRegistry = {
 }
 
 function getCarRegistryKey(car) {
-  return `${car.brand}|${car.model}`
+  return buildRegistryKey(car.brand, car.model)
 }
 
 export function getCarMedia(car) {

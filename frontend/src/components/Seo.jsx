@@ -28,6 +28,35 @@ function upsertLinkTag(rel, href) {
   }
 }
 
+function updateAlternateLinks(alternates) {
+  document.head
+    .querySelectorAll('link[data-seo-alternate="true"]')
+    .forEach((linkTag) => linkTag.remove())
+
+  alternates.forEach((alternate) => {
+    const linkTag = document.createElement('link')
+    linkTag.rel = 'alternate'
+    linkTag.href = alternate.href
+    linkTag.hreflang = alternate.hrefLang
+    linkTag.dataset.seoAlternate = 'true'
+    document.head.appendChild(linkTag)
+  })
+}
+
+function updateRepeatableMetaTags(attribute, key, values, dataAttribute) {
+  document.head
+    .querySelectorAll(`meta[data-${dataAttribute}="true"]`)
+    .forEach((metaTag) => metaTag.remove())
+
+  values.forEach((value) => {
+    const metaTag = document.createElement('meta')
+    metaTag.setAttribute(attribute, key)
+    metaTag.setAttribute('content', value)
+    metaTag.setAttribute(`data-${dataAttribute}`, 'true')
+    document.head.appendChild(metaTag)
+  })
+}
+
 function updateStructuredData(structuredData) {
   document.head
     .querySelectorAll('script[data-seo-json-ld="true"]')
@@ -49,9 +78,12 @@ function updateStructuredData(structuredData) {
 }
 
 function Seo({
+  alternates = [],
   canonicalUrl,
   description,
   ogType = 'website',
+  ogLocale = 'en_US',
+  ogLocaleAlternates = [],
   robots = 'index,follow',
   structuredData = null,
   title,
@@ -69,14 +101,25 @@ function Seo({
     upsertMetaTag('property', 'og:type', ogType)
     upsertMetaTag('property', 'og:url', url)
     upsertMetaTag('property', 'og:site_name', SITE_NAME)
+    upsertMetaTag('property', 'og:locale', ogLocale)
     upsertMetaTag('name', 'twitter:card', 'summary_large_image')
     upsertMetaTag('name', 'twitter:title', title)
     upsertMetaTag('name', 'twitter:description', description)
     upsertLinkTag('canonical', canonicalUrl)
+    updateAlternateLinks(alternates)
+    updateRepeatableMetaTags(
+      'property',
+      'og:locale:alternate',
+      ogLocaleAlternates,
+      'seo-og-locale-alternate',
+    )
     updateStructuredData(structuredData)
   }, [
+    alternates,
     canonicalUrl,
     description,
+    ogLocale,
+    ogLocaleAlternates,
     ogType,
     robots,
     structuredData,

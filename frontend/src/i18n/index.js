@@ -15,9 +15,26 @@ function setDocumentLanguage(language) {
   }
 }
 
+function getLanguageFromUrlSearch(search) {
+  const language = new URLSearchParams(search).get('lang')
+
+  if (!language) {
+    return null
+  }
+
+  return normalizeLanguage(language)
+}
+
 function resolveInitialLanguage() {
   if (typeof window === 'undefined') {
     return DEFAULT_LANGUAGE
+  }
+
+  const queryLanguage = getLanguageFromUrlSearch(window.location.search)
+
+  if (queryLanguage) {
+    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, queryLanguage)
+    return queryLanguage
   }
 
   const storedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY)

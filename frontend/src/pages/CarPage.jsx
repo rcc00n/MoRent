@@ -7,7 +7,7 @@ import BookingForm from '../components/BookingForm'
 import Seo from '../components/Seo'
 import { enrichCarMedia } from '../content/mediaLibrary'
 import { getCarPageMetadata } from '../seo/pageMetadata'
-import { getRuntimeSiteUrl } from '../seo/site'
+import { buildLocalizedUrl, getRuntimeSiteUrl } from '../seo/site'
 import { getCar } from '../shared/api'
 
 const MotionDiv = motion.div
@@ -24,6 +24,7 @@ function CarPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [hasLoadError, setHasLoadError] = useState(false)
   const siteUrl = getRuntimeSiteUrl()
+  const catalogUrl = buildLocalizedUrl('/catalog', i18n.resolvedLanguage, siteUrl)
 
   useEffect(() => {
     let isMounted = true
@@ -67,10 +68,10 @@ function CarPage() {
     return (
       <>
         <Seo
-          canonicalUrl={`${siteUrl}/catalog`}
+          canonicalUrl={catalogUrl}
           description={t('metadata.pages.carLoading.description')}
           title={t('metadata.pages.carLoading.title')}
-          url={`${siteUrl}/catalog`}
+          url={catalogUrl}
         />
         <div className="loading-shell loading-shell--panel" aria-hidden="true">
           <div className="loading-line loading-line--wide"></div>
@@ -85,10 +86,10 @@ function CarPage() {
     return (
       <>
         <Seo
-          canonicalUrl={`${siteUrl}/catalog`}
+          canonicalUrl={catalogUrl}
           description={t('metadata.pages.carNotFound.description')}
           title={t('metadata.pages.carNotFound.title')}
-          url={`${siteUrl}/catalog`}
+          url={catalogUrl}
         />
         <div className="empty-state">
           <p>{hasLoadError ? t('common.errors.car') : t('common.errors.carNotFound')}</p>

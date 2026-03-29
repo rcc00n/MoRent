@@ -1,6 +1,9 @@
 import { getDictionary } from '../i18n/resources/index.js'
 import {
-  buildAbsoluteUrl,
+  buildLanguageAlternates,
+  buildLocalizedUrl,
+  getOgLocale,
+  getOgLocaleAlternates,
   normalizePathname,
   SITE_NAME,
 } from './site.js'
@@ -8,19 +11,36 @@ import {
 const pageMetadataRegistry = {
   '/': {
     key: 'home',
-    structuredData: (siteUrl, dictionary) => [
+    structuredData: (siteUrl, dictionary, language) => [
       {
         '@context': 'https://schema.org',
         '@type': 'Organization',
         name: SITE_NAME,
-        url: buildAbsoluteUrl('/', siteUrl),
+        url: buildLocalizedUrl('/', language, siteUrl),
         description: dictionary.metadata.organizationDescription,
+        inLanguage: language,
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: SITE_NAME,
+        url: buildLocalizedUrl('/', language, siteUrl),
+        description: dictionary.metadata.organizationDescription,
+        areaServed: [
+          'Coastal resort area',
+          'Hotel pickup coordination',
+          'Airport arrival pickup',
+        ],
+        availableLanguage: ['en', 'ru'],
+        serviceType: 'Premium car rental',
+        inLanguage: language,
       },
       {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: SITE_NAME,
-        url: buildAbsoluteUrl('/', siteUrl),
+        url: buildLocalizedUrl('/', language, siteUrl),
+        inLanguage: language,
       },
     ],
   },
@@ -32,15 +52,38 @@ const pageMetadataRegistry = {
   },
   '/about': {
     key: 'about',
+    structuredData: (siteUrl, dictionary, language, pathname, pageCopy) => ({
+      '@context': 'https://schema.org',
+      '@type': 'AboutPage',
+      name: pageCopy.title,
+      description: pageCopy.description,
+      url: buildLocalizedUrl(pathname, language, siteUrl),
+      inLanguage: language,
+      about: {
+        '@type': 'LocalBusiness',
+        name: SITE_NAME,
+        description: dictionary.metadata.organizationDescription,
+      },
+    }),
   },
   '/contacts': {
     key: 'contacts',
+    structuredData: (siteUrl, _dictionary, language, pathname, pageCopy) => ({
+      '@context': 'https://schema.org',
+      '@type': 'ContactPage',
+      name: pageCopy.title,
+      description: pageCopy.description,
+      url: buildLocalizedUrl(pathname, language, siteUrl),
+      inLanguage: language,
+    }),
   },
   '/faq': {
     key: 'faq',
-    structuredData: (_siteUrl, dictionary) => ({
+    structuredData: (siteUrl, dictionary, language, pathname) => ({
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
+      url: buildLocalizedUrl(pathname, language, siteUrl),
+      inLanguage: language,
       mainEntity: dictionary.faq.items.map((item) => ({
         '@type': 'Question',
         name: item.question,
@@ -64,10 +107,13 @@ const pageMetadataRegistry = {
   },
 }
 
+function normalizePageLanguage(language) {
+  return language === 'ru' ? 'ru' : 'en'
+}
+
 function getLocalizedPageCopy(pathname, language) {
   const dictionary = getDictionary(language)
-  const registryEntry =
-    pageMetadataRegistry[normalizePathname(pathname)] || {}
+  const registryEntry = pageMetadataRegistry[normalizePathname(pathname)] || {}
   const metadataKey = registryEntry.key
 
   return {
@@ -79,41 +125,94 @@ function getLocalizedPageCopy(pathname, language) {
   }
 }
 
-export function getPageMetadata(pathname, siteUrl, language = 'en') {
-  const normalizedPathname = normalizePathname(pathname)
-  const { dictionary, entry, pageCopy } = getLocalizedPageCopy(
-    normalizedPathname,
-    language,
-  )
+function buildMetadataPayload({
+  pathname,
+  language,
+  siteUrl,
+  pageCopy,
+  entry,
+  structuredData,
+}) {
+  const normalizedLanguage = normalizePageLanguage(language)
 
   return {
     title: pageCopy.title,
     description: pageCopy.description,
     robots: entry.robots || 'index,follow',
-    canonicalUrl: buildAbsoluteUrl(normalizedPathname, siteUrl),
-    url: buildAbsoluteUrl(normalizedPathname, siteUrl),
+    canonicalUrl: buildLocalizedUrl(pathname, normalizedLanguage, siteUrl),
+    url: buildLocalizedUrl(pathname, normalizedLanguage, siteUrl),
     ogType: entry.ogType || 'website',
     shouldIndex: entry.shouldIndex !== false,
-    structuredData: entry.structuredData
-      ? entry.structuredData(siteUrl, dictionary)
-      : null,
+    language: normalizedLanguage,
+    alternates: buildLanguageAlternates(pathname, siteUrl),
+    ogLocale: getOgLocale(normalizedLanguage),
+    ogLocaleAlternates: getOgLocaleAlternates(normalizedLanguage),
+    structuredData,
   }
 }
 
-export function getStaticPageEntries(siteUrl, language = 'en') {
-  return Object.keys(pageMetadataRegistry).map((pathname) => ({
-    pathname,
-    metadata: getPageMetadata(pathname, siteUrl, language),
-  }))
+export function getDefaultSiteMetadata(siteUrl, language = 'en') {
+  const dictionary = getDictionary(language)
+
+  return buildMetadataPayload({
+    pathname: '/',
+    language,
+    siteUrl,
+    pageCopy: dictionary.metadata.default,
+    entry: {},
+    structuredData: null,
+  })
+}
+
+export function getPageMetadata(pathname, siteUrl, language = 'en') {
+  const normalizedPathname = normalizePathname(pathname)
+  const normalizedLanguage = normalizePageLanguage(language)
+  const { dictionary, entry, pageCopy } = getLocalizedPageCopy(
+    normalizedPathname,
+    normalizedLanguage,
+  )
+
+  return buildMetadataPayload({
+    pathname: normalizedPathname,
+    language: normalizedLanguage,
+    siteUrl,
+    pageCopy,
+    entry,
+    structuredData: entry.structuredData
+      ? entry.structuredData(
+          siteUrl,
+          dictionary,
+          normalizedLanguage,
+          normalizedPathname,
+          pageCopy,
+        )
+      : null,
+  })
+}
+
+export function getStaticPageEntries(siteUrl) {
+  return Object.keys(pageMetadataRegistry).map((pathname) => {
+    const metadataByLanguage = {
+      en: getPageMetadata(pathname, siteUrl, 'en'),
+      ru: getPageMetadata(pathname, siteUrl, 'ru'),
+    }
+
+    return {
+      pathname,
+      metadata: metadataByLanguage.en,
+      metadataByLanguage,
+    }
+  })
 }
 
 export function getCarPageMetadata(car, siteUrl, language = 'en') {
-  const dictionary = getDictionary(language)
+  const normalizedLanguage = normalizePageLanguage(language)
+  const dictionary = getDictionary(normalizedLanguage)
   const localizedCarDescription =
     (car.translationKey && dictionary.cars?.[car.translationKey]?.description) ||
     car.description
   const carName = `${car.brand} ${car.model}`
-  const canonicalUrl = buildAbsoluteUrl(`/car/${car.id}`, siteUrl)
+  const canonicalUrl = buildLocalizedUrl(`/car/${car.id}`, normalizedLanguage, siteUrl)
   const metadataCopy = dictionary.metadata.pages.car
 
   return {
@@ -125,6 +224,11 @@ export function getCarPageMetadata(car, siteUrl, language = 'en') {
     canonicalUrl,
     url: canonicalUrl,
     ogType: 'product',
+    shouldIndex: true,
+    language: normalizedLanguage,
+    alternates: buildLanguageAlternates(`/car/${car.id}`, siteUrl),
+    ogLocale: getOgLocale(normalizedLanguage),
+    ogLocaleAlternates: getOgLocaleAlternates(normalizedLanguage),
     structuredData: {
       '@context': 'https://schema.org',
       '@type': 'Car',
@@ -137,6 +241,7 @@ export function getCarPageMetadata(car, siteUrl, language = 'en') {
       description:
         localizedCarDescription || metadataCopy.structuredFallbackDescription,
       url: canonicalUrl,
+      inLanguage: normalizedLanguage,
     },
   }
 }

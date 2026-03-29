@@ -68,8 +68,6 @@ const en = {
   },
   footer: {
     title: 'Premium coastal car rental with visible daily rates.',
-    description:
-      'MoRent keeps the booking path short: choose the car, see the day rate, and send the request for direct confirmation.',
     requestCar: 'Request a car',
     serviceDetails: 'Service details',
     groups: {
@@ -134,23 +132,6 @@ const en = {
     benefits: {
       title: 'See the car. Trust the rate. Send the request.',
       description: 'Exact fleet, readable day rates, direct confirmation.',
-      proofItems: [
-        {
-          value: '15 min',
-          title: 'Average response',
-          description: 'Availability moves fast.',
-        },
-        {
-          value: 'Daily',
-          title: 'Visible day rates',
-          description: 'Rates stay readable first.',
-        },
-        {
-          value: '100%',
-          title: 'Verified fleet',
-          description: 'Every listed car is checked.',
-        },
-      ],
       processItems: [
         {
           title: 'See the car.',
@@ -191,8 +172,6 @@ const en = {
     visuals: {
       primaryAlt: 'Premium coastal highway for resort arrivals and scenic drives',
       primaryCaption: 'Coastal arrival routes planned around your pickup',
-      secondaryAlt: 'Premium interior prepared for a direct handoff',
-      secondaryCaption: 'Comfort-first fleet presentation before the request',
     },
     infoCards: [
       {
@@ -327,9 +306,6 @@ const en = {
     visuals: {
       primaryAlt: 'Sunset coastal road matching the MoRent premium travel mood',
       primaryCaption: 'Calm travel mood, premium fleet, direct handoff',
-      secondaryAlt:
-        'Seafront coastal road used to frame the premium resort context',
-      secondaryCaption: 'Built for hotel arrivals and coastal escapes',
     },
     stats: [
       {
@@ -378,9 +354,6 @@ const en = {
       primaryAlt:
         'Premium arrival forecourt for airport and hotel pickup coordination',
       primaryCaption: 'Airport and hotel pickup agreed after review',
-      secondaryAlt: 'Coastal route supporting the wider service area',
-      secondaryCaption:
-        'Service built around resort, hotel, and private handoff',
     },
     summary: [
       {
@@ -524,8 +497,6 @@ const en = {
       primaryAlt:
         'Scenic coastal road representing the route from request to drive',
       primaryCaption: 'Short request path, premium drive, direct confirmation',
-      secondaryAlt: 'Arrival area supporting coordinated pickup',
-      secondaryCaption: 'Pickup timing agreed after the team review',
     },
     steps: [
       {
