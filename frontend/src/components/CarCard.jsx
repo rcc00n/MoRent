@@ -14,10 +14,10 @@ const cardMotion = {
     scale: 1,
   },
   hover: {
-    y: -10,
-    scale: 1.01,
+    y: -8,
+    scale: 1.008,
     transition: {
-      duration: 0.26,
+      duration: 0.32,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -28,9 +28,9 @@ const imageMotion = {
     scale: 1,
   },
   hover: {
-    scale: 1.08,
+    scale: 1.05,
     transition: {
-      duration: 0.38,
+      duration: 0.42,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -41,6 +41,7 @@ function CarCard({ car }) {
     <MotionArticle
       animate="rest"
       className="car-card"
+      data-cursor="interactive"
       initial="rest"
       variants={cardMotion}
       whileHover="hover"
@@ -49,6 +50,8 @@ function CarCard({ car }) {
         <MotionImage
           alt={`${car.brand} ${car.model}`}
           className="car-card__media"
+          decoding="async"
+          loading="lazy"
           src={car.image}
           variants={imageMotion}
         />
@@ -72,7 +75,7 @@ function CarCard({ car }) {
         <div className="price-row">
           <span className="price">{formatPrice(car.price_per_day)}</span>
           <Link className="button button--primary" to={`/car/${car.id}`}>
-            View car
+            Check availability
           </Link>
         </div>
       </div>
