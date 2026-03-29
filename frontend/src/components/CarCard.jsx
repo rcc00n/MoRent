@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
+import { enrichCarMedia } from '../content/mediaLibrary'
 import {
   resetInteractiveGlow,
   updateInteractiveGlow,
@@ -42,7 +43,8 @@ const imageMotion = {
 }
 
 function CarCard({ car }) {
-  const carName = `${car.brand} ${car.model}`
+  const displayCar = enrichCarMedia(car)
+  const carName = `${displayCar.brand} ${displayCar.model}`
 
   return (
     <MotionArticle
@@ -58,7 +60,7 @@ function CarCard({ car }) {
       <Link
         aria-label={`View availability for ${carName}`}
         className="car-card__link"
-        to={`/car/${car.id}`}
+        to={`/car/${displayCar.id}`}
       />
 
       <div className="car-card__content">
@@ -68,7 +70,7 @@ function CarCard({ car }) {
             className="car-card__media"
             decoding="async"
             loading="lazy"
-            src={car.image}
+            src={displayCar.image}
             variants={imageMotion}
           />
         </div>
@@ -76,18 +78,20 @@ function CarCard({ car }) {
           <div className="car-card__top">
             <div>
               <h2 className="car-card__title">{carName}</h2>
-              <p className="car-card__description muted-text">{car.description}</p>
+              <p className="car-card__description muted-text">{displayCar.description}</p>
             </div>
             <span
               className={
-                car.available ? 'badge badge--available' : 'badge badge--unavailable'
+                displayCar.available
+                  ? 'badge badge--available'
+                  : 'badge badge--unavailable'
               }
             >
-              {car.available ? 'Available' : 'Booked'}
+              {displayCar.available ? 'Available' : 'Booked'}
             </span>
           </div>
           <div className="price-row">
-            <span className="price">{formatPrice(car.price_per_day)}</span>
+            <span className="price">{formatPrice(displayCar.price_per_day)}</span>
             <span aria-hidden="true" className="button button--primary car-card__cta">
               Check availability
             </span>

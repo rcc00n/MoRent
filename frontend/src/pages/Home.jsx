@@ -11,8 +11,8 @@ import DotFieldCanvas from '../components/DotFieldCanvas'
 import FaqList from '../components/FaqList'
 import LoadingFleet from '../components/LoadingFleet'
 import MagneticAction from '../components/MagneticAction'
-import coastalResortScene from '../assets/coastal-resort-scene.webp'
 import coastalRoadHero from '../assets/coastal-road-hero.webp'
+import { enrichCarMedia, pageMedia } from '../content/mediaLibrary'
 import { faqItems } from '../content/siteContent'
 import { getCars } from '../shared/api'
 import {
@@ -344,7 +344,7 @@ function loadFeaturedCars() {
   if (!featuredCarsRequest) {
     featuredCarsRequest = getCars()
       .then(({ data }) => {
-        featuredCarsCache = data.slice(0, 3)
+        featuredCarsCache = data.slice(0, 3).map(enrichCarMedia)
 
         return featuredCarsCache
       })
@@ -588,7 +588,7 @@ function Home() {
             className="destination-section__image"
             decoding="async"
             loading="lazy"
-            src={coastalResortScene}
+            src={pageMedia.compactCoastal}
             transition={{ duration: 0.7, ease: premiumEase }}
             whileHover={shouldReduceMotion ? undefined : { scale: 1.035, y: -4 }}
           />

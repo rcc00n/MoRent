@@ -1,5 +1,8 @@
 import { Link, useLocation } from 'react-router-dom'
 
+import PageVisualStack from '../components/PageVisualStack'
+import { pageMedia } from '../content/mediaLibrary'
+
 function formatDate(value) {
   if (!value) {
     return null
@@ -26,14 +29,27 @@ function RequestReceived() {
   return (
     <div className="content-page">
       <section className="thank-you scene scene--closing">
-        <span className="page-eyebrow">Request received</span>
-        <h1>Your request is in. We will review the availability next.</h1>
-        <p>
-          {state?.carName
-            ? `${state.carName} has been added to the request queue.`
-            : 'The booking request has been saved and sent to the team for review.'}{' '}
-          No payment is taken at this stage.
-        </p>
+        <div className="thank-you__hero">
+          <div className="thank-you__intro">
+            <span className="page-eyebrow">Request received</span>
+            <h1>Your request is in. We will review the availability next.</h1>
+            <p>
+              {state?.carName
+                ? `${state.carName} has been added to the request queue.`
+                : 'The booking request has been saved and sent to the team for review.'}{' '}
+              No payment is taken at this stage.
+            </p>
+          </div>
+
+          <PageVisualStack
+            primary={pageMedia.sunsetArrival}
+            primaryAlt="Arrival forecourt visual reinforcing the booking confirmation mood"
+            primaryCaption="The team reviews timing, car, and pickup context next"
+            secondary={pageMedia.sunsetCoast}
+            secondaryAlt="Calm coastal road representing the next step after confirmation"
+            secondaryCaption="Once confirmed, the trip moves from request to handoff"
+          />
+        </div>
 
         {startDate || endDate ? (
           <div className="thank-you__dates">

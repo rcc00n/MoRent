@@ -4,6 +4,7 @@ import { Link, useParams } from 'react-router-dom'
 
 import BookingForm from '../components/BookingForm'
 import Seo from '../components/Seo'
+import { enrichCarMedia } from '../content/mediaLibrary'
 import { getCarPageMetadata } from '../seo/pageMetadata'
 import { getRuntimeSiteUrl } from '../seo/site'
 import { getCar } from '../shared/api'
@@ -17,6 +18,7 @@ function formatPrice(price) {
 function CarPage() {
   const { id } = useParams()
   const [car, setCar] = useState(null)
+  const [activeImage, setActiveImage] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [errorMessage, setErrorMessage] = useState('')
   const siteUrl = getRuntimeSiteUrl()
@@ -27,9 +29,11 @@ function CarPage() {
     async function loadCar() {
       try {
         const { data } = await getCar(id)
+        const enrichedCar = enrichCarMedia(data)
 
         if (isMounted) {
-          setCar(data)
+          setCar(enrichedCar)
+          setActiveImage(enrichedCar.primaryImage || enrichedCar.image || '')
         }
       } catch {
         if (isMounted) {
@@ -48,6 +52,10 @@ function CarPage() {
       isMounted = false
     }
   }, [id])
+
+  const galleryImages = [...new Set([car?.primaryImage, ...(car?.gallery || [])].filter(Boolean))]
+  const currentImage =
+    galleryImages.find((image) => image === activeImage) || galleryImages[0] || car?.image
 
   if (isLoading) {
     return (
@@ -102,8 +110,34 @@ function CarPage() {
             <img
               alt={`${car.brand} ${car.model}`}
               className="car-page__image"
-              src={car.image}
+              decoding="async"
+              src={currentImage}
             />
+            {galleryImages.length > 1 ? (
+              <div className="car-page__gallery-strip">
+                {galleryImages.map((image, index) => (
+                  <button
+                    aria-label={`View ${car.brand} ${car.model} photo ${index + 1}`}
+                    className={
+                      image === currentImage
+                        ? 'car-page__thumbnail is-active'
+                        : 'car-page__thumbnail'
+                    }
+                    key={image}
+                    onClick={() => setActiveImage(image)}
+                    type="button"
+                  >
+                    <img
+                      alt=""
+                      className="car-page__thumbnail-image"
+                      decoding="async"
+                      loading="lazy"
+                      src={image}
+                    />
+                  </button>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           <div className="panel">

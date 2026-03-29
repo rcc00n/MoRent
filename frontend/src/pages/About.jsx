@@ -1,19 +1,32 @@
 import { Link } from 'react-router-dom'
 
+import PageVisualStack from '../components/PageVisualStack'
+import { pageMedia } from '../content/mediaLibrary'
 import { aboutPrinciples, aboutStats } from '../content/siteContent'
 
 function About() {
   return (
     <div className="content-page">
       <section className="page-hero scene scene--fleet">
-        <div className="page-hero__content">
-          <span className="page-eyebrow">About MoRent</span>
-          <h1>Premium coastal car rental designed to feel calm, clear, and direct.</h1>
-          <p>
-            MoRent is built around a short decision path: visible daily rates, a curated
-            fleet, and direct request handling for resort arrivals, hotel delivery, and
-            private pickup coordination.
-          </p>
+        <div className="page-hero__grid">
+          <div className="page-hero__content">
+            <span className="page-eyebrow">About MoRent</span>
+            <h1>Premium coastal car rental designed to feel calm, clear, and direct.</h1>
+            <p>
+              MoRent is built around a short decision path: visible daily rates, a
+              curated fleet, and direct request handling for resort arrivals, hotel
+              delivery, and private pickup coordination.
+            </p>
+          </div>
+
+          <PageVisualStack
+            primary={pageMedia.sunsetCoast}
+            primaryAlt="Sunset coastal road matching the MoRent premium travel mood"
+            primaryCaption="Calm travel mood, premium fleet, direct handoff"
+            secondary={pageMedia.compactCoastal}
+            secondaryAlt="Seafront coastal road used to frame the premium resort context"
+            secondaryCaption="Built for hotel arrivals and coastal escapes"
+          />
         </div>
 
         <div className="page-hero__aside">

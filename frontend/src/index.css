@@ -1389,11 +1389,42 @@ code {
 
 .car-page__gallery {
   overflow: hidden;
+  display: grid;
+  gap: 14px;
+  padding: 18px;
 }
 
 .car-page__image {
   width: 100%;
   aspect-ratio: 16 / 10;
+  object-fit: cover;
+  border-radius: 22px;
+}
+
+.car-page__gallery-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.car-page__thumbnail {
+  width: 100%;
+  padding: 0;
+  border: 1px solid rgba(177, 205, 255, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.car-page__thumbnail.is-active {
+  border-color: rgba(141, 195, 255, 0.52);
+  box-shadow: 0 0 0 3px rgba(77, 143, 255, 0.12);
+}
+
+.car-page__thumbnail-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
   object-fit: cover;
 }
 
@@ -1566,8 +1597,24 @@ code {
   padding: 28px;
 }
 
+.page-hero.scene--destination {
+  grid-template-columns: 1fr;
+  gap: 22px;
+  padding: 28px;
+}
+
+.page-hero__grid,
+.catalog-intro__top,
+.thank-you__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+  gap: 24px;
+  align-items: center;
+}
+
 .page-hero__content,
-.page-hero__aside {
+.page-hero__aside,
+.thank-you__intro {
   display: grid;
   gap: 12px;
 }
@@ -1582,7 +1629,7 @@ code {
 }
 
 .page-hero__content p,
-.thank-you > p {
+.thank-you__intro p {
   margin: 0;
   max-width: 62ch;
   color: var(--color-text-muted);
@@ -1718,6 +1765,70 @@ code {
   display: grid;
   gap: 18px;
   padding: 28px;
+}
+
+.catalog-intro__visual {
+  justify-self: stretch;
+}
+
+.page-visual-stack {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.56fr);
+  gap: 14px;
+  min-height: 100%;
+}
+
+.page-visual-stack__figure {
+  position: relative;
+  overflow: hidden;
+  min-height: 100%;
+  margin: 0;
+  border: 1px solid rgba(186, 213, 255, 0.14);
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 205, 154, 0.12), transparent 22%),
+    rgba(10, 18, 32, 0.88);
+  box-shadow: var(--color-shadow-soft);
+}
+
+.page-visual-stack__figure::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 44%;
+  background: linear-gradient(180deg, rgba(7, 12, 23, 0), rgba(7, 12, 23, 0.88));
+}
+
+.page-visual-stack__figure--primary {
+  aspect-ratio: 4 / 5;
+}
+
+.page-visual-stack__figure--secondary {
+  aspect-ratio: 4 / 5;
+  margin-top: 48px;
+}
+
+.page-visual-stack__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.page-visual-stack__caption {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 1;
+  padding: 12px 14px;
+  border: 1px solid rgba(177, 205, 255, 0.14);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(8, 14, 27, 0.5), rgba(12, 18, 34, 0.74));
+  color: #f2f7ff;
+  font-size: 0.88rem;
+  line-height: 1.4;
+  backdrop-filter: blur(12px);
 }
 
 .faq-preview {
@@ -1993,6 +2104,9 @@ code {
   .scene--destination,
   .closing-cta__panel,
   .car-page,
+  .page-hero__grid,
+  .catalog-intro__top,
+  .thank-you__hero,
   .cta-panel,
   .site-footer__inner,
   .site-footer__bottom {
@@ -2042,6 +2156,14 @@ code {
 
   .page-hero__aside {
     grid-template-columns: 1fr;
+  }
+
+  .page-visual-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-visual-stack__figure--secondary {
+    margin-top: 0;
   }
 }
 
@@ -2161,6 +2283,10 @@ code {
     padding: 22px;
   }
 
+  .car-page__gallery {
+    padding: 14px;
+  }
+
   .destination-section__media {
     min-height: 188px;
   }
@@ -2180,6 +2306,10 @@ code {
 
   .custom-cursor {
     display: none;
+  }
+
+  .page-visual-stack {
+    grid-template-columns: 1fr;
   }
 }
 

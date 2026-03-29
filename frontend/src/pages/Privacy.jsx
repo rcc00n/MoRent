@@ -1,18 +1,32 @@
 import { Link } from 'react-router-dom'
 
+import PageVisualStack from '../components/PageVisualStack'
+import { pageMedia } from '../content/mediaLibrary'
 import { privacySections } from '../content/siteContent'
 
 function Privacy() {
   return (
     <div className="content-page">
       <section className="page-hero scene scene--benefits">
-        <div className="page-hero__content">
-          <span className="page-eyebrow">Privacy</span>
-          <h1>Privacy policy for booking requests and service follow-up.</h1>
-          <p>
-            MoRent keeps personal data collection focused on what is needed to review
-            availability, confirm the request, and manage future operational workflows.
-          </p>
+        <div className="page-hero__grid">
+          <div className="page-hero__content">
+            <span className="page-eyebrow">Privacy</span>
+            <h1>Privacy policy for booking requests and service follow-up.</h1>
+            <p>
+              MoRent keeps personal data collection focused on what is needed to review
+              availability, confirm the request, and manage future operational
+              workflows.
+            </p>
+          </div>
+
+          <PageVisualStack
+            primary={pageMedia.mercedesInterior}
+            primaryAlt="Premium car interior supporting privacy and request-handling context"
+            primaryCaption="Only the details needed to review the request"
+            secondary={pageMedia.sunsetArrival}
+            secondaryAlt="Arrival setting linked to service follow-up and request handling"
+            secondaryCaption="Operational follow-up stays tied to the booking journey"
+          />
         </div>
       </section>
 

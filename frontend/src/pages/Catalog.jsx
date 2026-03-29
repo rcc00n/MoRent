@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom'
 
 import CarCard from '../components/CarCard'
 import LoadingFleet from '../components/LoadingFleet'
+import PageVisualStack from '../components/PageVisualStack'
+import { enrichCarMedia, pageMedia } from '../content/mediaLibrary'
 import { getCars } from '../shared/api'
 
 const MotionSection = motion.section
@@ -21,7 +23,7 @@ function Catalog() {
         const { data } = await getCars()
 
         if (isMounted) {
-          setCars(data)
+          setCars(data.map(enrichCarMedia))
         }
       } catch {
         if (isMounted) {
@@ -49,14 +51,26 @@ function Catalog() {
         initial={{ opacity: 0, y: 18 }}
         transition={{ duration: 0.45 }}
       >
-        <div className="section-header section-header--split">
-          <div>
-            <h1>Premium fleet with visible daily rates.</h1>
+        <div className="catalog-intro__top">
+          <div className="section-header section-header--split">
+            <div>
+              <h1>Premium fleet with visible daily rates.</h1>
+            </div>
+            <p>
+              Choose the car first, review the daily rate, and move into the request
+              only when the timing works for the trip.
+            </p>
           </div>
-          <p>
-            Choose the car first, review the daily rate, and move into the request only
-            when the timing works for the trip.
-          </p>
+
+          <PageVisualStack
+            className="catalog-intro__visual"
+            primary={pageMedia.coastalHighway}
+            primaryAlt="Premium coastal highway for resort arrivals and scenic drives"
+            primaryCaption="Coastal arrival routes planned around your pickup"
+            secondary={pageMedia.mercedesInterior}
+            secondaryAlt="Premium interior prepared for a direct handoff"
+            secondaryCaption="Comfort-first fleet presentation before the request"
+          />
         </div>
 
         <div className="info-grid info-grid--compact">

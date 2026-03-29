@@ -1,18 +1,31 @@
 import { Link } from 'react-router-dom'
 
+import PageVisualStack from '../components/PageVisualStack'
+import { pageMedia } from '../content/mediaLibrary'
 import { bookingProcessSteps } from '../content/siteContent'
 
 function HowItWorks() {
   return (
     <div className="content-page">
       <section className="page-hero scene scene--closing">
-        <div className="page-hero__content">
-          <span className="page-eyebrow">How It Works</span>
-          <h1>A short booking path built for premium trips, not admin.</h1>
-          <p>
-            MoRent keeps the process intentionally simple so the client sees the fleet,
-            understands the rate, and reaches a confirmed handoff without extra steps.
-          </p>
+        <div className="page-hero__grid">
+          <div className="page-hero__content">
+            <span className="page-eyebrow">How It Works</span>
+            <h1>A short booking path built for premium trips, not admin.</h1>
+            <p>
+              MoRent keeps the process intentionally simple so the client sees the fleet,
+              understands the rate, and reaches a confirmed handoff without extra steps.
+            </p>
+          </div>
+
+          <PageVisualStack
+            primary={pageMedia.coastalHighway}
+            primaryAlt="Scenic coastal road representing the route from request to drive"
+            primaryCaption="Short request path, premium drive, direct confirmation"
+            secondary={pageMedia.sunsetArrival}
+            secondaryAlt="Arrival area supporting coordinated pickup"
+            secondaryCaption="Pickup timing agreed after the team review"
+          />
         </div>
       </section>
 

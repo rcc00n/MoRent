@@ -1,19 +1,32 @@
 import { Link } from 'react-router-dom'
 
+import PageVisualStack from '../components/PageVisualStack'
+import { pageMedia } from '../content/mediaLibrary'
 import { contactHighlights } from '../content/siteContent'
 
 function Contacts() {
   return (
     <div className="content-page">
       <section className="page-hero scene scene--destination">
-        <div className="page-hero__content">
-          <span className="page-eyebrow">Contacts</span>
-          <h1>Contact the team and plan the request with the right pickup context.</h1>
-          <p>
-            The site is the main booking channel. Once the request is in, the team
-            follows up directly to confirm availability, pickup timing, and the handoff
-            point.
-          </p>
+        <div className="page-hero__grid">
+          <div className="page-hero__content">
+            <span className="page-eyebrow">Contacts</span>
+            <h1>Contact the team and plan the request with the right pickup context.</h1>
+            <p>
+              The site is the main booking channel. Once the request is in, the team
+              follows up directly to confirm availability, pickup timing, and the handoff
+              point.
+            </p>
+          </div>
+
+          <PageVisualStack
+            primary={pageMedia.sunsetArrival}
+            primaryAlt="Premium arrival forecourt for airport and hotel pickup coordination"
+            primaryCaption="Airport and hotel pickup agreed after review"
+            secondary={pageMedia.coastalHighway}
+            secondaryAlt="Coastal route supporting the wider service area"
+            secondaryCaption="Service built around resort, hotel, and private handoff"
+          />
         </div>
 
         <div className="contact-summary">
