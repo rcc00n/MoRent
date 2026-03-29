@@ -179,13 +179,13 @@ code {
 .catalog-layout,
 .car-page {
   display: grid;
-  gap: 38px;
+  gap: 42px;
 }
 
 .scene {
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(167, 193, 242, 0.12);
+  border: 1px solid rgba(167, 193, 242, 0.08);
   border-radius: 32px;
 }
 
@@ -200,13 +200,11 @@ code {
 .scene::before {
   inset: 1px;
   border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.022), rgba(255, 255, 255, 0));
 }
 
 .scene::after {
-  inset: auto 26px 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(179, 207, 255, 0.2), transparent);
+  display: none;
 }
 
 .scene > * {
@@ -351,25 +349,6 @@ code {
   align-content: center;
 }
 
-.eyebrow {
-  display: inline-flex;
-  width: fit-content;
-  align-items: center;
-  justify-content: center;
-  padding: 6px 10px;
-  border: 1px solid rgba(176, 202, 250, 0.12);
-  border-radius: 999px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.018));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  color: rgba(166, 205, 255, 0.94);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  line-height: 1;
-  text-transform: uppercase;
-}
-
 .hero h1,
 .section-header h1,
 .section-header h2,
@@ -415,15 +394,6 @@ code {
 .hero__headline {
   display: grid;
   gap: 2px;
-}
-
-.hero__headline-line {
-  display: block;
-  overflow: hidden;
-}
-
-.hero__headline-line > span {
-  display: block;
 }
 
 .hero__description {
@@ -521,7 +491,7 @@ code {
   gap: 4px;
   min-width: 168px;
   padding: 14px 16px;
-  border: 1px solid rgba(151, 180, 234, 0.14);
+  border: 1px solid rgba(151, 180, 234, 0.1);
   border-radius: 20px;
   background: linear-gradient(180deg, rgba(8, 14, 27, 0.76), rgba(12, 18, 34, 0.72));
   backdrop-filter: blur(16px);
@@ -534,38 +504,6 @@ code {
 
 .hero__visual-note strong {
   font-size: 1.08rem;
-}
-
-.hero__visual-chip {
-  position: absolute;
-  z-index: 1;
-  display: grid;
-  gap: 4px;
-  padding: 12px 14px;
-  border: 1px solid rgba(194, 219, 255, 0.15);
-  border-radius: 18px;
-  background: linear-gradient(180deg, rgba(242, 248, 255, 0.1), rgba(242, 248, 255, 0.04));
-  backdrop-filter: blur(16px);
-}
-
-.hero__visual-chip span {
-  font-size: 0.8rem;
-  color: rgba(228, 239, 255, 0.72);
-}
-
-.hero__visual-chip strong {
-  font-size: 0.95rem;
-  color: #f7fbff;
-}
-
-.hero__visual-chip--top {
-  top: 18px;
-  left: -18px;
-}
-
-.hero__visual-chip--bottom {
-  right: -10px;
-  bottom: 88px;
 }
 
 .button-row,
@@ -596,7 +534,7 @@ code {
 .section-cta {
   justify-content: space-between;
   padding-top: var(--space-3);
-  border-top: 1px solid rgba(176, 202, 250, 0.12);
+  border-top: 1px solid rgba(176, 202, 250, 0.08);
 }
 
 .button {
@@ -659,38 +597,6 @@ code {
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.04));
 }
 
-.hero__booking-path {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 2px;
-}
-
-.hero__booking-step {
-  display: grid;
-  gap: 6px;
-  padding: 14px 14px 12px;
-  border: 1px solid rgba(177, 205, 255, 0.12);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(14px);
-}
-
-.hero__booking-step span {
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: rgba(138, 181, 255, 0.92);
-  text-transform: uppercase;
-}
-
-.hero__booking-step p {
-  margin: 0;
-  font-size: 0.95rem;
-  line-height: 1.35;
-  color: #f4f8ff;
-}
-
 .button__spinner {
   width: 14px;
   height: 14px;
@@ -712,9 +618,9 @@ code {
   gap: 14px;
   align-items: start;
   padding: 16px 18px;
-  border: 1px solid rgba(181, 207, 255, 0.12);
+  border: 1px solid rgba(181, 207, 255, 0.1);
   border-radius: 22px;
-  background: linear-gradient(180deg, rgba(243, 248, 255, 0.06), rgba(243, 248, 255, 0.03));
+  background: linear-gradient(180deg, rgba(243, 248, 255, 0.05), rgba(243, 248, 255, 0.02));
   backdrop-filter: blur(16px);
   transition:
     transform 220ms ease,
@@ -724,9 +630,9 @@ code {
 }
 
 .proof-strip__item:hover {
-  transform: translateY(-3px);
-  border-color: rgba(191, 217, 255, 0.18);
-  box-shadow: 0 22px 56px rgba(4, 10, 24, 0.22);
+  transform: translateY(-2px);
+  border-color: rgba(191, 217, 255, 0.14);
+  box-shadow: 0 18px 40px rgba(4, 10, 24, 0.18);
 }
 
 .proof-strip__value {
@@ -779,7 +685,7 @@ code {
 .closing-cta__panel,
 .loading-card,
 .loading-shell {
-  border: 1px solid rgba(151, 180, 234, 0.14);
+  border: 1px solid rgba(151, 180, 234, 0.11);
   border-radius: 26px;
   background: var(--color-surface);
   backdrop-filter: blur(18px);
@@ -800,13 +706,13 @@ code {
   inset: 0;
   border-radius: inherit;
   background: radial-gradient(
-    220px circle at var(--spotlight-x) var(--spotlight-y),
-    rgba(155, 199, 255, 0.14),
+    240px circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(155, 199, 255, 0.1),
     transparent 58%
   );
   opacity: 0;
   pointer-events: none;
-  transition: opacity 220ms ease;
+  transition: opacity 260ms ease;
   z-index: 0;
 }
 
@@ -822,7 +728,7 @@ code {
 .interactive-surface--soft::after {
   background: radial-gradient(
     210px circle at var(--spotlight-x) var(--spotlight-y),
-    rgba(144, 196, 255, 0.18),
+    rgba(144, 196, 255, 0.13),
     transparent 56%
   );
 }
@@ -830,7 +736,7 @@ code {
 .interactive-surface--feature::after {
   background: radial-gradient(
     260px circle at var(--spotlight-x) var(--spotlight-y),
-    rgba(136, 176, 255, 0.18),
+    rgba(136, 176, 255, 0.13),
     transparent 60%
   );
 }
@@ -838,7 +744,7 @@ code {
 .interactive-surface--stat::after {
   background: radial-gradient(
     180px circle at var(--spotlight-x) var(--spotlight-y),
-    rgba(165, 208, 255, 0.18),
+    rgba(165, 208, 255, 0.13),
     transparent 62%
   );
 }
@@ -846,7 +752,7 @@ code {
 .interactive-surface--fleet::after {
   background: radial-gradient(
     300px circle at var(--spotlight-x) var(--spotlight-y),
-    rgba(150, 193, 255, 0.14),
+    rgba(150, 193, 255, 0.1),
     transparent 58%
   );
 }
@@ -916,9 +822,9 @@ code {
   gap: 4px;
   min-width: 150px;
   padding: 14px 16px;
-  border: 1px solid rgba(180, 207, 255, 0.14);
+  border: 1px solid rgba(180, 207, 255, 0.1);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
   transition:
     transform 220ms ease,
     border-color 220ms ease,
@@ -926,9 +832,9 @@ code {
 }
 
 .benefits-section__stat:hover {
-  transform: translateY(-3px);
-  border-color: rgba(193, 218, 255, 0.2);
-  box-shadow: 0 20px 48px rgba(4, 10, 24, 0.2);
+  transform: translateY(-2px);
+  border-color: rgba(193, 218, 255, 0.14);
+  box-shadow: 0 16px 36px rgba(4, 10, 24, 0.16);
 }
 
 .benefits-section__stat strong {
@@ -958,9 +864,9 @@ code {
 }
 
 .benefit-card:hover {
-  transform: translateY(-4px);
-  border-color: rgba(186, 213, 255, 0.22);
-  background: rgba(17, 28, 49, 0.8);
+  transform: translateY(-2px);
+  border-color: rgba(186, 213, 255, 0.14);
+  background: rgba(17, 28, 49, 0.76);
 }
 
 .scene--proof .proof-strip__item {
@@ -974,8 +880,8 @@ code {
 }
 
 .scene--fleet .car-card:hover {
-  border-color: rgba(191, 217, 255, 0.22);
-  box-shadow: 0 30px 72px rgba(4, 10, 24, 0.38);
+  border-color: rgba(191, 217, 255, 0.16);
+  box-shadow: 0 22px 54px rgba(4, 10, 24, 0.28);
 }
 
 .scene--benefits .benefit-card,
@@ -1014,14 +920,12 @@ code {
 .signal-section__visual::before {
   inset: 10% 8% 16%;
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(81, 146, 255, 0.18), transparent 66%);
+  background: radial-gradient(circle, rgba(81, 146, 255, 0.14), transparent 66%);
   filter: blur(38px);
 }
 
 .signal-section__visual::after {
-  inset: auto 10% 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(180, 208, 255, 0.24), transparent);
+  display: none;
 }
 
 .dot-field {
@@ -1067,14 +971,6 @@ code {
   box-shadow: 0 28px 76px rgba(3, 9, 20, 0.46);
 }
 
-.benefit-card__tag {
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: rgba(132, 179, 255, 0.92);
-  text-transform: uppercase;
-}
-
 .benefit-card h3 {
   margin: 0;
   font-size: 1.28rem;
@@ -1089,11 +985,11 @@ code {
 
 .benefit-card__glyph {
   position: relative;
-  width: 58px;
-  height: 58px;
-  border: 1px solid rgba(194, 219, 255, 0.18);
+  width: 52px;
+  height: 52px;
+  border: 1px solid rgba(194, 219, 255, 0.12);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
   overflow: hidden;
 }
 
@@ -1140,7 +1036,7 @@ code {
   inset: 0;
   background: radial-gradient(
     220px circle at var(--spotlight-x) calc(var(--spotlight-y) - 28px),
-    rgba(255, 255, 255, 0.14),
+    rgba(255, 255, 255, 0.1),
     transparent 56%
   );
   opacity: 0;
@@ -1390,9 +1286,9 @@ code {
   gap: 12px;
   align-items: center;
   padding: 14px 16px;
-  border: 1px solid rgba(180, 207, 255, 0.14);
+  border: 1px solid rgba(180, 207, 255, 0.1);
   border-radius: 18px;
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .closing-cta__step span {
@@ -1541,7 +1437,6 @@ code {
     max-width: none;
   }
 
-  .hero__booking-path,
   .benefits-grid {
     grid-template-columns: 1fr;
   }
@@ -1585,23 +1480,9 @@ code {
     height: 260px;
   }
 
-  .hero__visual-chip--top {
-    top: 14px;
-    left: 14px;
-  }
-
-  .hero__visual-chip--bottom {
-    right: 14px;
-    bottom: 86px;
-  }
-
   .hero__visual-note {
     right: 18px;
     bottom: 18px;
-  }
-
-  .hero__booking-path {
-    grid-template-columns: 1fr;
   }
 
   .proof-strip__item {

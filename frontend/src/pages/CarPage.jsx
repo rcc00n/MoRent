@@ -83,7 +83,6 @@ function CarPage() {
         </div>
 
         <div className="panel">
-          <span className="eyebrow">Car details</span>
           <div className="car-page__summary">
             <div>
               <h1 className="car-page__title">

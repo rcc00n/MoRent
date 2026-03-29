@@ -48,10 +48,9 @@ function Catalog() {
       transition={{ duration: 0.45 }}
     >
       <div className="section-header">
-        <span className="eyebrow">Catalog</span>
         <h1>Available cars</h1>
         <p>
-          The catalog is connected to the backend endpoint at <code>/api/cars/</code>.
+          Open a car, check the dates, and send your request directly.
         </p>
       </div>
 

@@ -45,27 +45,23 @@ const proofItems = [
 
 const benefitItems = [
   {
-    tag: 'Fast booking',
     title: 'Request in minutes.',
     description: 'Choose dates and send the request without account setup.',
     tone: 'signal',
   },
   {
-    tag: 'Verified fleet',
-    title: 'Premium cars with visible rates.',
-    description: 'High-end models, clear day rates, real availability.',
+    title: 'Premium cars with clear rates.',
+    description: 'High-end models, day rates, and real availability in view.',
     tone: 'fleet',
   },
   {
-    tag: 'Premium support',
     title: 'A real manager confirms the handoff.',
-    description: 'Support stays personal after the form is sent.',
+    description: 'Support stays personal after the request is sent.',
     tone: 'support',
   },
   {
-    tag: 'Transparent pricing',
     title: 'Pricing stays visible from the start.',
-    description: 'No hidden step before the request.',
+    description: 'No hidden step before dates or contact.',
     tone: 'pricing',
   },
 ]
@@ -440,17 +436,13 @@ function Home() {
             initial="hidden"
             variants={heroContentVariants}
           >
-            <span className="eyebrow">
-              Premium rental experience
-            </span>
-
             <MotionHeading className="hero__headline">
-              Premium cars for days that need more than transport.
+              Premium car rental with clear rates and fast booking.
             </MotionHeading>
 
             <p className="hero__description">
-              Curated premium cars, clear day rates, simple booking from first
-              look to confirmation.
+              Browse the fleet, open the car you want, and send your request in
+              minutes.
             </p>
 
             <div className="button-row button-row--hero">
@@ -536,10 +528,9 @@ function Home() {
             className="benefits-section__intro"
             variants={benefitsIntroVariants}
           >
-            <span className="eyebrow">Why choose us</span>
-            <h2>Premium booking should feel calm and close at hand.</h2>
+            <h2>See the car, trust the rate, send the request.</h2>
             <p>
-              See the car, trust the rate, send the request, get a fast answer.
+              Everything stays visible from first glance to confirmation.
             </p>
 
             <div className="benefits-section__stats">
@@ -579,7 +570,6 @@ function Home() {
                   <span></span>
                   <span></span>
                 </div>
-                <span className="benefit-card__tag">{item.tag}</span>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
               </MotionArticle>
@@ -597,9 +587,8 @@ function Home() {
         whileInView="visible"
       >
         <div className="signal-section__intro">
-          <span className="eyebrow">Motion field</span>
           <h2 id="motion-field-heading">
-            Precision locks into form.
+            The fleet comes into focus.
           </h2>
         </div>
 
@@ -622,13 +611,12 @@ function Home() {
           variants={sectionSlideVariants}
         >
           <div>
-            <span className="eyebrow">Featured fleet</span>
             <h2 id="featured-cars-heading">
               Check availability for the cars booked first.
             </h2>
           </div>
           <p>
-            Open the fleet and move straight into dates.
+            Open any car and move straight into dates.
           </p>
         </MotionDiv>
 
@@ -668,7 +656,6 @@ function Home() {
       >
         <MotionDiv className="closing-cta__panel" variants={closingPanelVariants}>
           <div className="closing-cta__content">
-            <span className="eyebrow">Ready to book</span>
             <h2>Choose the dates. We confirm the rest.</h2>
             <p>
               Browse the fleet, pick the car, send the request in minutes.

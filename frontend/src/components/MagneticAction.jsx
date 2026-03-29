@@ -15,14 +15,14 @@ function MagneticAction({ children, className, href, to }) {
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const springX = useSpring(x, {
-    stiffness: 260,
-    damping: 24,
-    mass: 0.45,
+    stiffness: 220,
+    damping: 26,
+    mass: 0.5,
   })
   const springY = useSpring(y, {
-    stiffness: 260,
-    damping: 24,
-    mass: 0.45,
+    stiffness: 220,
+    damping: 26,
+    mass: 0.5,
   })
 
   const handlePointerMove = (event) => {
@@ -40,8 +40,8 @@ function MagneticAction({ children, className, href, to }) {
     const offsetX = event.clientX - rect.left - rect.width / 2
     const offsetY = event.clientY - rect.top - rect.height / 2
 
-    x.set(Math.max(Math.min(offsetX * 0.12, 7), -7))
-    y.set(Math.max(Math.min(offsetY * 0.12, 6), -6))
+    x.set(Math.max(Math.min(offsetX * 0.08, 5), -5))
+    y.set(Math.max(Math.min(offsetY * 0.08, 4), -4))
   }
 
   const handlePointerLeave = () => {

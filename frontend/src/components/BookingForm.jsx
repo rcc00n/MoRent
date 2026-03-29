@@ -137,7 +137,6 @@ function BookingForm({ carId, carName }) {
   return (
     <form className="booking-form" onSubmit={handleSubmit}>
       <div>
-        <span className="eyebrow">Booking form</span>
         <h2>Check availability for {carName}</h2>
         <p className="muted-text">
           Send your dates and contact details. No payment is required to request the car.
