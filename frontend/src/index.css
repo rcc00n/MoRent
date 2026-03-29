@@ -19,8 +19,8 @@
   --color-danger: #ff8888;
   --color-shadow: 0 28px 80px rgba(4, 10, 24, 0.55);
   --color-shadow-soft: 0 20px 60px rgba(4, 10, 24, 0.32);
-  --container-width: 1180px;
-  --page-gutter: 32px;
+  --container-width: 1240px;
+  --page-gutter: 24px;
   --space-2: 8px;
   --space-3: 12px;
   --space-4: 16px;
@@ -123,7 +123,7 @@ code {
   align-items: center;
   justify-content: space-between;
   gap: var(--space-5);
-  min-height: 78px;
+  min-height: 72px;
 }
 
 .navbar__actions {
@@ -168,14 +168,14 @@ code {
 }
 
 .page-shell {
-  padding-block: var(--space-8) 80px;
+  padding-block: 28px 72px;
 }
 
 .home-page,
 .catalog-layout,
 .car-page {
   display: grid;
-  gap: var(--space-8);
+  gap: 36px;
 }
 
 .hero {
@@ -187,8 +187,10 @@ code {
 }
 
 .hero--premium {
-  min-height: 620px;
-  padding: clamp(28px, 5vw, 56px);
+  display: flex;
+  align-items: center;
+  max-height: 85vh;
+  padding: clamp(28px, 4vw, 48px);
   background:
     linear-gradient(145deg, rgba(41, 110, 255, 0.2) 0%, rgba(10, 17, 33, 0.06) 34%, rgba(9, 17, 33, 0.7) 100%),
     linear-gradient(180deg, rgba(10, 17, 33, 0.95) 0%, rgba(8, 15, 29, 0.92) 100%);
@@ -222,15 +224,17 @@ code {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
-  gap: var(--space-8);
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.78fr);
+  gap: clamp(24px, 3vw, 40px);
   align-items: center;
 }
 
 .hero__content {
   display: grid;
-  gap: var(--space-5);
-  max-width: 640px;
+  gap: 16px;
+  max-width: 620px;
+  align-content: center;
 }
 
 .eyebrow {
@@ -256,9 +260,14 @@ code {
   letter-spacing: -0.05em;
 }
 
-.hero h1,
+.hero h1 {
+  max-width: 10.5ch;
+  font-size: clamp(2.65rem, 4.8vw, 4.95rem);
+  line-height: 0.94;
+}
+
 .section-header h1 {
-  font-size: clamp(3rem, 6vw, 5.8rem);
+  font-size: clamp(3rem, 5.6vw, 5.2rem);
   line-height: 0.98;
 }
 
@@ -278,17 +287,24 @@ code {
   color: var(--color-text-muted);
 }
 
-.hero p,
+.hero p {
+  max-width: 620px;
+  font-size: 1.02rem;
+  line-height: 1.58;
+}
+
 .section-header p {
   max-width: 660px;
-  font-size: 1.05rem;
-  line-height: 1.7;
+  font-size: 1.03rem;
+  line-height: 1.64;
 }
 
 .hero__visual {
   position: relative;
   overflow: hidden;
-  min-height: 440px;
+  justify-self: end;
+  width: min(100%, 420px);
+  aspect-ratio: 5 / 4;
   border: 1px solid rgba(151, 180, 234, 0.14);
   border-radius: 28px;
   background:
@@ -321,13 +337,13 @@ code {
 
 .hero__visual-note {
   position: absolute;
-  right: 24px;
-  bottom: 24px;
+  right: 18px;
+  bottom: 18px;
   z-index: 1;
   display: grid;
   gap: 4px;
-  min-width: 190px;
-  padding: 16px 18px;
+  min-width: 168px;
+  padding: 14px 16px;
   border: 1px solid rgba(151, 180, 234, 0.14);
   border-radius: 20px;
   background: rgba(8, 14, 27, 0.72);
@@ -340,15 +356,19 @@ code {
 }
 
 .hero__visual-note strong {
-  font-size: 1.2rem;
+  font-size: 1.08rem;
 }
 
 .button-row,
 .section-cta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-3);
+  gap: 12px;
   align-items: center;
+}
+
+.button-row {
+  margin-top: 2px;
 }
 
 .section-cta {
@@ -361,7 +381,7 @@ code {
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
-  padding: 14px 20px;
+  padding: 13px 18px;
   border: 1px solid transparent;
   border-radius: 999px;
   font-weight: 700;
@@ -381,7 +401,7 @@ code {
 }
 
 .button--small {
-  padding: 12px 16px;
+  padding: 11px 15px;
   font-size: 0.94rem;
 }
 
@@ -413,11 +433,11 @@ code {
 .proof-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--space-4);
+  gap: 14px;
 }
 
 .proof-strip__item {
-  padding: 20px 22px;
+  padding: 18px 20px;
   border: 1px solid rgba(151, 180, 234, 0.1);
   border-radius: 22px;
   background: rgba(255, 255, 255, 0.03);
@@ -436,7 +456,7 @@ code {
 
 .section-header {
   display: grid;
-  gap: var(--space-3);
+  gap: 10px;
 }
 
 .section-header--split {
@@ -539,7 +559,7 @@ code {
 
 .panel,
 .booking-form {
-  padding: 28px;
+  padding: 26px;
 }
 
 .panel--visual {
@@ -548,7 +568,7 @@ code {
 
 .catalog-layout,
 .car-page {
-  gap: var(--space-7);
+  gap: 32px;
 }
 
 .car-page {
@@ -572,7 +592,7 @@ code {
 
 .booking-form {
   display: grid;
-  gap: var(--space-5);
+  gap: 18px;
 }
 
 .form-grid {
@@ -598,7 +618,7 @@ code {
 .field input,
 .field textarea {
   width: 100%;
-  padding: 14px 16px;
+  padding: 13px 15px;
   border: 1px solid rgba(151, 180, 234, 0.14);
   border-radius: 18px;
   color: var(--color-text);
@@ -695,14 +715,13 @@ code {
   top: 0;
   left: 0;
   z-index: 90;
-  width: 34px;
-  height: 34px;
-  border: 1px solid rgba(97, 165, 255, 0.5);
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(168, 198, 255, 0.38);
   border-radius: 999px;
-  background: rgba(46, 125, 255, 0.08);
+  background: rgba(97, 165, 255, 0.09);
   pointer-events: none;
   opacity: 0;
-  backdrop-filter: blur(12px);
   will-change: transform;
 }
 
@@ -710,10 +729,10 @@ code {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 7px;
-  height: 7px;
+  width: 2px;
+  height: 2px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(255, 255, 255, 0.78);
   transform: translate(-50%, -50%);
 }
 
@@ -740,16 +759,22 @@ code {
     grid-template-columns: 1fr;
   }
 
+  .hero--premium {
+    max-height: none;
+  }
+
+  .hero__visual {
+    justify-self: stretch;
+    width: 100%;
+    max-width: none;
+  }
+
   .section-cta {
     justify-content: flex-start;
   }
 }
 
 @media (max-width: 720px) {
-  :root {
-    --page-gutter: 20px;
-  }
-
   .navbar__inner,
   .navbar__actions {
     flex-direction: column;
@@ -761,7 +786,7 @@ code {
   }
 
   .page-shell {
-    padding-block: 32px 64px;
+    padding-block: 24px 56px;
   }
 
   .hero--premium,
@@ -772,11 +797,11 @@ code {
   }
 
   .hero--premium {
-    min-height: auto;
+    max-height: none;
   }
 
   .hero__visual {
-    min-height: 320px;
+    aspect-ratio: 16 / 11;
   }
 
   .hero__visual-note {

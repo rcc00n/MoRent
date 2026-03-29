@@ -15,7 +15,7 @@ function CustomCursor() {
   const cursorRef = useRef(null)
 
   useEffect(() => {
-    if (window.matchMedia('(pointer: coarse)').matches) {
+    if (window.matchMedia('(pointer: coarse), (hover: none)').matches) {
       return undefined
     }
 
@@ -42,11 +42,11 @@ function CustomCursor() {
     }
 
     const render = () => {
-      state.currentX += (state.targetX - state.currentX) * 0.18
-      state.currentY += (state.targetY - state.currentY) * 0.18
+      state.currentX += (state.targetX - state.currentX) * 0.16
+      state.currentY += (state.targetY - state.currentY) * 0.16
 
-      cursorNode.style.opacity = state.visible ? '1' : '0'
-      cursorNode.style.transform = `translate3d(${state.currentX}px, ${state.currentY}px, 0) translate(-50%, -50%) scale(${state.active ? 1.8 : 1})`
+      cursorNode.style.opacity = state.visible ? (state.active ? '0.9' : '0.62') : '0'
+      cursorNode.style.transform = `translate3d(${state.currentX}px, ${state.currentY}px, 0) translate(-50%, -50%) scale(${state.active ? 1.75 : 1})`
 
       frameId = window.requestAnimationFrame(render)
     }
