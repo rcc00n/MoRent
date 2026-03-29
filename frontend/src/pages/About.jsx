@@ -23,9 +23,6 @@ function About() {
             primary={pageMedia.sunsetCoast}
             primaryAlt={t('about.visuals.primaryAlt')}
             primaryCaption={t('about.visuals.primaryCaption')}
-            secondary={pageMedia.compactCoastal}
-            secondaryAlt={t('about.visuals.secondaryAlt')}
-            secondaryCaption={t('about.visuals.secondaryCaption')}
           />
         </div>
 

@@ -67,9 +67,6 @@ function Catalog() {
             primary={pageMedia.coastalHighway}
             primaryAlt={t('catalog.visuals.primaryAlt')}
             primaryCaption={t('catalog.visuals.primaryCaption')}
-            secondary={pageMedia.mercedesInterior}
-            secondaryAlt={t('catalog.visuals.secondaryAlt')}
-            secondaryCaption={t('catalog.visuals.secondaryCaption')}
           />
         </div>
 

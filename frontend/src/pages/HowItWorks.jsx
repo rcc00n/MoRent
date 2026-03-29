@@ -23,9 +23,6 @@ function HowItWorks() {
             primary={pageMedia.coastalHighway}
             primaryAlt={t('howItWorks.visuals.primaryAlt')}
             primaryCaption={t('howItWorks.visuals.primaryCaption')}
-            secondary={pageMedia.sunsetArrival}
-            secondaryAlt={t('howItWorks.visuals.secondaryAlt')}
-            secondaryCaption={t('howItWorks.visuals.secondaryCaption')}
           />
         </div>
       </section>

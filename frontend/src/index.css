@@ -1825,6 +1825,10 @@ html[lang='ru'] .thank-you h1 {
   min-height: 100%;
 }
 
+.page-visual-stack--single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .page-visual-stack__figure {
   position: relative;
   overflow: hidden;
@@ -1848,6 +1852,10 @@ html[lang='ru'] .thank-you h1 {
 
 .page-visual-stack__figure--primary {
   aspect-ratio: 4 / 5;
+}
+
+.page-visual-stack--single .page-visual-stack__figure--primary {
+  aspect-ratio: 6 / 5;
 }
 
 .page-visual-stack__figure--secondary {

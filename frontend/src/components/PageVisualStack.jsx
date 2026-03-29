@@ -7,8 +7,12 @@ function PageVisualStack({
   secondaryCaption,
   className = '',
 }) {
+  const hasSecondary = Boolean(secondary)
+
   return (
-    <div className={`page-visual-stack ${className}`.trim()}>
+    <div
+      className={`page-visual-stack ${hasSecondary ? '' : 'page-visual-stack--single'} ${className}`.trim()}
+    >
       <figure className="page-visual-stack__figure page-visual-stack__figure--primary">
         <img
           alt={primaryAlt}

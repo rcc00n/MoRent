@@ -23,9 +23,6 @@ function Contacts() {
             primary={pageMedia.sunsetArrival}
             primaryAlt={t('contacts.visuals.primaryAlt')}
             primaryCaption={t('contacts.visuals.primaryCaption')}
-            secondary={pageMedia.coastalHighway}
-            secondaryAlt={t('contacts.visuals.secondaryAlt')}
-            secondaryCaption={t('contacts.visuals.secondaryCaption')}
           />
         </div>
 
