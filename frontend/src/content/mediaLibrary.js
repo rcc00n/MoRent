@@ -5,6 +5,8 @@ export const pageMedia = {
     `${wikiBase}/thumb/6/66/Cesme%27ye_d%C3%B6nerken_izmir_sahil_yolu_-_panoramio.jpg/1920px-Cesme%27ye_d%C3%B6nerken_izmir_sahil_yolu_-_panoramio.jpg`,
   coastalHighway:
     `${wikiBase}/thumb/1/13/00_1833_North_West_Coastal_Highway_-_Western_Australia.jpg/1920px-00_1833_North_West_Coastal_Highway_-_Western_Australia.jpg`,
+  catalogBridge:
+    'https://commons.wikimedia.org/wiki/Special:FilePath/Bixby%20Creek%20Bridge%20%28Unsplash%20jufiEK-E64s%29.jpg?width=1920',
   sunsetArrival:
     `${wikiBase}/thumb/f/f3/2017-08-20_Outside_the_Arrivals_hall_at_the_terminal%2C_Faro_airport_%282%29.JPG/1920px-2017-08-20_Outside_the_Arrivals_hall_at_the_terminal%2C_Faro_airport_%282%29.JPG`,
   mercedesInterior:

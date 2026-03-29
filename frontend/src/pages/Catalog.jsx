@@ -64,7 +64,7 @@ function Catalog() {
 
           <PageVisualStack
             className="catalog-intro__visual"
-            primary={pageMedia.coastalHighway}
+            primary={pageMedia.catalogBridge}
             primaryAlt={t('catalog.visuals.primaryAlt')}
             primaryCaption={t('catalog.visuals.primaryCaption')}
           />

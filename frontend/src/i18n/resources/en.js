@@ -170,8 +170,8 @@ const en = {
     description:
       'Choose the car first, review the daily rate, and move into the request only when the timing works for the trip.',
     visuals: {
-      primaryAlt: 'Premium coastal highway for resort arrivals and scenic drives',
-      primaryCaption: 'Coastal arrival routes planned around your pickup',
+      primaryAlt: 'Dramatic coastal bridge and Pacific horizon for premium scenic drives',
+      primaryCaption: 'A distinct coastal route that gives the fleet page its own visual identity',
     },
     infoCards: [
       {
