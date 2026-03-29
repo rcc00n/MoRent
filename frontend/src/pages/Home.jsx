@@ -488,9 +488,7 @@ function Home() {
                       src={heroCar.image}
                     />
                     <div className="hero__visual-note">
-                      <span>{heroCar.brand}</span>
-                      <strong>{heroCar.model}</strong>
-                      <span>{formatPrice(heroCar.price_per_day)}</span>
+                      <strong>{formatPrice(heroCar.price_per_day)}</strong>
                     </div>
                   </>
                 ) : (
