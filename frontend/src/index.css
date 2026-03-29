@@ -179,7 +179,7 @@ code {
 .catalog-layout,
 .car-page {
   display: grid;
-  gap: 40px;
+  gap: 38px;
 }
 
 .scene {
@@ -215,7 +215,6 @@ code {
 }
 
 .scene--fleet,
-.scene--signal,
 .scene--benefits,
 .scene--closing {
   display: grid;
@@ -242,15 +241,6 @@ code {
     radial-gradient(circle at 85% 15%, rgba(100, 90, 255, 0.14), transparent 24%),
     radial-gradient(circle at 15% 100%, rgba(101, 161, 255, 0.09), transparent 22%),
     linear-gradient(180deg, rgba(17, 21, 43, 0.9), rgba(10, 17, 35, 0.84));
-}
-
-.scene--signal {
-  gap: 24px;
-  padding: 24px;
-  background:
-    radial-gradient(circle at 16% 14%, rgba(91, 156, 255, 0.14), transparent 24%),
-    radial-gradient(circle at 84% 66%, rgba(95, 96, 255, 0.14), transparent 26%),
-    linear-gradient(180deg, rgba(8, 12, 24, 0.98), rgba(8, 12, 24, 0.9));
 }
 
 .scene--closing {
@@ -442,9 +432,9 @@ code {
 }
 
 .section-header p {
-  max-width: 660px;
-  font-size: 1.03rem;
-  line-height: 1.64;
+  max-width: 440px;
+  font-size: 0.98rem;
+  line-height: 1.56;
 }
 
 .hero__visual-stage {
@@ -594,6 +584,15 @@ code {
   margin-top: 4px;
 }
 
+.magnetic-action {
+  display: inline-flex;
+  will-change: transform;
+}
+
+.magnetic-action > .button {
+  width: 100%;
+}
+
 .section-cta {
   justify-content: space-between;
   padding-top: var(--space-3);
@@ -717,6 +716,17 @@ code {
   border-radius: 22px;
   background: linear-gradient(180deg, rgba(243, 248, 255, 0.06), rgba(243, 248, 255, 0.03));
   backdrop-filter: blur(16px);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.proof-strip__item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(191, 217, 255, 0.18);
+  box-shadow: 0 22px 56px rgba(4, 10, 24, 0.22);
 }
 
 .proof-strip__value {
@@ -776,9 +786,75 @@ code {
   box-shadow: var(--color-shadow-soft);
 }
 
+.interactive-surface {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  --spotlight-x: 50%;
+  --spotlight-y: 0%;
+}
+
+.interactive-surface::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    220px circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(155, 199, 255, 0.14),
+    transparent 58%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+  z-index: 0;
+}
+
+.interactive-surface:hover::after {
+  opacity: 1;
+}
+
+.interactive-surface > * {
+  position: relative;
+  z-index: 1;
+}
+
+.interactive-surface--soft::after {
+  background: radial-gradient(
+    210px circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(144, 196, 255, 0.18),
+    transparent 56%
+  );
+}
+
+.interactive-surface--feature::after {
+  background: radial-gradient(
+    260px circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(136, 176, 255, 0.18),
+    transparent 60%
+  );
+}
+
+.interactive-surface--stat::after {
+  background: radial-gradient(
+    180px circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(165, 208, 255, 0.18),
+    transparent 62%
+  );
+}
+
+.interactive-surface--fleet::after {
+  background: radial-gradient(
+    300px circle at var(--spotlight-x) var(--spotlight-y),
+    rgba(150, 193, 255, 0.14),
+    transparent 58%
+  );
+}
+
 .car-card {
   overflow: hidden;
   transition:
+    transform 240ms ease,
     box-shadow 240ms ease,
     border-color 220ms ease,
     background-color 220ms ease;
@@ -789,6 +865,13 @@ code {
 .closing-cta {
   content-visibility: auto;
   contain-intrinsic-size: 1px 640px;
+}
+
+.signal-section {
+  position: relative;
+  display: grid;
+  gap: 18px;
+  padding: 6px 0 4px;
 }
 
 .benefits-section__frame {
@@ -816,7 +899,7 @@ code {
   margin: 0;
   max-width: 620px;
   color: var(--color-text-muted);
-  line-height: 1.62;
+  line-height: 1.54;
 }
 
 .benefits-section__stats {
@@ -834,6 +917,16 @@ code {
   border: 1px solid rgba(180, 207, 255, 0.14);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.04);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.benefits-section__stat:hover {
+  transform: translateY(-3px);
+  border-color: rgba(193, 218, 255, 0.2);
+  box-shadow: 0 20px 48px rgba(4, 10, 24, 0.2);
 }
 
 .benefits-section__stat strong {
@@ -889,15 +982,10 @@ code {
     linear-gradient(180deg, rgba(20, 25, 51, 0.78), rgba(13, 18, 39, 0.88));
 }
 
-.scene--signal::after {
-  inset: auto 42px 0;
-  background: linear-gradient(90deg, transparent, rgba(189, 215, 255, 0.28), transparent);
-}
-
 .signal-section__intro {
   display: grid;
-  gap: 12px;
-  max-width: 620px;
+  gap: 10px;
+  max-width: 520px;
   justify-self: center;
   text-align: center;
 }
@@ -909,55 +997,37 @@ code {
   letter-spacing: -0.05em;
 }
 
-.signal-section__intro p {
-  margin: 0;
-  color: var(--color-text-muted);
-  line-height: 1.62;
-}
-
 .signal-section__visual {
   position: relative;
-  overflow: hidden;
-  padding: clamp(16px, 2vw, 22px);
-  border: 1px solid rgba(190, 214, 255, 0.14);
-  border-radius: 28px;
-  background:
-    radial-gradient(circle at 16% 18%, rgba(103, 162, 255, 0.1), transparent 22%),
-    radial-gradient(circle at 80% 52%, rgba(99, 96, 255, 0.11), transparent 28%),
-    linear-gradient(180deg, rgba(10, 14, 26, 0.96), rgba(9, 13, 24, 0.88));
-  box-shadow: 0 28px 82px rgba(3, 8, 19, 0.44);
+  padding: 0;
 }
 
 .signal-section__visual::before,
 .signal-section__visual::after {
   content: '';
   position: absolute;
-  inset: 0;
   pointer-events: none;
 }
 
 .signal-section__visual::before {
-  background:
-    radial-gradient(circle at 28% 28%, rgba(162, 208, 255, 0.08), transparent 16%),
-    radial-gradient(circle at 72% 62%, rgba(129, 136, 255, 0.08), transparent 22%);
+  inset: 10% 8% 16%;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(81, 146, 255, 0.18), transparent 66%);
+  filter: blur(38px);
 }
 
 .signal-section__visual::after {
-  inset: auto 8% 0;
-  height: 30%;
-  background: linear-gradient(180deg, rgba(8, 12, 24, 0), rgba(8, 12, 24, 0.7));
+  inset: auto 10% 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(180, 208, 255, 0.24), transparent);
 }
 
 .dot-field {
   position: relative;
-  height: clamp(280px, 38vw, 440px);
+  height: clamp(300px, 40vw, 480px);
   overflow: hidden;
-  border: 1px solid rgba(193, 216, 255, 0.1);
-  border-radius: 24px;
-  background:
-    radial-gradient(circle at 18% 16%, rgba(97, 159, 255, 0.12), transparent 24%),
-    radial-gradient(circle at 72% 52%, rgba(88, 88, 255, 0.11), transparent 28%),
-    linear-gradient(180deg, rgba(10, 14, 26, 0.96), rgba(8, 12, 22, 0.94));
+  border-radius: 32px;
+  background: transparent;
 }
 
 .dot-field::before,
@@ -970,17 +1040,17 @@ code {
 
 .dot-field::before {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 22%),
-    radial-gradient(circle at 68% 48%, rgba(149, 194, 255, 0.08), transparent 24%);
+    radial-gradient(circle at 22% 26%, rgba(111, 174, 255, 0.12), transparent 18%),
+    radial-gradient(circle at 78% 54%, rgba(95, 96, 255, 0.12), transparent 22%);
 }
 
 .dot-field::after {
   background: linear-gradient(
     180deg,
-    rgba(6, 10, 19, 0.68),
-    rgba(6, 10, 19, 0) 20%,
-    rgba(6, 10, 19, 0) 78%,
-    rgba(6, 10, 19, 0.76)
+    rgba(6, 10, 19, 0.36),
+    rgba(6, 10, 19, 0) 18%,
+    rgba(6, 10, 19, 0) 82%,
+    rgba(6, 10, 19, 0.52)
   );
 }
 
@@ -1012,7 +1082,7 @@ code {
 .benefit-card p {
   margin: 0;
   color: var(--color-text-muted);
-  line-height: 1.56;
+  line-height: 1.48;
 }
 
 .benefit-card__glyph {
@@ -1060,6 +1130,24 @@ code {
   background:
     radial-gradient(circle at top, rgba(46, 125, 255, 0.28), transparent 45%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(11, 18, 34, 0.92));
+}
+
+.car-card__media-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    220px circle at var(--spotlight-x) calc(var(--spotlight-y) - 28px),
+    rgba(255, 255, 255, 0.14),
+    transparent 56%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease;
+}
+
+.car-card:hover .car-card__media-wrap::after {
+  opacity: 1;
 }
 
 .car-card__media {
@@ -1121,6 +1209,11 @@ code {
   font-size: 1.22rem;
   font-weight: 800;
   color: #f7faff;
+}
+
+.animated-metric {
+  display: inline-block;
+  min-width: 3ch;
 }
 
 .panel,
@@ -1412,10 +1505,6 @@ code {
 
   .hero--premium {
     max-height: none;
-  }
-
-  .scene--signal {
-    padding: 20px;
   }
 
   .hero__visual {

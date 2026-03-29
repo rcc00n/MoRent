@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
+import {
+  resetInteractiveGlow,
+  updateInteractiveGlow,
+} from '../shared/interactiveSurface'
+
 const MotionArticle = motion.article
 const MotionImage = motion.img
 
@@ -40,9 +45,11 @@ function CarCard({ car }) {
   return (
     <MotionArticle
       animate="rest"
-      className="car-card"
+      className="car-card interactive-surface interactive-surface--fleet"
       data-cursor="interactive"
       initial="rest"
+      onPointerLeave={resetInteractiveGlow}
+      onPointerMove={updateInteractiveGlow}
       variants={cardMotion}
       whileHover="hover"
     >

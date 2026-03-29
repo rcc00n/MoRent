@@ -4,9 +4,19 @@ function clamp(value, min, max) {
   return Math.min(Math.max(value, min), max)
 }
 
+function gaussian(distance, width) {
+  return Math.exp(-((distance * distance) / (2 * width * width)))
+}
+
+function smoothstep(edge0, edge1, value) {
+  const x = clamp((value - edge0) / (edge1 - edge0), 0, 1)
+
+  return x * x * (3 - 2 * x)
+}
+
 function buildPoints(width, compactMode) {
-  const columns = compactMode ? 28 : width < 920 ? 40 : 58
-  const rows = compactMode ? 14 : width < 920 ? 18 : 24
+  const columns = compactMode ? 30 : width < 920 ? 42 : 62
+  const rows = compactMode ? 14 : width < 920 ? 18 : 26
   const points = []
 
   for (let row = 0; row < rows; row += 1) {
@@ -17,14 +27,104 @@ function buildPoints(width, compactMode) {
       points.push({
         accent: Math.random() > 0.955,
         depth: 0.72 + Math.random() * 0.62,
-        nx: clamp(nx + (Math.random() - 0.5) * 0.012, 0.03, 0.97),
-        ny: clamp(ny + (Math.random() - 0.5) * 0.018, 0.08, 0.92),
+        nx: clamp(nx + (Math.random() - 0.5) * 0.014, 0.03, 0.97),
+        ny: clamp(ny + (Math.random() - 0.5) * 0.022, 0.08, 0.92),
         seed: Math.random() * Math.PI * 2,
       })
     }
   }
 
   return points
+}
+
+function getSilhouetteTarget(nx, ny, compactMode) {
+  let totalWeight = 0
+  let weightedX = 0
+  let weightedY = 0
+  let accentWeight = 0
+
+  const addTarget = (targetX, targetY, weight, accent = 0) => {
+    if (weight <= 0.002) {
+      return
+    }
+
+    totalWeight += weight
+    weightedX += targetX * weight
+    weightedY += targetY * weight
+    accentWeight = Math.max(accentWeight, accent * weight)
+  }
+
+  if (nx >= 0.18 && nx <= 0.82) {
+    const t = (nx - 0.18) / 0.64
+    const roofY = 0.47 - Math.sin(t * Math.PI) * 0.18
+    const bodyY = 0.58 - Math.sin(t * Math.PI) * 0.018
+    const roofWeight =
+      gaussian(ny - roofY, compactMode ? 0.028 : 0.022) *
+      Math.pow(Math.sin(t * Math.PI), 0.9) *
+      1.55
+    const bodyWeight =
+      gaussian(ny - bodyY, compactMode ? 0.026 : 0.02) *
+      (0.58 + Math.sin(t * Math.PI) * 0.18)
+
+    addTarget(nx, roofY, roofWeight)
+    addTarget(nx, bodyY, bodyWeight)
+  }
+
+  if (nx >= 0.77 && nx <= 0.9) {
+    const t = (nx - 0.77) / 0.13
+    const noseY = 0.46 + Math.pow(t, 0.78) * 0.16
+    const noseWeight = gaussian(ny - noseY, compactMode ? 0.028 : 0.022) * 1.16
+
+    addTarget(0.77 + t * 0.12, noseY, noseWeight, 0.9)
+  }
+
+  if (nx >= 0.1 && nx <= 0.24) {
+    const t = (nx - 0.1) / 0.14
+    const tailY = 0.57 - Math.pow(t, 0.82) * 0.12
+    const tailWeight = gaussian(ny - tailY, compactMode ? 0.03 : 0.024) * 0.94
+
+    addTarget(0.1 + t * 0.12, tailY, tailWeight, 0.35)
+  }
+
+  const wheelRadius = compactMode ? 0.078 : 0.065
+  const wheelDepth = compactMode ? 0.048 : 0.058
+
+  for (const centerX of [0.36, 0.66]) {
+    const distance = Math.abs(nx - centerX)
+
+    if (distance < wheelRadius) {
+      const wheelArc = Math.sqrt(1 - (distance / wheelRadius) ** 2)
+      const wheelY = 0.64 - wheelArc * wheelDepth
+      const wheelWeight =
+        gaussian(ny - wheelY, compactMode ? 0.026 : 0.02) * 1.18
+
+      addTarget(nx, wheelY, wheelWeight)
+    }
+  }
+
+  if (nx >= 0.16 && nx <= 0.88) {
+    const t = (nx - 0.16) / 0.72
+    const roadY = 0.77 + Math.sin(t * Math.PI) * 0.014
+    const roadWeight = gaussian(ny - roadY, compactMode ? 0.036 : 0.028) * 0.38
+
+    addTarget(nx, roadY, roadWeight)
+  }
+
+  if (totalWeight <= 0.001) {
+    return {
+      accent: 0,
+      strength: 0,
+      targetX: nx,
+      targetY: ny,
+    }
+  }
+
+  return {
+    accent: clamp(accentWeight, 0, 1),
+    strength: clamp(totalWeight, 0, 1.1),
+    targetX: weightedX / totalWeight,
+    targetY: weightedY / totalWeight,
+  }
 }
 
 function bindMediaListener(mediaQueryList, handler) {
@@ -99,22 +199,23 @@ function DotFieldCanvas() {
         1,
       )
       const centerPulse = 1 - Math.abs(progress - 0.5) / 0.5
-      const choreography = Math.pow(clamp(centerPulse, 0, 1), 1.15)
-      const motionStrength = state.reducedMotion ? choreography * 0.45 : choreography
+      const choreography = Math.pow(clamp(centerPulse, 0, 1), 1.18)
+      const convergence = state.reducedMotion ? choreography * 0.55 : choreography
       const ambientTime = timestamp * (state.reducedMotion ? 0.00008 : 0.00016)
+      const fieldCompression = 1 - convergence * 0.09
 
       context.clearRect(0, 0, state.width, state.height)
 
       const glowGradient = context.createRadialGradient(
-        state.width * 0.72,
-        state.height * 0.5,
+        state.width * 0.68,
+        state.height * 0.48,
         0,
-        state.width * 0.72,
-        state.height * 0.5,
-        state.width * 0.42,
+        state.width * 0.68,
+        state.height * 0.48,
+        state.width * 0.48,
       )
 
-      glowGradient.addColorStop(0, `rgba(102, 156, 255, ${0.1 + choreography * 0.08})`)
+      glowGradient.addColorStop(0, `rgba(102, 156, 255, ${0.08 + choreography * 0.1})`)
       glowGradient.addColorStop(0.55, 'rgba(56, 94, 183, 0.05)')
       glowGradient.addColorStop(1, 'rgba(5, 10, 19, 0)')
 
@@ -123,57 +224,60 @@ function DotFieldCanvas() {
       context.globalCompositeOperation = 'screen'
 
       for (const point of state.points) {
+        const compressedY = ((point.ny - 0.5) * fieldCompression + 0.5) * state.height
         const baseX = point.nx * state.width
-        const baseY = point.ny * state.height
-        const contourA = 0.38 + Math.sin(point.nx * Math.PI * 1.08) * 0.08
-        const contourB = 0.6 - Math.sin(point.nx * Math.PI * 1.2 + 0.4) * 0.065
-        const bandWidth = state.compactMode ? 0.02 : 0.014
-        const contourInfluenceA = Math.exp(
-          -((point.ny - contourA) ** 2) / (2 * bandWidth * bandWidth),
-        )
-        const contourInfluenceB = Math.exp(
-          -((point.ny - contourB) ** 2) / (2 * (bandWidth * 1.2) ** 2),
-        )
-        const contourInfluence = Math.max(contourInfluenceA, contourInfluenceB) * motionStrength
+        const baseY = compressedY
+        const silhouette = getSilhouetteTarget(point.nx, point.ny, state.compactMode)
+        const organizeStrength = silhouette.strength * convergence
         const fieldInfluence =
-          Math.exp(-((point.ny - 0.5) ** 2) / 0.12) * (0.16 + choreography * 0.14)
+          Math.exp(-((point.ny - 0.52) ** 2) / 0.11) * (0.12 + convergence * 0.18)
         const ambientShift = Math.sin(ambientTime + point.seed) * point.depth
+        const resolveWindow = smoothstep(0.08, 0.42, progress) * (1 - smoothstep(0.62, 0.94, progress))
         const flowX =
           Math.sin(
-            (point.ny * 3.2 + point.seed + progress * 1.7) * Math.PI * 2 + ambientTime,
+            (point.ny * 2.8 + point.seed + progress * 1.45) * Math.PI * 2 + ambientTime,
           ) *
-          10 *
-          contourInfluence
+          12 *
+          (0.18 + (1 - convergence) * 0.82)
         const flowY =
           Math.cos(
-            (point.nx * 2.6 - progress * 1.3 + point.seed * 0.34) * Math.PI * 2 +
+            (point.nx * 2.2 - progress * 1.1 + point.seed * 0.34) * Math.PI * 2 +
               ambientTime * 1.1,
           ) *
-          18 *
-          contourInfluence
-        const settleShift = ambientShift * (state.reducedMotion ? 1.1 : 1.9) * (1 - choreography * 0.45)
-        const x = baseX + flowX + ambientShift * 0.32
+          14 *
+          (0.22 + (1 - convergence) * 0.64)
+        const settleShift =
+          ambientShift * (state.reducedMotion ? 1.1 : 1.9) * (1 - convergence * 0.52)
+        const targetX = silhouette.targetX * state.width
+        const targetY = silhouette.targetY * state.height
+        const x =
+          baseX +
+          flowX +
+          ambientShift * 0.34 +
+          (targetX - baseX) * organizeStrength * 0.92 +
+          Math.sin(point.seed + ambientTime * 0.72) * 3.2 * resolveWindow * (1 - organizeStrength)
         const y =
           baseY +
           flowY +
           settleShift * 0.34 +
-          Math.sin(point.seed + ambientTime * 0.8) * 4.2 * fieldInfluence
+          Math.sin(point.seed + ambientTime * 0.8) * 4.2 * fieldInfluence +
+          (targetY - baseY) * organizeStrength * 0.96
         const radius =
-          (state.compactMode ? 0.72 : 0.86) +
+          (state.compactMode ? 0.7 : 0.82) +
           point.depth * 0.2 +
-          contourInfluence * 1.08
+          organizeStrength * 1.18
         const alpha = clamp(
-          0.12 + point.depth * 0.06 + contourInfluence * 0.42 + fieldInfluence * 0.12,
-          0.12,
-          0.76,
+          0.08 + point.depth * 0.05 + organizeStrength * 0.58 + fieldInfluence * 0.11,
+          0.08,
+          0.82,
         )
 
-        let fill = `rgba(150, 193, 255, ${alpha})`
+        let fill = `rgba(146, 192, 255, ${alpha})`
 
-        if (point.accent && contourInfluence > 0.22) {
-          fill = `rgba(255, 210, 154, ${Math.min(alpha * 0.72, 0.4)})`
-        } else if (contourInfluence > 0.14) {
-          fill = `rgba(120, 170, 255, ${Math.min(alpha * 1.02, 0.66)})`
+        if (silhouette.accent > 0.12 && organizeStrength > 0.18 && point.accent) {
+          fill = `rgba(255, 208, 152, ${Math.min(alpha * 0.82, 0.46)})`
+        } else if (organizeStrength > 0.18) {
+          fill = `rgba(120, 172, 255, ${Math.min(alpha * 1.02, 0.72)})`
         }
 
         context.fillStyle = fill

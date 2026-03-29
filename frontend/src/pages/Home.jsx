@@ -5,12 +5,17 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion'
-import { Link } from 'react-router-dom'
 
+import AnimatedMetric from '../components/AnimatedMetric'
 import CarCard from '../components/CarCard'
 import DotFieldCanvas from '../components/DotFieldCanvas'
 import LoadingFleet from '../components/LoadingFleet'
+import MagneticAction from '../components/MagneticAction'
 import { getCars } from '../shared/api'
+import {
+  resetInteractiveGlow,
+  updateInteractiveGlow,
+} from '../shared/interactiveSurface'
 
 const MotionArticle = motion.article
 const MotionDiv = motion.div
@@ -24,47 +29,43 @@ const proofItems = [
   {
     value: '15 min',
     title: 'Average response',
-    description: 'We confirm availability quickly after the request lands.',
+    description: 'Availability confirmations move fast.',
   },
   {
     value: '100%',
     title: 'Verified fleet',
-    description: 'Each listed car is reviewed before it reaches the catalog.',
+    description: 'Every listed car is checked before it goes live.',
   },
   {
     value: '24/7',
     title: 'Premium support',
-    description: 'A manager stays close to the booking from request to return.',
+    description: 'Support stays close from request to return.',
   },
 ]
 
 const benefitItems = [
   {
     tag: 'Fast booking',
-    title: 'Request in minutes, not pages of forms.',
-    description:
-      'Pick a car, choose your dates, and send a request without registration or a payment wall.',
+    title: 'Request in minutes.',
+    description: 'Choose dates and send the request without account setup.',
     tone: 'signal',
   },
   {
     tag: 'Verified fleet',
-    title: 'Clean premium cars with clear availability.',
-    description:
-      'The catalog stays focused on high-end models and transparent day rates so the decision is simple.',
+    title: 'Premium cars with visible rates.',
+    description: 'High-end models, clear day rates, real availability.',
     tone: 'fleet',
   },
   {
     tag: 'Premium support',
-    title: 'Manual confirmation with a real manager.',
-    description:
-      'The handoff stays personal after the form, which reduces uncertainty during the final booking step.',
+    title: 'A real manager confirms the handoff.',
+    description: 'Support stays personal after the form is sent.',
     tone: 'support',
   },
   {
     tag: 'Transparent pricing',
-    title: 'The rate is visible before the request starts.',
-    description:
-      'Customers see a clear daily price and booking path before they commit to sending their dates.',
+    title: 'Pricing stays visible from the start.',
+    description: 'No hidden step before the request.',
     tone: 'pricing',
   },
 ]
@@ -77,12 +78,15 @@ const bookingSteps = [
 
 const statItems = [
   {
-    value: '4.9/5',
+    decimals: 1,
     label: 'service score',
+    suffix: '/5',
+    value: 4.9,
   },
   {
-    value: '48+',
-    label: 'monthly premium bookings',
+    label: 'premium bookings each month',
+    suffix: '+',
+    value: 48,
   },
 ]
 
@@ -445,18 +449,17 @@ function Home() {
             </MotionHeading>
 
             <p className="hero__description">
-              Curated premium cars, transparent daily pricing, and a booking path
-              designed to move from interest to confirmed availability without
-              friction.
+              Curated premium cars, clear day rates, simple booking from first
+              look to confirmation.
             </p>
 
             <div className="button-row button-row--hero">
-              <Link className="button button--primary" to="/catalog">
+              <MagneticAction className="button button--primary" to="/catalog">
                 Book now
-              </Link>
-              <a className="button button--secondary" href="#featured-cars">
+              </MagneticAction>
+              <MagneticAction className="button button--secondary" href="#featured-cars">
                 Check availability
-              </a>
+              </MagneticAction>
             </div>
           </MotionDiv>
 
@@ -506,8 +509,10 @@ function Home() {
       >
         {proofItems.map((item) => (
           <MotionArticle
-            className="proof-strip__item"
+            className="proof-strip__item interactive-surface interactive-surface--soft"
             key={item.title}
+            onPointerLeave={resetInteractiveGlow}
+            onPointerMove={updateInteractiveGlow}
             variants={proofItemVariants}
           >
             <span className="proof-strip__value">{item.value}</span>
@@ -532,17 +537,26 @@ function Home() {
             variants={benefitsIntroVariants}
           >
             <span className="eyebrow">Why choose us</span>
-            <h2>Premium booking should feel calm, clear, and personal.</h2>
+            <h2>Premium booking should feel calm and close at hand.</h2>
             <p>
-              MoRent is designed around one conversion path: see the car, trust the
-              pricing, send the request, and get a fast confirmation from a real
-              person.
+              See the car, trust the rate, send the request, get a fast answer.
             </p>
 
             <div className="benefits-section__stats">
               {statItems.map((item) => (
-                <div className="benefits-section__stat" key={item.label}>
-                  <strong>{item.value}</strong>
+                <div
+                  className="benefits-section__stat interactive-surface interactive-surface--stat"
+                  key={item.label}
+                  onPointerLeave={resetInteractiveGlow}
+                  onPointerMove={updateInteractiveGlow}
+                >
+                  <strong>
+                    <AnimatedMetric
+                      decimals={item.decimals}
+                      suffix={item.suffix}
+                      value={item.value}
+                    />
+                  </strong>
                   <span>{item.label}</span>
                 </div>
               ))}
@@ -552,8 +566,10 @@ function Home() {
           <MotionDiv className="benefits-grid" variants={benefitCardsContainerVariants}>
             {benefitItems.map((item) => (
               <MotionArticle
-                className="benefit-card"
+                className="benefit-card interactive-surface interactive-surface--feature"
                 key={item.title}
+                onPointerLeave={resetInteractiveGlow}
+                onPointerMove={updateInteractiveGlow}
                 variants={benefitCardRevealVariants}
               >
                 <div
@@ -574,7 +590,7 @@ function Home() {
 
       <MotionSection
         aria-labelledby="motion-field-heading"
-        className="signal-section scene scene--signal"
+        className="signal-section"
         initial="hidden"
         variants={signalSectionVariants}
         viewport={viewportSettings}
@@ -583,13 +599,8 @@ function Home() {
         <div className="signal-section__intro">
           <span className="eyebrow">Motion field</span>
           <h2 id="motion-field-heading">
-            Precision moves quietly before it becomes visible.
+            Precision locks into form.
           </h2>
-          <p>
-            A controlled field of points responds to scroll with subtle density
-            shifts and directional flow, creating a designed pause between trust
-            and conversion.
-          </p>
         </div>
 
         <MotionDiv className="signal-section__visual" variants={signalCanvasVariants}>
@@ -613,12 +624,11 @@ function Home() {
           <div>
             <span className="eyebrow">Featured fleet</span>
             <h2 id="featured-cars-heading">
-              Check availability for the most requested cars.
+              Check availability for the cars booked first.
             </h2>
           </div>
           <p>
-            The fleet now follows the trust and motion layers, so the booking path
-            feels considered before the inventory appears.
+            Open the fleet and move straight into dates.
           </p>
         </MotionDiv>
 
@@ -641,13 +651,10 @@ function Home() {
 
         {!isLoading && !errorMessage ? (
           <MotionDiv className="section-cta" variants={sectionRevealVariants}>
-            <p className="muted-text">
-              Need more options? Open the full fleet and move straight into the
-              booking flow.
-            </p>
-            <Link className="button button--secondary" to="/catalog">
+            <p className="muted-text">Need more options? Open the full fleet.</p>
+            <MagneticAction className="button button--secondary" to="/catalog">
               View all cars
-            </Link>
+            </MagneticAction>
           </MotionDiv>
         ) : null}
       </MotionSection>
@@ -662,11 +669,9 @@ function Home() {
         <MotionDiv className="closing-cta__panel" variants={closingPanelVariants}>
           <div className="closing-cta__content">
             <span className="eyebrow">Ready to book</span>
-            <h2>Choose the dates, send the request, and let the manager confirm the rest.</h2>
+            <h2>Choose the dates. We confirm the rest.</h2>
             <p>
-              The path stays lightweight all the way through: browse the fleet,
-              check availability, and submit a booking request without a long
-              checkout.
+              Browse the fleet, pick the car, send the request in minutes.
             </p>
           </div>
 
@@ -681,12 +686,12 @@ function Home() {
             </MotionDiv>
 
             <div className="button-row">
-              <Link className="button button--primary" to="/catalog">
+              <MagneticAction className="button button--primary" to="/catalog">
                 Book now
-              </Link>
-              <a className="button button--secondary" href="#featured-cars">
+              </MagneticAction>
+              <MagneticAction className="button button--secondary" href="#featured-cars">
                 Check availability
-              </a>
+              </MagneticAction>
             </div>
           </div>
         </MotionDiv>
