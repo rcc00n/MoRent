@@ -38,7 +38,9 @@ class AdminExperienceTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "MoRent Control Room")
+        self.assertContains(response, "Welcome back, admin.")
         self.assertContains(response, "Operations snapshot")
+        self.assertContains(response, "Priority areas")
         self.assertContains(response, "Latest requests")
 
     def test_booking_change_list_exposes_lead_columns(self):

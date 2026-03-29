@@ -1,8 +1,44 @@
 {% extends "admin/base_site.html" %}
-{% load i18n %}
+{% load i18n static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'morent_admin/css/dashboard.css' %}">
+{% endblock %}
 
 {% block content %}
   <div class="morent-dashboard-shell">
+    <section class="morent-dashboard-hero">
+      <div>
+        <p class="morent-kicker">{% trans "MoRent control room" %}</p>
+        <h1 class="morent-dashboard-hero__title">
+          {% blocktranslate with username=request.user.get_short_name|default:request.user.get_username %}Welcome back, {{ username }}.{% endblocktranslate %}
+        </h1>
+        <p class="morent-dashboard-hero__text">
+          {% trans "Monitor lead intake, keep the fleet current, and update owner-managed site content from one premium workspace." %}
+        </p>
+
+        <div class="morent-dashboard-actions">
+          {% for action in dashboard_actions %}
+            <a class="morent-admin-link" href="{{ action.url }}">{{ action.label }}</a>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="morent-dashboard-hero__aside">
+        {% if morent_service_hours %}
+          <div class="morent-dashboard-hero__stat">
+            <span>{% trans "Service hours" %}</span>
+            <strong>{{ morent_service_hours }}</strong>
+          </div>
+        {% endif %}
+        <div class="morent-dashboard-hero__stat">
+          <span>{% trans "Channels online" %}</span>
+          <strong>{{ morent_contact_channels|length }}</strong>
+        </div>
+      </div>
+    </section>
+
     <section class="morent-dashboard-panel">
       <div class="morent-dashboard-panel__header">
         <div>
@@ -14,10 +50,41 @@
 
       <div class="morent-dashboard-cards">
         {% for card in dashboard_cards %}
-          <article class="morent-dashboard-card">
+          <article class="morent-dashboard-card morent-dashboard-card--{{ card.tone }}">
             <span>{{ card.label }}</span>
             <strong>{{ card.value }}</strong>
             <p>{{ card.hint }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="morent-dashboard-sections">
+      <div class="morent-dashboard-panel__header">
+        <div>
+          <p class="morent-kicker">{% trans "Workspace sections" %}</p>
+          <h2>{% trans "Priority areas" %}</h2>
+        </div>
+      </div>
+
+      <div class="morent-dashboard-section-grid">
+        {% for section in dashboard_sections %}
+          <article class="morent-dashboard-panel morent-quick-section">
+            <div class="morent-dashboard-panel__header">
+              <div>
+                <h2>{{ section.title }}</h2>
+                <p>{{ section.description }}</p>
+              </div>
+            </div>
+            <div class="morent-quick-links">
+              {% for item in section.items %}
+                <a class="morent-quick-link" href="{{ item.url }}">
+                  <span class="morent-quick-link__label">{{ item.label }}</span>
+                  <strong class="morent-quick-link__value">{{ item.value }}</strong>
+                  <small class="morent-quick-link__detail">{{ item.detail }}</small>
+                </a>
+              {% endfor %}
+            </div>
           </article>
         {% endfor %}
       </div>
@@ -33,7 +100,9 @@
           {% for item in request_type_counts %}
             <li>
               <span>{{ item.label }}</span>
-              <strong>{{ item.value }}</strong>
+              <strong>
+                <span class="morent-badge morent-badge--{{ item.tone }}">{{ item.value }}</span>
+              </strong>
             </li>
           {% endfor %}
         </ul>
@@ -48,7 +117,9 @@
           {% for item in status_counts %}
             <li>
               <span>{{ item.label }}</span>
-              <strong>{{ item.value }}</strong>
+              <strong>
+                <span class="morent-badge morent-badge--{{ item.tone }}">{{ item.value }}</span>
+              </strong>
             </li>
           {% endfor %}
         </ul>
@@ -69,6 +140,7 @@
                 <th>{% trans "Lead" %}</th>
                 <th>{% trans "Intent" %}</th>
                 <th>{% trans "Status" %}</th>
+                <th>{% trans "CRM" %}</th>
                 <th>{% trans "Vehicle" %}</th>
                 <th>{% trans "Source" %}</th>
               </tr>
@@ -78,14 +150,20 @@
                 <tr>
                   <td>{{ lead.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
                   <td>
-                    <a href="{% url 'admin:bookings_booking_change' lead.pk %}">
+                    <a href="{{ lead.change_url }}">
                       {{ lead.name }}
                     </a>
                   </td>
-                  <td>{{ lead.get_request_type_display }}</td>
-                  <td>{{ lead.get_status_display }}</td>
-                  <td>{{ lead.car|default:"Flexible enquiry" }}</td>
-                  <td>{{ lead.source|default:"website" }}</td>
+                  <td><span class="morent-badge morent-badge--{{ lead.intent_tone }}">{{ lead.intent_label }}</span></td>
+                  <td><span class="morent-badge morent-badge--{{ lead.status_tone }}">{{ lead.status_label }}</span></td>
+                  <td><span class="morent-badge morent-badge--{{ lead.crm_tone }}">{{ lead.crm_label }}</span></td>
+                  <td>{{ lead.vehicle_label }}</td>
+                  <td>
+                    {{ lead.source_label }}
+                    {% if lead.source_meta %}
+                      <span class="morent-subtext">{{ lead.source_meta }}</span>
+                    {% endif %}
+                  </td>
                 </tr>
               {% endfor %}
             </tbody>

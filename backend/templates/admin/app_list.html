@@ -1,0 +1,63 @@
+{% load i18n %}
+
+{% if app_list %}
+  <div class="morent-app-grid">
+    {% for app in app_list %}
+      <section class="morent-app-card app-{{ app.app_label }}{% if app.app_url in request.path|urlencode %} current-app{% endif %}">
+        <header class="morent-app-card__header">
+          <div>
+            <p class="morent-kicker">{{ app.app_label|upper }}</p>
+            <h3>
+              <a href="{{ app.app_url }}" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">
+                {{ app.name }}
+              </a>
+            </h3>
+          </div>
+          <span class="morent-app-card__count">{{ app.models|length }} {% trans "items" %}</span>
+        </header>
+
+        <ul class="morent-model-list">
+          {% for model in app.models %}
+            {% with model_name=model.object_name|lower %}
+              <li class="morent-model-row model-{{ model_name }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}">
+                <div>
+                  <strong>
+                    {% if model.admin_url %}
+                      <a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>
+                        {{ model.name }}
+                      </a>
+                    {% else %}
+                      {{ model.name }}
+                    {% endif %}
+                  </strong>
+                  <span>
+                    {% if model.view_only %}
+                      {% trans "View access only" %}
+                    {% else %}
+                      {% trans "Manage records and content" %}
+                    {% endif %}
+                  </span>
+                </div>
+
+                <div class="morent-model-actions">
+                  {% if model.add_url %}
+                    <a href="{{ model.add_url }}" aria-describedby="{{ app.app_label }}-{{ model_name }}">{% trans "Add" %}</a>
+                  {% endif %}
+                  {% if model.admin_url and show_changelinks %}
+                    {% if model.view_only %}
+                      <a href="{{ model.admin_url }}" aria-describedby="{{ app.app_label }}-{{ model_name }}">{% trans "View" %}</a>
+                    {% else %}
+                      <a href="{{ model.admin_url }}" aria-describedby="{{ app.app_label }}-{{ model_name }}">{% trans "Open" %}</a>
+                    {% endif %}
+                  {% endif %}
+                </div>
+              </li>
+            {% endwith %}
+          {% endfor %}
+        </ul>
+      </section>
+    {% endfor %}
+  </div>
+{% else %}
+  <p class="morent-empty-state">{% translate 'You don’t have permission to view or edit anything.' %}</p>
+{% endif %}
