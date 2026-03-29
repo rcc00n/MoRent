@@ -1,0 +1,106 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block content %}
+  <div class="morent-dashboard-shell">
+    <section class="morent-dashboard-panel">
+      <div class="morent-dashboard-panel__header">
+        <div>
+          <p class="morent-kicker">{% trans "MoRent lead desk" %}</p>
+          <h2>{% trans "Operations snapshot" %}</h2>
+        </div>
+        <a class="morent-admin-link" href="{{ booking_changelist_url }}">{% trans "Open all requests" %}</a>
+      </div>
+
+      <div class="morent-dashboard-cards">
+        {% for card in dashboard_cards %}
+          <article class="morent-dashboard-card">
+            <span>{{ card.label }}</span>
+            <strong>{{ card.value }}</strong>
+            <p>{{ card.hint }}</p>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <div class="morent-dashboard-grid">
+      <section class="morent-dashboard-panel">
+        <div class="morent-dashboard-panel__header">
+          <h2>{% trans "Request mix" %}</h2>
+        </div>
+
+        <ul class="morent-dashboard-list">
+          {% for item in request_type_counts %}
+            <li>
+              <span>{{ item.label }}</span>
+              <strong>{{ item.value }}</strong>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <section class="morent-dashboard-panel">
+        <div class="morent-dashboard-panel__header">
+          <h2>{% trans "Status overview" %}</h2>
+        </div>
+
+        <ul class="morent-dashboard-list">
+          {% for item in status_counts %}
+            <li>
+              <span>{{ item.label }}</span>
+              <strong>{{ item.value }}</strong>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+    </div>
+
+    <section class="morent-dashboard-panel">
+      <div class="morent-dashboard-panel__header">
+        <h2>{% trans "Latest requests" %}</h2>
+      </div>
+
+      {% if latest_requests %}
+        <div class="morent-dashboard-table-wrap">
+          <table class="morent-dashboard-table">
+            <thead>
+              <tr>
+                <th>{% trans "Received" %}</th>
+                <th>{% trans "Lead" %}</th>
+                <th>{% trans "Intent" %}</th>
+                <th>{% trans "Status" %}</th>
+                <th>{% trans "Vehicle" %}</th>
+                <th>{% trans "Source" %}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for lead in latest_requests %}
+                <tr>
+                  <td>{{ lead.created_at|date:"SHORT_DATETIME_FORMAT" }}</td>
+                  <td>
+                    <a href="{% url 'admin:bookings_booking_change' lead.pk %}">
+                      {{ lead.name }}
+                    </a>
+                  </td>
+                  <td>{{ lead.get_request_type_display }}</td>
+                  <td>{{ lead.get_status_display }}</td>
+                  <td>{{ lead.car|default:"Flexible enquiry" }}</td>
+                  <td>{{ lead.source|default:"website" }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <p class="morent-empty-state">{% trans "No requests yet. New leads will appear here as soon as the site starts receiving them." %}</p>
+      {% endif %}
+    </section>
+
+    <section class="morent-dashboard-panel">
+      <div class="morent-dashboard-panel__header">
+        <h2>{% trans "Applications" %}</h2>
+      </div>
+      {% include "admin/app_list.html" with app_list=app_list show_changelinks=True %}
+    </section>
+  </div>
+{% endblock %}

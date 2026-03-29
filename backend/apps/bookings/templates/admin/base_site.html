@@ -1,0 +1,36 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ title }} | {{ site_title|default:_("MoRent Admin") }}{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'bookings/admin/morent-admin.css' %}">
+{% endblock %}
+
+{% block branding %}
+  <div class="morent-branding">
+    <div>
+      <p class="morent-kicker">MoRent</p>
+      <h1 id="site-name">
+        <a href="{% url 'admin:index' %}">{{ site_header }}</a>
+      </h1>
+      <p class="morent-tagline">{{ morent_admin_tagline }}</p>
+    </div>
+
+    <div class="morent-branding__meta">
+      {% if morent_service_hours %}
+        <span class="morent-branding__pill">{{ morent_service_hours }}</span>
+      {% endif %}
+
+      {% for channel in morent_contact_channels %}
+        <span class="morent-branding__pill">
+          <strong>{{ channel.label }}</strong>
+          {{ channel.value }}
+        </span>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

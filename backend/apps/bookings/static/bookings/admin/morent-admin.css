@@ -1,0 +1,348 @@
+:root {
+  --morent-admin-bg: #f4efe6;
+  --morent-admin-surface: #fffdf9;
+  --morent-admin-surface-strong: #ffffff;
+  --morent-admin-border: rgba(39, 43, 36, 0.12);
+  --morent-admin-text: #1f231d;
+  --morent-admin-muted: #6b6f67;
+  --morent-admin-accent: #8d6a32;
+  --morent-admin-accent-soft: rgba(141, 106, 50, 0.12);
+  --morent-admin-success: #2b6d46;
+  --morent-admin-warning: #a66b16;
+  --morent-admin-danger: #9b3d2e;
+  --morent-admin-info: #25577a;
+}
+
+html[data-theme="light"],
+html,
+body.login,
+body.dashboard,
+body.change-list,
+body.change-form {
+  background: linear-gradient(180deg, #f8f3ec 0%, #f1ebe1 100%);
+}
+
+body,
+#container,
+.module,
+.dashboard #content,
+.change-list #content-main,
+.change-form #content-main {
+  color: var(--morent-admin-text);
+}
+
+#header {
+  background: rgba(31, 35, 29, 0.92);
+  color: #fff8ef;
+  border-bottom: 1px solid rgba(255, 248, 239, 0.08);
+}
+
+#branding h1,
+#branding h1 a:link,
+#branding h1 a:visited {
+  color: #fff8ef;
+}
+
+.morent-branding {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  width: 100%;
+}
+
+.morent-kicker {
+  margin: 0 0 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 239, 0.72);
+}
+
+.morent-tagline {
+  margin: 0.35rem 0 0;
+  color: rgba(255, 248, 239, 0.78);
+}
+
+.morent-branding__meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.morent-branding__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.42rem 0.78rem;
+  border-radius: 999px;
+  background: rgba(255, 248, 239, 0.08);
+  color: #fff8ef;
+  font-size: 0.82rem;
+}
+
+#user-tools a:link,
+#user-tools a:visited,
+.module caption,
+div.breadcrumbs a {
+  color: #f0d8a8;
+}
+
+#content {
+  padding-top: 1.5rem;
+}
+
+.morent-dashboard-shell {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.morent-dashboard-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.morent-dashboard-panel,
+.module,
+#changelist-filter,
+.inline-group,
+.submit-row,
+.object-tools a,
+.results,
+form .aligned .form-row,
+.selector {
+  border-radius: 18px;
+}
+
+.morent-dashboard-panel,
+.module,
+#changelist-filter,
+.inline-group,
+.submit-row,
+.results,
+form .aligned .form-row,
+.selector,
+#changelist .actions,
+#changelist .paginator,
+#content-related {
+  background: var(--morent-admin-surface);
+  border: 1px solid var(--morent-admin-border);
+  box-shadow: 0 14px 36px rgba(31, 35, 29, 0.05);
+}
+
+.morent-dashboard-panel {
+  padding: 1.35rem;
+}
+
+.morent-dashboard-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.morent-dashboard-panel__header h2 {
+  margin: 0;
+  font-size: 1.12rem;
+}
+
+.morent-admin-link,
+.object-tools a,
+.button,
+input[type="submit"],
+input[type="button"],
+.submit-row input,
+a.button {
+  border-radius: 999px;
+}
+
+.morent-admin-link,
+.object-tools a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 1rem;
+  background: rgba(31, 35, 29, 0.95);
+  color: #fff8ef;
+  text-decoration: none;
+}
+
+.morent-dashboard-cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.morent-dashboard-card {
+  padding: 1rem 1.05rem;
+  border-radius: 16px;
+  background: var(--morent-admin-surface-strong);
+  border: 1px solid var(--morent-admin-border);
+}
+
+.morent-dashboard-card span {
+  display: block;
+  color: var(--morent-admin-muted);
+  font-size: 0.88rem;
+}
+
+.morent-dashboard-card strong {
+  display: block;
+  margin-top: 0.45rem;
+  font-size: 1.9rem;
+  line-height: 1;
+}
+
+.morent-dashboard-card p,
+.morent-empty-state,
+.help,
+.morent-subtext {
+  color: var(--morent-admin-muted);
+}
+
+.morent-dashboard-card p {
+  margin: 0.65rem 0 0;
+  font-size: 0.88rem;
+}
+
+.morent-dashboard-list {
+  display: grid;
+  gap: 0.8rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.morent-dashboard-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--morent-admin-border);
+}
+
+.morent-dashboard-list li:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.morent-dashboard-table-wrap {
+  overflow-x: auto;
+}
+
+.morent-dashboard-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.morent-dashboard-table th,
+.morent-dashboard-table td {
+  padding: 0.8rem 0.4rem;
+  border-bottom: 1px solid var(--morent-admin-border);
+  text-align: left;
+}
+
+.morent-dashboard-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.morent-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.28rem 0.7rem;
+  border-radius: 999px;
+  background: var(--morent-admin-accent-soft);
+  color: var(--morent-admin-text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.morent-badge--booking,
+.morent-badge--contacted,
+.morent-badge--synced {
+  background: rgba(43, 109, 70, 0.12);
+  color: var(--morent-admin-success);
+}
+
+.morent-badge--contact,
+.morent-badge--reviewing,
+.morent-badge--pending {
+  background: rgba(141, 106, 50, 0.14);
+  color: var(--morent-admin-warning);
+}
+
+.morent-badge--support,
+.morent-badge--failed,
+.morent-badge--closed {
+  background: rgba(155, 61, 46, 0.12);
+  color: var(--morent-admin-danger);
+}
+
+.morent-badge--new,
+.morent-badge--skipped {
+  background: rgba(37, 87, 122, 0.12);
+  color: var(--morent-admin-info);
+}
+
+.morent-subtext {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.78rem;
+}
+
+.morent-code-block {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  border-radius: 12px;
+  background: #1f231d;
+  color: #f7f1e8;
+  overflow-x: auto;
+}
+
+.morent-car-preview {
+  display: block;
+  width: 120px;
+  height: 72px;
+  border-radius: 12px;
+  object-fit: cover;
+  border: 1px solid var(--morent-admin-border);
+}
+
+#changelist-filter h2,
+.module h2,
+.module caption,
+.inline-group h2 {
+  background: transparent;
+  color: var(--morent-admin-text);
+}
+
+#nav-sidebar .current-app .section:link,
+#nav-sidebar .current-app .section:visited,
+#nav-sidebar .current-model {
+  background: rgba(141, 106, 50, 0.12);
+  color: var(--morent-admin-text);
+}
+
+@media (max-width: 1024px) {
+  .morent-dashboard-cards,
+  .morent-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .morent-branding,
+  .morent-dashboard-panel__header {
+    flex-direction: column;
+  }
+
+  .morent-branding__meta {
+    justify-content: flex-start;
+  }
+}

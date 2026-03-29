@@ -26,7 +26,7 @@ CORS_ALLOWED_ORIGINS = split_csv_env(
 
 
 INSTALLED_APPS = [
-    "django.contrib.admin",
+    "morent_backend.apps.MoRentAdminConfig",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
