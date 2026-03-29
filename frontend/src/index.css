@@ -248,6 +248,8 @@ code {
 }
 
 .scene--destination {
+  gap: 18px;
+  padding: 22px;
   grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
   align-items: center;
   background:
@@ -779,7 +781,7 @@ code {
 .destination-section__media {
   position: relative;
   overflow: hidden;
-  min-height: 360px;
+  min-height: clamp(284px, 28vw, 320px);
   border-radius: 26px;
   border: 1px solid rgba(180, 205, 244, 0.14);
   background:
@@ -806,9 +808,9 @@ code {
 
 .destination-section__content {
   display: grid;
-  gap: 16px;
+  gap: 10px;
   align-content: center;
-  max-width: 430px;
+  max-width: 400px;
 }
 
 .destination-section__content h2 {
@@ -821,7 +823,7 @@ code {
 .destination-section__content p {
   margin: 0;
   color: rgba(226, 234, 249, 0.76);
-  line-height: 1.58;
+  line-height: 1.52;
 }
 
 .signal-section {
@@ -1520,6 +1522,15 @@ code {
   .section-cta {
     justify-content: flex-start;
   }
+
+  .scene--destination {
+    gap: 16px;
+    padding: 20px;
+  }
+
+  .destination-section__media {
+    min-height: 280px;
+  }
 }
 
 @media (max-width: 720px) {
@@ -1563,6 +1574,19 @@ code {
 
   .hero__destination-plane {
     opacity: 0.26;
+  }
+
+  .scene--destination {
+    padding: 18px;
+  }
+
+  .destination-section__media {
+    min-height: 236px;
+  }
+
+  .destination-section__content {
+    gap: 8px;
+    max-width: none;
   }
 
   .form-grid {
