@@ -46,12 +46,12 @@ const imageMotion = {
 function CarCard({ car }) {
   const { t } = useTranslation()
   const displayCar = enrichCarMedia(car)
-  const carName = `${displayCar.brand} ${displayCar.model}`
-  const description = displayCar.translationKey
+  const carName = displayCar.title || `${displayCar.brand} ${displayCar.model}`
+  const description = displayCar.translationKey && !displayCar.shortDescription
     ? t(`cars.${displayCar.translationKey}.description`, {
         defaultValue: displayCar.description,
       })
-    : displayCar.description
+    : displayCar.shortDescription
 
   return (
     <MotionArticle

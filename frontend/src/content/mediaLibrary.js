@@ -62,23 +62,48 @@ function getCarRegistryKey(car) {
 }
 
 export function getCarMedia(car) {
-  return (
-    carMediaRegistry[getCarRegistryKey(car)] || {
-      translationKey: null,
-      primaryImage: car.image,
-      gallery: car.image ? [car.image] : [],
-    }
-  )
+  const registryMedia = carMediaRegistry[getCarRegistryKey(car)] || null
+  const apiPrimaryImage = car.primaryImage || car.primary_image || car.image || ''
+  const apiGallery = Array.isArray(car.gallery)
+    ? car.gallery.filter(Boolean)
+    : []
+
+  return {
+    translationKey: registryMedia?.translationKey || null,
+    primaryImage: apiPrimaryImage || registryMedia?.primaryImage || '',
+    gallery:
+      apiGallery.length
+        ? apiGallery
+        : registryMedia?.gallery?.length
+          ? registryMedia.gallery
+          : [apiPrimaryImage || registryMedia?.primaryImage].filter(Boolean),
+  }
 }
 
 export function enrichCarMedia(car) {
   const media = getCarMedia(car)
+  const title = car.title || `${car.brand} ${car.model}`
+  const shortDescription =
+    car.shortDescription ||
+    car.short_description ||
+    car.description ||
+    ''
+  const longDescription =
+    car.longDescription ||
+    car.long_description ||
+    shortDescription
 
   return {
     ...car,
+    title,
+    shortDescription,
+    longDescription,
     translationKey: media.translationKey,
     image: media.primaryImage || car.image,
     primaryImage: media.primaryImage || car.image,
-    gallery: media.gallery.length ? media.gallery : [media.primaryImage || car.image].filter(Boolean),
+    gallery:
+      media.gallery.length
+        ? media.gallery
+        : [media.primaryImage || car.image].filter(Boolean),
   }
 }

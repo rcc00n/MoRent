@@ -31,7 +31,9 @@ function CarPage() {
 
     async function loadCar() {
       try {
-        const { data } = await getCar(id)
+        setIsLoading(true)
+        setHasLoadError(false)
+        const { data } = await getCar(id, i18n.resolvedLanguage)
         const enrichedCar = enrichCarMedia(data)
 
         if (isMounted) {
@@ -54,15 +56,15 @@ function CarPage() {
     return () => {
       isMounted = false
     }
-  }, [id])
+  }, [id, i18n.resolvedLanguage])
 
   const galleryImages = [...new Set([car?.primaryImage, ...(car?.gallery || [])].filter(Boolean))]
   const currentImage =
     galleryImages.find((image) => image === activeImage) || galleryImages[0] || car?.image
   const carDescription =
-    car?.translationKey
+    car?.translationKey && !car?.longDescription
       ? t(`cars.${car.translationKey}.description`, { defaultValue: car.description })
-      : car?.description
+      : car?.longDescription || car?.description
 
   if (isLoading) {
     return (
@@ -102,6 +104,7 @@ function CarPage() {
   }
 
   const pageMetadata = getCarPageMetadata(car, siteUrl, i18n.resolvedLanguage)
+  const carName = car.title || `${car.brand} ${car.model}`
   const supportCards = t('carPage.supportCards', { returnObjects: true })
 
   return (
@@ -115,8 +118,8 @@ function CarPage() {
           transition={{ duration: 0.45 }}
         >
           <div className="panel car-page__gallery panel--visual">
-            <img
-              alt={`${car.brand} ${car.model}`}
+                    <img
+                      alt={carName}
               className="car-page__image"
               decoding="async"
               src={currentImage}
@@ -155,7 +158,7 @@ function CarPage() {
             <div className="car-page__summary">
               <div>
                 <h1 className="car-page__title">
-                  {car.brand} {car.model}
+                  {carName}
                 </h1>
                 <p className="muted-text">{carDescription}</p>
               </div>
@@ -181,7 +184,7 @@ function CarPage() {
           initial={{ opacity: 0, x: 20 }}
           transition={{ delay: 0.08, duration: 0.45 }}
         >
-          <BookingForm carId={car.id} carName={`${car.brand} ${car.model}`} />
+          <BookingForm carId={car.id} carName={carName} />
         </MotionDiv>
 
         <div className="car-page__support">

@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { NavLink, useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
+import { useSiteSettings } from '../hooks/useSiteContent'
+import { mergeContent } from '../shared/content'
 import LanguageSwitcher from './LanguageSwitcher'
 const MotionAside = motion.aside
 const MotionDiv = motion.div
@@ -15,11 +17,21 @@ const drawerLinkClassName = ({ isActive }) =>
 
 function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
   const location = useLocation()
   const previousLocationRef = useRef(`${location.pathname}${location.hash}`)
   const primaryLinks = t('nav.links', { returnObjects: true })
   const mobileExtraLinks = t('nav.mobileExtraLinks', { returnObjects: true })
+  const { data: remoteSettings } = useSiteSettings(i18n.resolvedLanguage)
+  const siteSettings = mergeContent(
+    {
+      brand_name: 'MoRent',
+      cta_labels: {
+        primary: t('common.actions.bookNow'),
+      },
+    },
+    remoteSettings || {},
+  )
 
   useEffect(() => {
     const nextLocation = `${location.pathname}${location.hash}`
@@ -69,12 +81,20 @@ function Navbar() {
     setIsDrawerOpen((current) => !current)
   }
 
+  const brandName = siteSettings.brand_name === 'MoRent'
+    ? (
+        <>
+          Mo<span>Rent</span>
+        </>
+      )
+    : siteSettings.brand_name
+
   return (
     <>
       <header className="navbar">
         <div className="navbar__inner">
           <NavLink className="brand" to="/">
-            Mo<span>Rent</span>
+            {brandName}
           </NavLink>
           <div className="navbar__actions">
             <nav className="nav-links" aria-label={t('nav.primaryLabel')}>
@@ -91,7 +111,7 @@ function Navbar() {
             </nav>
             <LanguageSwitcher />
             <NavLink className="button button--primary button--small" to="/catalog">
-              {t('common.actions.bookNow')}
+              {siteSettings.cta_labels.primary}
             </NavLink>
           </div>
           <button

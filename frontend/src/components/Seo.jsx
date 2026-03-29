@@ -85,7 +85,7 @@ function Seo({
   ogLocale = 'en_US',
   ogLocaleAlternates = [],
   robots = 'index,follow',
-  structuredData = null,
+  structuredData,
   title,
   url,
 }) {
@@ -113,7 +113,9 @@ function Seo({
       ogLocaleAlternates,
       'seo-og-locale-alternate',
     )
-    updateStructuredData(structuredData)
+    if (structuredData !== undefined) {
+      updateStructuredData(structuredData)
+    }
   }, [
     alternates,
     canonicalUrl,

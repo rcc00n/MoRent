@@ -3,30 +3,126 @@ import { useTranslation } from 'react-i18next'
 
 import ContactRequestForm from '../components/ContactRequestForm'
 import PageVisualStack from '../components/PageVisualStack'
+import Seo from '../components/Seo'
 import { pageMedia } from '../content/mediaLibrary'
-import { useContactConfig } from '../hooks/useContactConfig'
+import {
+  usePageContent,
+  useSiteSettings,
+} from '../hooks/useSiteContent'
+import { buildCmsMetadata } from '../seo/cmsMetadata'
+import { getRuntimeSiteUrl } from '../seo/site'
+import { mergeContent } from '../shared/content'
 
 function Contacts() {
-  const { t } = useTranslation()
-  const contactHighlights = t('contacts.highlights', { returnObjects: true })
-  const contactSummary = t('contacts.summary', { returnObjects: true })
-  const contactEntryCards = t('contacts.entryCards', { returnObjects: true })
-  const { directChannels } = useContactConfig()
+  const { i18n, t } = useTranslation()
+  const siteUrl = getRuntimeSiteUrl()
+  const fallbackSummary = t('contacts.summary', { returnObjects: true })
+  const { data: remoteContactsContent } = usePageContent(
+    'contacts',
+    i18n.resolvedLanguage,
+  )
+  const { data: remoteSettings } = useSiteSettings(i18n.resolvedLanguage)
+  const fallbackContent = {
+    eyebrow: t('contacts.eyebrow'),
+    title: t('contacts.title'),
+    description: t('contacts.description'),
+    summary_labels: {
+      primary: fallbackSummary[0].label,
+      hours: fallbackSummary[1].label,
+      coverage: fallbackSummary[2].label,
+    },
+    highlights: t('contacts.highlights', { returnObjects: true }),
+    entry_section: {
+      title: t('contacts.entrySectionTitle'),
+      description: t('contacts.entrySectionDescription'),
+    },
+    entry_cards: t('contacts.entryCards', { returnObjects: true }).map((item) => ({
+      intent: item.intent,
+      title: item.title,
+      description: item.description,
+      action_label: item.actionLabel,
+    })),
+    channels: {
+      title: t('contacts.channelsTitle'),
+      description: t('contacts.channelsDescription'),
+    },
+    form_section: {
+      title: t('contacts.formSectionTitle'),
+      description: t('contacts.formSectionDescription'),
+    },
+    visuals: {
+      primary_image: pageMedia.sunsetArrival,
+      primary_alt: t('contacts.visuals.primaryAlt'),
+      primary_caption: t('contacts.visuals.primaryCaption'),
+      secondary_image: '',
+      secondary_alt: '',
+      secondary_caption: '',
+    },
+    seo: {
+      title: t('metadata.pages.contacts.title'),
+      description: t('metadata.pages.contacts.description'),
+    },
+  }
+  const fallbackSettings = {
+    channels: {
+      phone: { value: '', href: '' },
+      email: { value: '', href: '' },
+      whatsapp: { value: '', href: '' },
+      telegram: { value: '', href: '' },
+    },
+    working_hours: fallbackSummary[1].value,
+    contact_availability_text: fallbackSummary[0].value,
+    pickup_location_text: fallbackSummary[2].value,
+  }
+  const contactsContent = mergeContent(fallbackContent, remoteContactsContent || {})
+  const siteSettings = mergeContent(fallbackSettings, remoteSettings || {})
+  const directChannels = Object.entries(siteSettings.channels || {})
+    .map(([key, channel]) => ({
+      key,
+      value: channel?.value || '',
+      href: channel?.href || '',
+    }))
+    .filter((channel) => channel.value && channel.href)
+  const contactSummary = [
+    {
+      label: contactsContent.summary_labels.primary,
+      value: siteSettings.contact_availability_text,
+    },
+    {
+      label: contactsContent.summary_labels.hours,
+      value: siteSettings.working_hours,
+    },
+    {
+      label: contactsContent.summary_labels.coverage,
+      value: siteSettings.pickup_location_text,
+    },
+  ]
+  const contactsSeo = buildCmsMetadata({
+    pathname: '/contacts',
+    siteUrl,
+    language: i18n.resolvedLanguage,
+    title: contactsContent.seo.title,
+    description: contactsContent.seo.description,
+  })
 
   return (
     <div className="content-page">
+      <Seo {...contactsSeo} />
       <section className="page-hero scene scene--destination">
         <div className="page-hero__grid">
           <div className="page-hero__content">
-            <span className="page-eyebrow">{t('contacts.eyebrow')}</span>
-            <h1>{t('contacts.title')}</h1>
-            <p>{t('contacts.description')}</p>
+            <span className="page-eyebrow">{contactsContent.eyebrow}</span>
+            <h1>{contactsContent.title}</h1>
+            <p>{contactsContent.description}</p>
           </div>
 
           <PageVisualStack
-            primary={pageMedia.sunsetArrival}
-            primaryAlt={t('contacts.visuals.primaryAlt')}
-            primaryCaption={t('contacts.visuals.primaryCaption')}
+            primary={contactsContent.visuals.primary_image}
+            primaryAlt={contactsContent.visuals.primary_alt}
+            primaryCaption={contactsContent.visuals.primary_caption}
+            secondary={contactsContent.visuals.secondary_image}
+            secondaryAlt={contactsContent.visuals.secondary_alt}
+            secondaryCaption={contactsContent.visuals.secondary_caption}
           />
         </div>
 
@@ -42,7 +138,7 @@ function Contacts() {
 
       <section className="page-section">
         <div className="info-grid">
-          {contactHighlights.map((item) => (
+          {contactsContent.highlights.map((item) => (
             <article className="info-card" key={item.title}>
               <h2>{item.title}</h2>
               <p>{item.detail}</p>
@@ -55,14 +151,14 @@ function Contacts() {
         <div>
           <div className="section-header section-header--split">
             <div>
-              <h2>{t('contacts.entrySectionTitle')}</h2>
+              <h2>{contactsContent.entry_section.title}</h2>
             </div>
-            <p>{t('contacts.entrySectionDescription')}</p>
+            <p>{contactsContent.entry_section.description}</p>
           </div>
         </div>
 
         <div className="contact-entry-grid">
-          {contactEntryCards.map((item) => {
+          {contactsContent.entry_cards.map((item) => {
             const to =
               item.intent === 'booking'
                 ? '/catalog'
@@ -73,7 +169,7 @@ function Contacts() {
                 <h2>{item.title}</h2>
                 <p>{item.description}</p>
                 <Link className="button button--secondary" to={to}>
-                  {item.actionLabel}
+                  {item.action_label}
                 </Link>
               </article>
             )
@@ -85,9 +181,9 @@ function Contacts() {
         <section className="page-section">
           <div className="section-header section-header--split">
             <div>
-              <h2>{t('contacts.channelsTitle')}</h2>
+              <h2>{contactsContent.channels.title}</h2>
             </div>
-            <p>{t('contacts.channelsDescription')}</p>
+            <p>{contactsContent.channels.description}</p>
           </div>
 
           <div className="contact-channel-grid">
@@ -111,8 +207,8 @@ function Contacts() {
 
       <section className="contact-request-shell" id="contact-form">
         <div className="section-header">
-          <h2>{t('contacts.formSectionTitle')}</h2>
-          <p>{t('contacts.formSectionDescription')}</p>
+          <h2>{contactsContent.form_section.title}</h2>
+          <p>{contactsContent.form_section.description}</p>
         </div>
 
         <ContactRequestForm />

@@ -2,35 +2,72 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import PageVisualStack from '../components/PageVisualStack'
+import Seo from '../components/Seo'
 import { pageMedia } from '../content/mediaLibrary'
+import { useLegalPage } from '../hooks/useSiteContent'
+import { buildCmsMetadata } from '../seo/cmsMetadata'
+import { getRuntimeSiteUrl } from '../seo/site'
+import { mergeContent } from '../shared/content'
 
 function Privacy() {
-  const { t } = useTranslation()
-  const privacySections = t('privacy.sections', { returnObjects: true })
+  const { i18n, t } = useTranslation()
+  const siteUrl = getRuntimeSiteUrl()
+  const { data: remotePrivacyContent } = useLegalPage('privacy', i18n.resolvedLanguage)
+  const fallbackContent = {
+    eyebrow: t('privacy.eyebrow'),
+    title: t('privacy.title'),
+    description: t('privacy.description'),
+    sections: t('privacy.sections', { returnObjects: true }),
+    cta: {
+      title: t('privacy.ctaTitle'),
+      description: t('privacy.ctaDescription'),
+    },
+    visuals: {
+      primary_image: pageMedia.mercedesInterior,
+      primary_alt: t('privacy.visuals.primaryAlt'),
+      primary_caption: t('privacy.visuals.primaryCaption'),
+      secondary_image: pageMedia.sunsetArrival,
+      secondary_alt: t('privacy.visuals.secondaryAlt'),
+      secondary_caption: t('privacy.visuals.secondaryCaption'),
+    },
+    seo: {
+      title: t('metadata.pages.privacy.title'),
+      description: t('metadata.pages.privacy.description'),
+    },
+  }
+  const privacyContent = mergeContent(fallbackContent, remotePrivacyContent || {})
+  const privacySeo = buildCmsMetadata({
+    pathname: '/privacy',
+    siteUrl,
+    language: i18n.resolvedLanguage,
+    title: privacyContent.seo.title,
+    description: privacyContent.seo.description,
+  })
 
   return (
     <div className="content-page">
+      <Seo {...privacySeo} />
       <section className="page-hero scene scene--benefits">
         <div className="page-hero__grid">
           <div className="page-hero__content">
-            <span className="page-eyebrow">{t('privacy.eyebrow')}</span>
-            <h1>{t('privacy.title')}</h1>
-            <p>{t('privacy.description')}</p>
+            <span className="page-eyebrow">{privacyContent.eyebrow}</span>
+            <h1>{privacyContent.title}</h1>
+            <p>{privacyContent.description}</p>
           </div>
 
           <PageVisualStack
-            primary={pageMedia.mercedesInterior}
-            primaryAlt={t('privacy.visuals.primaryAlt')}
-            primaryCaption={t('privacy.visuals.primaryCaption')}
-            secondary={pageMedia.sunsetArrival}
-            secondaryAlt={t('privacy.visuals.secondaryAlt')}
-            secondaryCaption={t('privacy.visuals.secondaryCaption')}
+            primary={privacyContent.visuals.primary_image}
+            primaryAlt={privacyContent.visuals.primary_alt}
+            primaryCaption={privacyContent.visuals.primary_caption}
+            secondary={privacyContent.visuals.secondary_image}
+            secondaryAlt={privacyContent.visuals.secondary_alt}
+            secondaryCaption={privacyContent.visuals.secondary_caption}
           />
         </div>
       </section>
 
       <section className="legal-grid">
-        {privacySections.map((section) => (
+        {privacyContent.sections.map((section) => (
           <article className="legal-card" key={section.title}>
             <h2>{section.title}</h2>
             <ul>
@@ -44,8 +81,8 @@ function Privacy() {
 
       <section className="cta-panel">
         <div>
-          <h2>{t('privacy.ctaTitle')}</h2>
-          <p>{t('privacy.ctaDescription')}</p>
+          <h2>{privacyContent.cta.title}</h2>
+          <p>{privacyContent.cta.description}</p>
         </div>
 
         <div className="button-row">

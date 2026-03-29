@@ -12,7 +12,7 @@ import { getCars } from '../shared/api'
 const MotionSection = motion.section
 
 function Catalog() {
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
   const [cars, setCars] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [hasLoadError, setHasLoadError] = useState(false)
@@ -23,7 +23,9 @@ function Catalog() {
 
     async function loadCars() {
       try {
-        const { data } = await getCars()
+        setIsLoading(true)
+        setHasLoadError(false)
+        const { data } = await getCars({ lang: i18n.resolvedLanguage })
 
         if (isMounted) {
           setCars(data.map(enrichCarMedia))
@@ -44,7 +46,7 @@ function Catalog() {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [i18n.resolvedLanguage])
 
   return (
     <div className="catalog-layout">
