@@ -1,111 +1,394 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #0f172a;
+  background: #f4f8ff;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+  --color-primary: #0b5cff;
+  --color-primary-dark: #0840b7;
+  --color-border: #d7e4ff;
+  --color-surface: #ffffff;
+  --color-surface-muted: #eef4ff;
+  --color-text-muted: #4b5c7d;
+  --color-success: #128c55;
+  --color-danger: #c83b3b;
+  --shadow-card: 0 18px 48px rgba(11, 92, 255, 0.08);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+* {
+  box-sizing: border-box;
+}
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+html,
+body,
+#root {
+  min-height: 100%;
 }
 
 body {
   margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(11, 92, 255, 0.14), transparent 32%),
+    linear-gradient(180deg, #f6f9ff 0%, #edf4ff 100%);
+  color: #0f172a;
 }
 
-#root {
-  width: 1126px;
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+img {
+  display: block;
   max-width: 100%;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(244, 248, 255, 0.94);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(11, 92, 255, 0.08);
+}
+
+.navbar__inner,
+.page-shell {
+  width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
+}
+
+.navbar__inner {
   display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 72px;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+.brand {
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+.brand span {
+  color: var(--color-primary);
 }
 
-code,
-.counter {
-  font-family: var(--mono);
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-link {
+  padding: 10px 14px;
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-link.active,
+.nav-link:hover {
+  background: rgba(11, 92, 255, 0.1);
+  color: var(--color-primary);
+}
+
+.page-shell {
+  padding-block: 48px 72px;
+}
+
+.hero,
+.panel,
+.car-card,
+.booking-form {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.hero {
+  padding: 48px;
+  display: grid;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.eyebrow {
   display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+  width: fit-content;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(11, 92, 255, 0.1);
+  color: var(--color-primary);
+  font-size: 0.85rem;
+  font-weight: 600;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+.hero h1,
+.section-header h1,
+.section-header h2 {
+  margin: 0;
+  line-height: 1.05;
+}
+
+.hero h1,
+.section-header h1 {
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.hero p,
+.section-header p,
+.muted-text {
+  color: var(--color-text-muted);
+  max-width: 720px;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+  transform: none;
+}
+
+.button--primary {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+.button--secondary {
+  background: var(--color-surface-muted);
+  border-color: var(--color-border);
+  color: #0f172a;
+}
+
+.section-header {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.cars-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.car-card {
+  overflow: hidden;
+  display: grid;
+}
+
+.car-card__media {
+  aspect-ratio: 16 / 10;
+  width: 100%;
+  object-fit: cover;
+  background: linear-gradient(135deg, #bfd2ff, #eaf1ff);
+}
+
+.car-card__body {
+  display: grid;
+  gap: 14px;
+  padding: 20px;
+}
+
+.car-card__top,
+.price-row,
+.car-page__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.car-card__title,
+.car-page__title {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.badge--available {
+  background: rgba(18, 140, 85, 0.12);
+  color: var(--color-success);
+}
+
+.badge--unavailable {
+  background: rgba(200, 59, 59, 0.12);
+  color: var(--color-danger);
+}
+
+.price {
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.panel {
+  padding: 28px;
+}
+
+.catalog-layout,
+.car-page {
+  display: grid;
+  gap: 28px;
+}
+
+.car-page {
+  grid-template-columns: minmax(0, 1.4fr) minmax(320px, 0.9fr);
+}
+
+.car-page__gallery {
+  overflow: hidden;
+}
+
+.car-page__image {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: linear-gradient(135deg, #bfd2ff, #eaf1ff);
+}
+
+.car-page__content {
+  display: grid;
+  gap: 20px;
+}
+
+.booking-form {
+  padding: 24px;
+  display: grid;
+  gap: 18px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.field--full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--color-border);
+  background: #fff;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: 2px solid rgba(11, 92, 255, 0.16);
+  border-color: var(--color-primary);
+}
+
+.feedback {
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-size: 0.95rem;
+}
+
+.feedback--success {
+  background: rgba(18, 140, 85, 0.12);
+  color: var(--color-success);
+}
+
+.feedback--error {
+  background: rgba(200, 59, 59, 0.12);
+  color: var(--color-danger);
+}
+
+.empty-state {
+  padding: 32px;
+  text-align: center;
+  border: 1px dashed var(--color-border);
+  border-radius: 24px;
+  color: var(--color-text-muted);
+  background: rgba(255, 255, 255, 0.65);
+}
+
+@media (max-width: 900px) {
+  .car-page {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 720px) {
+  .navbar__inner {
+    flex-direction: column;
+    justify-content: center;
+    padding-block: 14px;
+  }
+
+  .page-shell {
+    width: min(1120px, calc(100% - 20px));
+    padding-block: 28px 56px;
+  }
+
+  .hero,
+  .panel,
+  .booking-form {
+    padding: 22px;
+    border-radius: 20px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
 }
