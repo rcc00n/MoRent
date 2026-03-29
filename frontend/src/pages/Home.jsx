@@ -20,7 +20,6 @@ import {
   updateInteractiveGlow,
 } from '../shared/interactiveSurface'
 
-const MotionArticle = motion.article
 const MotionAnchor = motion.a
 const MotionDiv = motion.div
 const MotionHeading = motion.h1
@@ -87,23 +86,6 @@ const sectionSlideVariants = {
     x: 0,
     transition: {
       duration: 0.64,
-      ease: premiumEase,
-    },
-  },
-}
-
-const proofItemVariants = {
-  hidden: {
-    opacity: 0,
-    scale: 0.97,
-    y: 18,
-  },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    y: 0,
-    transition: {
-      duration: 0.58,
       ease: premiumEase,
     },
   },
@@ -328,7 +310,6 @@ function Home() {
   const beamY = useTransform(scrollYProgress, [0, 1], [0, -8])
   const coastalY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : 18])
   const visualY = useTransform(scrollYProgress, [0, 1], [0, -6])
-  const proofItems = t('home.benefits.proofItems', { returnObjects: true })
   const processItems = t('home.benefits.processItems', { returnObjects: true })
   const bookingSteps = t('home.closing.steps', { returnObjects: true })
   const faqItems = t('faq.items', { returnObjects: true })
@@ -569,24 +550,6 @@ function Home() {
           >
             <h2>{t('home.benefits.title')}</h2>
             <p>{t('home.benefits.description')}</p>
-          </MotionDiv>
-
-          <MotionDiv className="benefits-proof" variants={benefitCardsContainerVariants}>
-            {proofItems.map((item) => (
-              <MotionArticle
-                className="benefits-proof__item interactive-surface interactive-surface--soft"
-                key={item.title}
-                onPointerLeave={resetInteractiveGlow}
-                onPointerMove={updateInteractiveGlow}
-                variants={proofItemVariants}
-              >
-                <span className="benefits-proof__value">{item.value}</span>
-                <div className="benefits-proof__content">
-                  <h3>{item.title}</h3>
-                  <p>{item.description}</p>
-                </div>
-              </MotionArticle>
-            ))}
           </MotionDiv>
         </div>
 

@@ -424,8 +424,8 @@ code {
 }
 
 .scene--benefits {
-  gap: 18px;
-  padding: 24px;
+  gap: 22px;
+  padding: 26px;
   background:
     radial-gradient(circle at 85% 15%, rgba(100, 90, 255, 0.12), transparent 24%),
     radial-gradient(circle at 15% 100%, rgba(101, 161, 255, 0.09), transparent 22%),
@@ -434,9 +434,9 @@ code {
 }
 
 .scene--destination {
-  gap: 10px;
-  padding: 14px;
-  grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
+  gap: 18px;
+  padding: 16px;
+  grid-template-columns: minmax(0, 1.14fr) minmax(300px, 0.86fr);
   align-items: center;
   background:
     radial-gradient(circle at 18% 12%, rgba(255, 204, 150, 0.1), transparent 22%),
@@ -994,9 +994,10 @@ html[lang='ru'] .hero h1 {
 
 .destination-section__content {
   display: grid;
-  gap: 6px;
+  gap: 8px;
   align-content: center;
-  max-width: 350px;
+  max-width: 360px;
+  margin-inline-start: clamp(10px, 1.8vw, 26px);
 }
 
 .destination-section__content h2 {
@@ -1008,6 +1009,7 @@ html[lang='ru'] .hero h1 {
 
 .destination-section__content p {
   margin: 0;
+  max-width: 31ch;
   color: rgba(226, 234, 249, 0.76);
   line-height: 1.42;
 }
@@ -1043,65 +1045,15 @@ html[lang='ru'] .hero h1 {
 
 .benefits-section__header {
   display: grid;
-  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
-  gap: 18px;
-  align-items: end;
-}
-
-.benefits-proof {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.benefits-proof__item {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 14px;
   align-items: start;
-  padding: 14px 15px;
-  border: 1px solid rgba(180, 207, 255, 0.1);
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.03);
-  transition:
-    transform 220ms ease,
-    border-color 220ms ease,
-    box-shadow 220ms ease;
-}
-
-.benefits-proof__item:hover {
-  transform: translateY(-2px);
-  border-color: rgba(193, 218, 255, 0.14);
-  box-shadow: 0 16px 36px rgba(4, 10, 24, 0.16);
-}
-
-.benefits-proof__value {
-  font-size: 1.35rem;
-  font-weight: 800;
-  line-height: 1;
-  color: #f8fbff;
-}
-
-.benefits-proof__content {
-  display: grid;
-  gap: 5px;
-}
-
-.benefits-proof__content h3 {
-  margin: 0;
-  font-size: 0.96rem;
-}
-
-.benefits-proof__content p {
-  margin: 0;
-  color: var(--color-text-muted);
-  line-height: 1.45;
 }
 
 .benefits-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 16px;
   align-content: start;
 }
 
@@ -1110,10 +1062,11 @@ html[lang='ru'] .hero h1 {
   grid-template-columns: auto 1fr;
   grid-template-areas:
     'glyph title'
-    'glyph copy';
-  gap: 8px 12px;
+    'copy copy';
+  gap: 14px 16px;
   align-items: start;
-  padding: 18px;
+  min-height: 100%;
+  padding: 22px;
   transition:
     transform 220ms ease,
     border-color 220ms ease,
@@ -1145,8 +1098,7 @@ html[lang='ru'] .hero h1 {
   box-shadow: 0 22px 54px rgba(4, 10, 24, 0.28);
 }
 
-.scene--benefits .benefit-card,
-.scene--benefits .benefits-proof__item {
+.scene--benefits .benefit-card {
   background:
     linear-gradient(180deg, rgba(20, 25, 51, 0.78), rgba(13, 18, 39, 0.88));
 }
@@ -1236,25 +1188,26 @@ html[lang='ru'] .hero h1 {
   margin: 0;
   grid-area: title;
   align-self: center;
-  font-size: 1.04rem;
+  font-size: 1.1rem;
   line-height: 1.1;
 }
 
 .benefit-card p {
   margin: 0;
   grid-area: copy;
+  max-width: 30ch;
   color: var(--color-text-muted);
-  font-size: 0.94rem;
-  line-height: 1.45;
+  font-size: 0.96rem;
+  line-height: 1.5;
 }
 
 .benefit-card__glyph {
   grid-area: glyph;
   position: relative;
-  width: 46px;
-  height: 46px;
+  width: 52px;
+  height: 52px;
   border: 1px solid rgba(194, 219, 255, 0.12);
-  border-radius: 16px;
+  border-radius: 18px;
   background: rgba(255, 255, 255, 0.03);
   overflow: hidden;
 }
@@ -2183,7 +2136,6 @@ html[lang='ru'] .thank-you h1 {
     max-width: none;
   }
 
-  .benefits-proof,
   .benefits-grid,
   .info-grid,
   .legal-grid,
@@ -2208,6 +2160,11 @@ html[lang='ru'] .thank-you h1 {
     min-height: 210px;
   }
 
+  .destination-section__content {
+    margin-inline-start: 0;
+    max-width: none;
+  }
+
   .page-hero__aside {
     grid-template-columns: 1fr;
   }
@@ -2223,9 +2180,9 @@ html[lang='ru'] .thank-you h1 {
 
 @media (min-width: 981px) and (max-width: 1360px) {
   .scene--destination {
-    gap: 8px;
-    padding: 12px;
-    grid-template-columns: minmax(0, 1.24fr) minmax(280px, 0.76fr);
+    gap: 16px;
+    padding: 14px 16px;
+    grid-template-columns: minmax(0, 1.16fr) minmax(280px, 0.82fr);
   }
 
   .destination-section__media {
@@ -2234,7 +2191,8 @@ html[lang='ru'] .thank-you h1 {
 
   .destination-section__content {
     gap: 4px;
-    max-width: 320px;
+    max-width: 330px;
+    margin-inline-start: clamp(8px, 1.2vw, 16px);
   }
 
   .destination-section__content h2 {
