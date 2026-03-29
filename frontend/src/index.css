@@ -187,7 +187,7 @@ code {
 .catalog-layout,
 .car-page {
   display: grid;
-  gap: 42px;
+  gap: 36px;
 }
 
 .scene {
@@ -229,14 +229,6 @@ code {
   padding: 28px;
 }
 
-.scene--proof {
-  padding: 14px;
-  background:
-    radial-gradient(circle at 12% 0%, rgba(114, 177, 255, 0.12), transparent 24%),
-    radial-gradient(circle at 88% 40%, rgba(255, 202, 148, 0.08), transparent 22%),
-    linear-gradient(180deg, rgba(11, 18, 35, 0.78), rgba(12, 20, 38, 0.9));
-}
-
 .scene--fleet {
   background:
     radial-gradient(circle at 88% 8%, rgba(92, 120, 255, 0.11), transparent 20%),
@@ -246,6 +238,8 @@ code {
 }
 
 .scene--benefits {
+  gap: 18px;
+  padding: 24px;
   background:
     radial-gradient(circle at 85% 15%, rgba(100, 90, 255, 0.12), transparent 24%),
     radial-gradient(circle at 15% 100%, rgba(101, 161, 255, 0.09), transparent 22%),
@@ -427,7 +421,6 @@ code {
 .hero p,
 .section-header p,
 .muted-text,
-.proof-strip__item p,
 .booking-form p,
 .field label,
 .empty-state {
@@ -656,57 +649,6 @@ code {
   animation: spin 0.8s linear infinite;
 }
 
-.proof-strip {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.proof-strip__item {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 14px;
-  align-items: start;
-  padding: 16px 18px;
-  border: 1px solid rgba(181, 207, 255, 0.1);
-  border-radius: 22px;
-  background: linear-gradient(180deg, rgba(243, 248, 255, 0.05), rgba(243, 248, 255, 0.02));
-  backdrop-filter: blur(16px);
-  transition:
-    transform 220ms ease,
-    border-color 220ms ease,
-    background-color 220ms ease,
-    box-shadow 220ms ease;
-}
-
-.proof-strip__item:hover {
-  transform: translateY(-2px);
-  border-color: rgba(191, 217, 255, 0.14);
-  box-shadow: 0 18px 40px rgba(4, 10, 24, 0.18);
-}
-
-.proof-strip__value {
-  font-size: 1.55rem;
-  font-weight: 800;
-  line-height: 1;
-  color: #f7fbff;
-}
-
-.proof-strip__content {
-  display: grid;
-  gap: 6px;
-}
-
-.proof-strip__item h2 {
-  margin: 0;
-  font-size: 0.98rem;
-}
-
-.proof-strip__item p {
-  margin: 0;
-  line-height: 1.5;
-}
-
 .section-header {
   display: grid;
   gap: 8px;
@@ -885,20 +827,14 @@ code {
 .signal-section {
   position: relative;
   display: grid;
-  gap: 18px;
-  padding: 6px 0 4px;
-}
-
-.benefits-section__frame {
-  display: grid;
-  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
-  gap: 22px;
+  gap: 12px;
+  padding: 0;
 }
 
 .benefits-section__intro,
 .closing-cta__content {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .benefits-section__intro h2,
@@ -917,18 +853,25 @@ code {
   line-height: 1.54;
 }
 
-.benefits-section__stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding-top: 4px;
+.benefits-section__header {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
+  gap: 18px;
+  align-items: end;
 }
 
-.benefits-section__stat {
+.benefits-proof {
   display: grid;
-  gap: 4px;
-  min-width: 150px;
-  padding: 14px 16px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.benefits-proof__item {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 15px;
   border: 1px solid rgba(180, 207, 255, 0.1);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.03);
@@ -938,33 +881,51 @@ code {
     box-shadow 220ms ease;
 }
 
-.benefits-section__stat:hover {
+.benefits-proof__item:hover {
   transform: translateY(-2px);
   border-color: rgba(193, 218, 255, 0.14);
   box-shadow: 0 16px 36px rgba(4, 10, 24, 0.16);
 }
 
-.benefits-section__stat strong {
-  font-size: 1.25rem;
+.benefits-proof__value {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1;
   color: #f8fbff;
 }
 
-.benefits-section__stat span {
+.benefits-proof__content {
+  display: grid;
+  gap: 5px;
+}
+
+.benefits-proof__content h3 {
+  margin: 0;
+  font-size: 0.96rem;
+}
+
+.benefits-proof__content p {
+  margin: 0;
   color: var(--color-text-muted);
-  font-size: 0.9rem;
+  line-height: 1.45;
 }
 
 .benefits-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 14px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
   align-content: start;
 }
 
 .benefit-card {
   display: grid;
-  gap: 14px;
-  padding: 22px;
+  grid-template-columns: auto 1fr;
+  grid-template-areas:
+    'glyph title'
+    'glyph copy';
+  gap: 8px 12px;
+  align-items: start;
+  padding: 18px;
   transition:
     transform 220ms ease,
     border-color 220ms ease,
@@ -986,11 +947,6 @@ code {
   outline-offset: 3px;
 }
 
-.scene--proof .proof-strip__item {
-  background:
-    linear-gradient(180deg, rgba(244, 249, 255, 0.07), rgba(244, 249, 255, 0.02));
-}
-
 .scene--fleet .car-card {
   background:
     linear-gradient(180deg, rgba(18, 28, 47, 0.78), rgba(10, 18, 33, 0.88));
@@ -1002,22 +958,22 @@ code {
 }
 
 .scene--benefits .benefit-card,
-.scene--benefits .benefits-section__stat {
+.scene--benefits .benefits-proof__item {
   background:
     linear-gradient(180deg, rgba(20, 25, 51, 0.78), rgba(13, 18, 39, 0.88));
 }
 
 .signal-section__intro {
   display: grid;
-  gap: 10px;
-  max-width: 520px;
+  gap: 6px;
+  max-width: 460px;
   justify-self: center;
   text-align: center;
 }
 
 .signal-section__intro h2 {
   margin: 0;
-  font-size: clamp(2.15rem, 4vw, 3.6rem);
+  font-size: clamp(1.95rem, 3.7vw, 3.15rem);
   line-height: 0.97;
   letter-spacing: -0.05em;
 }
@@ -1035,10 +991,10 @@ code {
 }
 
 .signal-section__visual::before {
-  inset: 10% 8% 16%;
+  inset: 12% 10% 18%;
   border-radius: 999px;
   background: radial-gradient(circle, rgba(81, 146, 255, 0.14), transparent 66%);
-  filter: blur(38px);
+  filter: blur(32px);
 }
 
 .signal-section__visual::after {
@@ -1047,7 +1003,7 @@ code {
 
 .dot-field {
   position: relative;
-  height: clamp(300px, 40vw, 480px);
+  height: clamp(250px, 31vw, 390px);
   overflow: hidden;
   border-radius: 32px;
   background: transparent;
@@ -1090,22 +1046,27 @@ code {
 
 .benefit-card h3 {
   margin: 0;
-  font-size: 1.28rem;
-  line-height: 1.08;
+  grid-area: title;
+  align-self: center;
+  font-size: 1.04rem;
+  line-height: 1.1;
 }
 
 .benefit-card p {
   margin: 0;
+  grid-area: copy;
   color: var(--color-text-muted);
-  line-height: 1.48;
+  font-size: 0.94rem;
+  line-height: 1.45;
 }
 
 .benefit-card__glyph {
+  grid-area: glyph;
   position: relative;
-  width: 52px;
-  height: 52px;
+  width: 46px;
+  height: 46px;
   border: 1px solid rgba(194, 219, 255, 0.12);
-  border-radius: 18px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.03);
   overflow: hidden;
 }
@@ -1528,14 +1489,10 @@ code {
 @media (max-width: 980px) {
   .hero__grid,
   .section-header--split,
-  .benefits-section__frame,
+  .benefits-section__header,
   .scene--destination,
   .closing-cta__panel,
   .car-page {
-    grid-template-columns: 1fr;
-  }
-
-  .proof-strip {
     grid-template-columns: 1fr;
   }
 
@@ -1555,6 +1512,7 @@ code {
     max-width: none;
   }
 
+  .benefits-proof,
   .benefits-grid {
     grid-template-columns: 1fr;
   }
@@ -1595,7 +1553,7 @@ code {
   }
 
   .dot-field {
-    height: 260px;
+    height: 220px;
   }
 
   .hero__visual-note {
@@ -1605,10 +1563,6 @@ code {
 
   .hero__destination-plane {
     opacity: 0.26;
-  }
-
-  .proof-strip__item {
-    grid-template-columns: 1fr;
   }
 
   .form-grid {

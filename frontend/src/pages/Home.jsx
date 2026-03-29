@@ -6,7 +6,6 @@ import {
   useTransform,
 } from 'framer-motion'
 
-import AnimatedMetric from '../components/AnimatedMetric'
 import CarCard from '../components/CarCard'
 import DotFieldCanvas from '../components/DotFieldCanvas'
 import LoadingFleet from '../components/LoadingFleet'
@@ -33,36 +32,36 @@ const proofItems = [
   {
     value: '15 min',
     title: 'Average response',
-    description: 'Availability confirmations move fast.',
+    description: 'Availability moves fast.',
   },
   {
     value: 'Daily',
     title: 'Visible day rates',
-    description: 'Rates stay readable before the request begins.',
+    description: 'Rates stay readable first.',
   },
   {
     value: '100%',
     title: 'Verified fleet',
-    description: 'Every listed car is checked before it goes live.',
+    description: 'Every listed car is checked.',
   },
 ]
 
 const processItems = [
   {
     title: 'See the car.',
-    description: 'Open the featured fleet and view the exact car before you send anything.',
+    description: 'Open the fleet and inspect the exact car first.',
     href: '#featured-cars',
     tone: 'fleet',
   },
   {
     title: 'Trust the rate.',
-    description: 'Visible day rates stay in view before the booking form opens.',
+    description: 'Read the day rate before the request starts.',
     href: '#rate-clarity',
     tone: 'pricing',
   },
   {
     title: 'Send the request.',
-    description: 'Choose the dates and start confirmation in minutes.',
+    description: 'Choose the dates and send confirmation in minutes.',
     href: '#booking-path',
     tone: 'signal',
   },
@@ -72,20 +71,6 @@ const bookingSteps = [
   'Choose the car',
   'Check the dates',
   'Send the request',
-]
-
-const statItems = [
-  {
-    decimals: 1,
-    label: 'service score',
-    suffix: '/5',
-    value: 4.9,
-  },
-  {
-    label: 'premium bookings each month',
-    suffix: '+',
-    value: 48,
-  },
 ]
 
 const heroContentVariants = {
@@ -146,25 +131,6 @@ const sectionSlideVariants = {
     transition: {
       duration: 0.64,
       ease: premiumEase,
-    },
-  },
-}
-
-const proofSectionVariants = {
-  hidden: {
-    opacity: 0,
-    y: 18,
-    scale: 0.985,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.7,
-      ease: premiumEase,
-      staggerChildren: 0.09,
-      delayChildren: 0.12,
     },
   },
 }
@@ -507,93 +473,22 @@ function Home() {
       </section>
 
       <MotionSection
-        className="proof-strip scene scene--proof"
-        id="rate-clarity"
+        aria-labelledby="motion-field-heading"
+        className="signal-section"
         initial="hidden"
-        variants={proofSectionVariants}
+        variants={signalSectionVariants}
         viewport={viewportSettings}
         whileInView="visible"
       >
-        {proofItems.map((item) => (
-          <MotionArticle
-            className="proof-strip__item interactive-surface interactive-surface--soft"
-            key={item.title}
-            onPointerLeave={resetInteractiveGlow}
-            onPointerMove={updateInteractiveGlow}
-            variants={proofItemVariants}
-          >
-            <span className="proof-strip__value">{item.value}</span>
-            <div className="proof-strip__content">
-              <h2>{item.title}</h2>
-              <p>{item.description}</p>
-            </div>
-          </MotionArticle>
-        ))}
-      </MotionSection>
-
-      <MotionSection
-        className="benefits-section scene scene--benefits"
-        initial="hidden"
-        variants={benefitsSectionVariants}
-        viewport={viewportSettings}
-        whileInView="visible"
-      >
-        <div className="benefits-section__frame">
-          <MotionDiv
-            className="benefits-section__intro"
-            variants={benefitsIntroVariants}
-          >
-            <h2>See the car, trust the rate, send the request.</h2>
-            <p>
-              Everything stays visible from first glance to confirmation.
-            </p>
-
-            <div className="benefits-section__stats">
-              {statItems.map((item) => (
-                <div
-                  className="benefits-section__stat interactive-surface interactive-surface--stat"
-                  key={item.label}
-                  onPointerLeave={resetInteractiveGlow}
-                  onPointerMove={updateInteractiveGlow}
-                >
-                  <strong>
-                    <AnimatedMetric
-                      decimals={item.decimals}
-                      suffix={item.suffix}
-                      value={item.value}
-                    />
-                  </strong>
-                  <span>{item.label}</span>
-                </div>
-              ))}
-            </div>
-          </MotionDiv>
-
-          <MotionDiv className="benefits-grid" variants={benefitCardsContainerVariants}>
-            {processItems.map((item) => (
-              <MotionAnchor
-                aria-label={`Jump to ${item.title.replace('.', '').toLowerCase()}`}
-                className="benefit-card benefit-card--link interactive-surface interactive-surface--feature"
-                data-cursor="interactive"
-                href={item.href}
-                key={item.title}
-                onPointerLeave={resetInteractiveGlow}
-                onPointerMove={updateInteractiveGlow}
-                variants={benefitCardRevealVariants}
-              >
-                <div
-                  aria-hidden="true"
-                  className={`benefit-card__glyph benefit-card__glyph--${item.tone}`}
-                >
-                  <span></span>
-                  <span></span>
-                </div>
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </MotionAnchor>
-            ))}
-          </MotionDiv>
+        <div className="signal-section__intro">
+          <h2 id="motion-field-heading">
+            A grand tourer in motion.
+          </h2>
         </div>
+
+        <MotionDiv className="signal-section__visual" variants={signalCanvasVariants}>
+          <DotFieldCanvas />
+        </MotionDiv>
       </MotionSection>
 
       <MotionSection
@@ -621,30 +516,10 @@ function Home() {
         </MotionDiv>
 
         <MotionDiv className="destination-section__content" variants={sectionRevealVariants}>
-          <h2>Warm seafront light. Quiet pickup. Premium cars ready for the coast.</h2>
+          <h2>Seafront light. Calm pickup. Premium cars ready for the coast.</h2>
           <p>
-            MoRent keeps the booking path direct while bringing the feeling of a
-            destination arrival: ocean air, late sun, and a calm handoff.
+            Resort calm, direct booking, and a clean handoff from arrival to the road.
           </p>
-        </MotionDiv>
-      </MotionSection>
-
-      <MotionSection
-        aria-labelledby="motion-field-heading"
-        className="signal-section"
-        initial="hidden"
-        variants={signalSectionVariants}
-        viewport={viewportSettings}
-        whileInView="visible"
-      >
-        <div className="signal-section__intro">
-          <h2 id="motion-field-heading">
-            The fleet comes into focus.
-          </h2>
-        </div>
-
-        <MotionDiv className="signal-section__visual" variants={signalCanvasVariants}>
-          <DotFieldCanvas />
         </MotionDiv>
       </MotionSection>
 
@@ -699,6 +574,70 @@ function Home() {
       </MotionSection>
 
       <MotionSection
+        className="benefits-section scene scene--benefits"
+        id="rate-clarity"
+        initial="hidden"
+        variants={benefitsSectionVariants}
+        viewport={viewportSettings}
+        whileInView="visible"
+      >
+        <div className="benefits-section__header">
+          <MotionDiv
+            className="benefits-section__intro"
+            variants={benefitsIntroVariants}
+          >
+            <h2>See the car. Trust the rate. Send the request.</h2>
+            <p>
+              Exact fleet, readable day rates, direct confirmation.
+            </p>
+          </MotionDiv>
+
+          <MotionDiv className="benefits-proof" variants={benefitCardsContainerVariants}>
+            {proofItems.map((item) => (
+              <MotionArticle
+                className="benefits-proof__item interactive-surface interactive-surface--soft"
+                key={item.title}
+                onPointerLeave={resetInteractiveGlow}
+                onPointerMove={updateInteractiveGlow}
+                variants={proofItemVariants}
+              >
+                <span className="benefits-proof__value">{item.value}</span>
+                <div className="benefits-proof__content">
+                  <h3>{item.title}</h3>
+                  <p>{item.description}</p>
+                </div>
+              </MotionArticle>
+            ))}
+          </MotionDiv>
+        </div>
+
+        <MotionDiv className="benefits-grid" variants={benefitCardsContainerVariants}>
+          {processItems.map((item) => (
+            <MotionAnchor
+              aria-label={`Jump to ${item.title.replace('.', '').toLowerCase()}`}
+              className="benefit-card benefit-card--link interactive-surface interactive-surface--feature"
+              data-cursor="interactive"
+              href={item.href}
+              key={item.title}
+              onPointerLeave={resetInteractiveGlow}
+              onPointerMove={updateInteractiveGlow}
+              variants={benefitCardRevealVariants}
+            >
+              <div
+                aria-hidden="true"
+                className={`benefit-card__glyph benefit-card__glyph--${item.tone}`}
+              >
+                <span></span>
+                <span></span>
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </MotionAnchor>
+          ))}
+        </MotionDiv>
+      </MotionSection>
+
+      <MotionSection
         className="closing-cta scene scene--closing"
         id="booking-path"
         initial="hidden"
@@ -709,7 +648,7 @@ function Home() {
           <div className="closing-cta__content">
             <h2>Choose the dates. We confirm the rest.</h2>
             <p>
-              Browse the fleet, pick the car, send the request in minutes.
+              Pick the car, choose the dates, send the request.
             </p>
           </div>
 

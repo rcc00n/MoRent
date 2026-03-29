@@ -76,81 +76,81 @@ function buildSilhouetteModel(compactMode) {
   const density = compactMode ? 0.62 : 1
   const guides = [
     sampleQuadratic(
-      { x: 0.1, y: 0.655 },
-      { x: 0.13, y: 0.54 },
-      { x: 0.22, y: 0.468 },
-      scaleCount(16, density),
-      0.28,
+      { x: 0.092, y: 0.668 },
+      { x: 0.118, y: 0.548 },
+      { x: 0.226, y: 0.452 },
+      scaleCount(18, density),
+      0.32,
     ),
     sampleQuadratic(
-      { x: 0.22, y: 0.468 },
-      { x: 0.4, y: 0.225 },
-      { x: 0.59, y: 0.336 },
-      scaleCount(44, density),
-      0.94,
+      { x: 0.226, y: 0.452 },
+      { x: 0.406, y: 0.202 },
+      { x: 0.615, y: 0.32 },
+      scaleCount(50, density),
+      0.96,
     ),
     sampleQuadratic(
-      { x: 0.59, y: 0.336 },
-      { x: 0.75, y: 0.345 },
-      { x: 0.88, y: 0.515 },
-      scaleCount(30, density),
+      { x: 0.615, y: 0.32 },
+      { x: 0.782, y: 0.314 },
+      { x: 0.898, y: 0.492 },
+      scaleCount(34, density),
       1,
     ),
     sampleQuadratic(
-      { x: 0.88, y: 0.515 },
-      { x: 0.935, y: 0.585 },
-      { x: 0.95, y: 0.655 },
-      scaleCount(10, density),
-      0.72,
+      { x: 0.898, y: 0.492 },
+      { x: 0.952, y: 0.56 },
+      { x: 0.961, y: 0.646 },
+      scaleCount(12, density),
+      0.78,
     ),
     sampleLine(
-      { x: 0.115, y: 0.67 },
-      { x: 0.235, y: 0.67 },
+      { x: 0.105, y: 0.682 },
+      { x: 0.242, y: 0.682 },
       scaleCount(14, density),
       0.12,
     ),
     sampleArc(
-      { x: 0.345, y: 0.67 },
-      0.108,
-      compactMode ? 0.088 : 0.096,
+      { x: 0.348, y: 0.676 },
+      0.11,
+      compactMode ? 0.086 : 0.094,
       Math.PI,
       0,
-      scaleCount(30, density),
-      0.46,
+      scaleCount(28, density),
+      0.48,
     ),
     sampleLine(
-      { x: 0.452, y: 0.67 },
-      { x: 0.572, y: 0.67 },
+      { x: 0.458, y: 0.681 },
+      { x: 0.586, y: 0.679 },
       scaleCount(18, density),
       0.12,
     ),
     sampleArc(
-      { x: 0.695, y: 0.67 },
-      0.108,
-      compactMode ? 0.088 : 0.096,
+      { x: 0.708, y: 0.674 },
+      0.114,
+      compactMode ? 0.09 : 0.098,
       Math.PI,
       0,
       scaleCount(30, density),
-      0.46,
+      0.5,
     ),
     sampleLine(
-      { x: 0.804, y: 0.67 },
-      { x: 0.935, y: 0.662 },
+      { x: 0.822, y: 0.673 },
+      { x: 0.94, y: 0.664 },
       scaleCount(14, density),
       0.22,
     ),
     sampleQuadratic(
-      { x: 0.31, y: 0.47 },
-      { x: 0.41, y: 0.335 },
-      { x: 0.53, y: 0.368 },
-      scaleCount(18, density),
-      0.18,
+      { x: 0.302, y: 0.456 },
+      { x: 0.432, y: 0.31 },
+      { x: 0.582, y: 0.352 },
+      scaleCount(20, density),
+      0.2,
     ),
     sampleQuadratic(
-      { x: 0.56, y: 0.37 },
-      { x: 0.64, y: 0.382 },
-      { x: 0.715, y: 0.432 },
-      scaleCount(16, density),
+      { x: 0.592, y: 0.352 },
+      { x: 0.69, y: 0.356 },
+      { x: 0.758, y: 0.414 },
+      scaleCount(18, density),
       0.18,
     ),
   ]
@@ -285,14 +285,14 @@ function DotFieldCanvas() {
         0,
         1,
       )
-      const organizeIn = smoothstep(0.08, 0.4, progress)
-      const organizeOut = 1 - smoothstep(0.62, 0.94, progress)
+      const organizeIn = smoothstep(0.12, 0.38, progress)
+      const organizeOut = 1 - smoothstep(0.68, 0.9, progress)
       const formation = organizeIn * organizeOut
-      const focus = Math.pow(clamp(1 - Math.abs(progress - 0.5) / 0.2, 0, 1), 1.2)
+      const focus = Math.pow(clamp(1 - Math.abs(progress - 0.5) / 0.18, 0, 1), 1.12)
       const resolve = state.reducedMotion
-        ? formation * 0.82
-        : Math.min(1, Math.pow(formation, 0.9) * 1.06)
-      const ambientTime = timestamp * (state.reducedMotion ? 0.00006 : 0.00013)
+        ? formation * 0.84
+        : Math.min(1, Math.pow(formation, 0.86) * 1.08)
+      const ambientTime = timestamp * (state.reducedMotion ? 0.00006 : 0.00012)
 
       context.clearRect(0, 0, state.width, state.height)
 
@@ -327,11 +327,11 @@ function DotFieldCanvas() {
         const ambientX =
           Math.sin(ambientTime + point.seed) *
           (state.compactMode ? 7 : 10) *
-          (1 - resolve * 0.94)
+          (1 - resolve * 0.96)
         const ambientY =
           Math.cos(ambientTime * 1.16 + point.seed * 0.82) *
           (state.compactMode ? 6 : 9) *
-          (1 - resolve * 0.92)
+          (1 - resolve * 0.94)
         const dissolveX = point.driftBiasX * (1 - formation)
         const dissolveY = point.driftBiasY * (1 - formation)
         const x = scatterX + (targetX - scatterX) * resolve + ambientX + dissolveX
