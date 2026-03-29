@@ -45,8 +45,8 @@ function CustomCursor() {
       state.currentX += (state.targetX - state.currentX) * 0.16
       state.currentY += (state.targetY - state.currentY) * 0.16
 
-      cursorNode.style.opacity = state.visible ? (state.active ? '0.72' : '0.38') : '0'
-      cursorNode.style.transform = `translate3d(${state.currentX}px, ${state.currentY}px, 0) translate(-50%, -50%) scale(${state.active ? 1.55 : 1})`
+      cursorNode.style.opacity = state.visible ? (state.active ? '0.56' : '0.28') : '0'
+      cursorNode.style.transform = `translate3d(${state.currentX}px, ${state.currentY}px, 0) translate(-50%, -50%) scale(${state.active ? 1.48 : 1})`
 
       frameId = window.requestAnimationFrame(render)
     }

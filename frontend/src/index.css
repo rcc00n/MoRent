@@ -179,7 +179,7 @@ code {
 .catalog-layout,
 .car-page {
   display: grid;
-  gap: 44px;
+  gap: 40px;
 }
 
 .scene {
@@ -215,6 +215,7 @@ code {
 }
 
 .scene--fleet,
+.scene--signal,
 .scene--benefits,
 .scene--closing {
   display: grid;
@@ -241,6 +242,15 @@ code {
     radial-gradient(circle at 85% 15%, rgba(100, 90, 255, 0.14), transparent 24%),
     radial-gradient(circle at 15% 100%, rgba(101, 161, 255, 0.09), transparent 22%),
     linear-gradient(180deg, rgba(17, 21, 43, 0.9), rgba(10, 17, 35, 0.84));
+}
+
+.scene--signal {
+  gap: 24px;
+  padding: 24px;
+  background:
+    radial-gradient(circle at 16% 14%, rgba(91, 156, 255, 0.14), transparent 24%),
+    radial-gradient(circle at 84% 66%, rgba(95, 96, 255, 0.14), transparent 26%),
+    linear-gradient(180deg, rgba(8, 12, 24, 0.98), rgba(8, 12, 24, 0.9));
 }
 
 .scene--closing {
@@ -346,7 +356,7 @@ code {
 
 .hero__content {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   max-width: 620px;
   align-content: center;
 }
@@ -354,14 +364,19 @@ code {
 .eyebrow {
   display: inline-flex;
   width: fit-content;
-  padding: 8px 12px;
-  border: 1px solid rgba(151, 180, 234, 0.14);
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border: 1px solid rgba(176, 202, 250, 0.12);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.04);
-  color: var(--color-primary-bright);
-  font-size: 0.8rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.018));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  color: rgba(166, 205, 255, 0.94);
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
+  line-height: 1;
   text-transform: uppercase;
 }
 
@@ -376,8 +391,8 @@ code {
 
 .hero h1 {
   max-width: 10.5ch;
-  font-size: clamp(2.65rem, 4.8vw, 4.95rem);
-  line-height: 0.92;
+  font-size: clamp(2.6rem, 4.5vw, 4.6rem);
+  line-height: 0.94;
 }
 
 .section-header h1 {
@@ -403,8 +418,8 @@ code {
 
 .hero p {
   max-width: 620px;
-  font-size: 1.02rem;
-  line-height: 1.58;
+  font-size: 1rem;
+  line-height: 1.56;
 }
 
 .hero__headline {
@@ -434,7 +449,7 @@ code {
 
 .hero__visual-stage {
   justify-self: end;
-  width: min(100%, 448px);
+  width: min(100%, 432px);
 }
 
 .hero__visual {
@@ -576,7 +591,7 @@ code {
 }
 
 .button-row--hero {
-  margin-top: 6px;
+  margin-top: 4px;
 }
 
 .section-cta {
@@ -728,7 +743,7 @@ code {
 
 .section-header {
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
 .section-header h2 {
@@ -770,6 +785,7 @@ code {
 }
 
 .benefits-section,
+.signal-section,
 .closing-cta {
   content-visibility: auto;
   contain-intrinsic-size: 1px 640px;
@@ -871,6 +887,107 @@ code {
 .scene--benefits .benefits-section__stat {
   background:
     linear-gradient(180deg, rgba(20, 25, 51, 0.78), rgba(13, 18, 39, 0.88));
+}
+
+.scene--signal::after {
+  inset: auto 42px 0;
+  background: linear-gradient(90deg, transparent, rgba(189, 215, 255, 0.28), transparent);
+}
+
+.signal-section__intro {
+  display: grid;
+  gap: 12px;
+  max-width: 620px;
+  justify-self: center;
+  text-align: center;
+}
+
+.signal-section__intro h2 {
+  margin: 0;
+  font-size: clamp(2.15rem, 4vw, 3.6rem);
+  line-height: 0.97;
+  letter-spacing: -0.05em;
+}
+
+.signal-section__intro p {
+  margin: 0;
+  color: var(--color-text-muted);
+  line-height: 1.62;
+}
+
+.signal-section__visual {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(16px, 2vw, 22px);
+  border: 1px solid rgba(190, 214, 255, 0.14);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 16% 18%, rgba(103, 162, 255, 0.1), transparent 22%),
+    radial-gradient(circle at 80% 52%, rgba(99, 96, 255, 0.11), transparent 28%),
+    linear-gradient(180deg, rgba(10, 14, 26, 0.96), rgba(9, 13, 24, 0.88));
+  box-shadow: 0 28px 82px rgba(3, 8, 19, 0.44);
+}
+
+.signal-section__visual::before,
+.signal-section__visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.signal-section__visual::before {
+  background:
+    radial-gradient(circle at 28% 28%, rgba(162, 208, 255, 0.08), transparent 16%),
+    radial-gradient(circle at 72% 62%, rgba(129, 136, 255, 0.08), transparent 22%);
+}
+
+.signal-section__visual::after {
+  inset: auto 8% 0;
+  height: 30%;
+  background: linear-gradient(180deg, rgba(8, 12, 24, 0), rgba(8, 12, 24, 0.7));
+}
+
+.dot-field {
+  position: relative;
+  height: clamp(280px, 38vw, 440px);
+  overflow: hidden;
+  border: 1px solid rgba(193, 216, 255, 0.1);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 18% 16%, rgba(97, 159, 255, 0.12), transparent 24%),
+    radial-gradient(circle at 72% 52%, rgba(88, 88, 255, 0.11), transparent 28%),
+    linear-gradient(180deg, rgba(10, 14, 26, 0.96), rgba(8, 12, 22, 0.94));
+}
+
+.dot-field::before,
+.dot-field::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.dot-field::before {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0) 22%),
+    radial-gradient(circle at 68% 48%, rgba(149, 194, 255, 0.08), transparent 24%);
+}
+
+.dot-field::after {
+  background: linear-gradient(
+    180deg,
+    rgba(6, 10, 19, 0.68),
+    rgba(6, 10, 19, 0) 20%,
+    rgba(6, 10, 19, 0) 78%,
+    rgba(6, 10, 19, 0.76)
+  );
+}
+
+.dot-field__canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
 }
 
 .scene--closing .closing-cta__panel {
@@ -1249,9 +1366,9 @@ code {
   z-index: 90;
   width: 11px;
   height: 11px;
-  border: 1px solid rgba(226, 238, 255, 0.62);
+  border: 1px solid rgba(215, 232, 255, 0.46);
   border-radius: 999px;
-  background: rgba(239, 247, 255, 0.14);
+  background: rgba(177, 210, 255, 0.08);
   pointer-events: none;
   opacity: 0;
   will-change: transform;
@@ -1264,7 +1381,7 @@ code {
   width: 2px;
   height: 2px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.72);
   transform: translate(-50%, -50%);
 }
 
@@ -1295,6 +1412,10 @@ code {
 
   .hero--premium {
     max-height: none;
+  }
+
+  .scene--signal {
+    padding: 20px;
   }
 
   .hero__visual {
@@ -1347,6 +1468,10 @@ code {
 
   .hero__visual {
     aspect-ratio: 16 / 11;
+  }
+
+  .dot-field {
+    height: 260px;
   }
 
   .hero__visual-chip--top {

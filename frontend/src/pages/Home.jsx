@@ -1,15 +1,14 @@
 import { useEffect, useRef, useState } from 'react'
 import {
   motion,
-  useMotionValue,
   useReducedMotion,
   useScroll,
-  useSpring,
   useTransform,
 } from 'framer-motion'
 import { Link } from 'react-router-dom'
 
 import CarCard from '../components/CarCard'
+import DotFieldCanvas from '../components/DotFieldCanvas'
 import LoadingFleet from '../components/LoadingFleet'
 import { getCars } from '../shared/api'
 
@@ -17,17 +16,9 @@ const MotionArticle = motion.article
 const MotionDiv = motion.div
 const MotionHeading = motion.h1
 const MotionSection = motion.section
-const MotionSpan = motion.span
-const MotionParagraph = motion.p
 
 const premiumEase = [0.22, 1, 0.36, 1]
 const viewportSettings = { once: true, amount: 0.24 }
-
-const heroHeadlineLines = [
-  'Premium cars',
-  'for days that need',
-  'more than transport.',
-]
 
 const proofItems = [
   {
@@ -95,52 +86,36 @@ const statItems = [
   },
 ]
 
-const heroLineVariants = {
-  hidden: {
-    y: '115%',
-  },
-  visible: (index) => ({
-    y: 0,
-    transition: {
-      duration: 0.72,
-      delay: 0.12 + index * 0.08,
-      ease: premiumEase,
-    },
-  }),
-}
-
-const heroFadeVariants = {
+const heroContentVariants = {
   hidden: {
     opacity: 0,
-    y: 22,
+    y: 10,
   },
-  visible: (delay = 0) => ({
+  visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.58,
-      delay,
+      duration: 0.64,
       ease: premiumEase,
     },
-  }),
+  },
 }
 
 const heroVisualVariants = {
   hidden: {
     opacity: 0,
-    y: 34,
-    scale: 0.95,
+    y: 10,
+    scale: 0.992,
   },
-  visible: (delay = 0) => ({
+  visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      duration: 0.82,
-      delay,
+      duration: 0.72,
       ease: premiumEase,
     },
-  }),
+  },
 }
 
 const sectionRevealVariants = {
@@ -311,6 +286,37 @@ const benefitCardRevealVariants = {
   },
 }
 
+const signalSectionVariants = {
+  hidden: {
+    opacity: 0,
+    y: 28,
+  },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.86,
+      ease: premiumEase,
+    },
+  },
+}
+
+const signalCanvasVariants = {
+  hidden: {
+    opacity: 0,
+    scale: 0.975,
+  },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 1,
+      delay: 0.08,
+      ease: premiumEase,
+    },
+  },
+}
+
 const closingPanelVariants = {
   hidden: {
     opacity: 0,
@@ -363,47 +369,15 @@ function Home() {
   const [errorMessage, setErrorMessage] = useState('')
   const heroRef = useRef(null)
   const shouldReduceMotion = useReducedMotion()
-  const pointerX = useMotionValue(0)
-  const pointerY = useMotionValue(0)
-  const springX = useSpring(pointerX, {
-    stiffness: 88,
-    damping: 20,
-    mass: 0.7,
-  })
-  const springY = useSpring(pointerY, {
-    stiffness: 88,
-    damping: 20,
-    mass: 0.7,
-  })
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
   })
 
-  const depthOffset = shouldReduceMotion ? 0 : 18
-  const tiltOffset = shouldReduceMotion ? 0 : 6
-  const chipOffset = shouldReduceMotion ? 0 : 14
-  const scrollDrift = shouldReduceMotion ? 0 : 72
-  const visualLift = shouldReduceMotion ? 0 : -48
-
-  const glowY = useTransform(scrollYProgress, [0, 1], [0, scrollDrift])
-  const glowX = useTransform(springX, [-1, 1], [-depthOffset, depthOffset])
-  const meshX = useTransform(springX, [-1, 1], [depthOffset, -depthOffset])
-  const meshY = useTransform(springY, [-1, 1], [-12, 12])
-  const beamX = useTransform(springX, [-1, 1], [-20, 20])
-  const beamY = useTransform(scrollYProgress, [0, 1], [0, visualLift])
-  const visualX = useTransform(springX, [-1, 1], [-depthOffset, depthOffset])
-  const visualY = useTransform(scrollYProgress, [0, 1], [0, visualLift])
-  const visualRotateY = useTransform(springX, [-1, 1], [-tiltOffset, tiltOffset])
-  const visualRotateX = useTransform(springY, [-1, 1], [tiltOffset, -tiltOffset])
-  const backLayerX = useTransform(springX, [-1, 1], [-22, 22])
-  const backLayerY = useTransform(springY, [-1, 1], [18, -18])
-  const midLayerX = useTransform(springX, [-1, 1], [14, -14])
-  const midLayerY = useTransform(springY, [-1, 1], [-12, 12])
-  const chipTopX = useTransform(springX, [-1, 1], [-chipOffset, chipOffset])
-  const chipTopY = useTransform(springY, [-1, 1], [10, -10])
-  const chipBottomX = useTransform(springX, [-1, 1], [chipOffset, -chipOffset])
-  const chipBottomY = useTransform(springY, [-1, 1], [-10, 10])
+  const driftAmount = shouldReduceMotion ? 0 : 12
+  const glowY = useTransform(scrollYProgress, [0, 1], [0, driftAmount])
+  const beamY = useTransform(scrollYProgress, [0, 1], [0, -8])
+  const visualY = useTransform(scrollYProgress, [0, 1], [0, -6])
 
   useEffect(() => {
     let isMounted = true
@@ -433,159 +407,71 @@ function Home() {
     }
   }, [])
 
-  function handleHeroPointerMove(event) {
-    if (
-      shouldReduceMotion ||
-      window.matchMedia('(pointer: coarse), (hover: none)').matches
-    ) {
-      return
-    }
-
-    const heroBounds = heroRef.current?.getBoundingClientRect()
-    if (!heroBounds) {
-      return
-    }
-
-    const normalizedX = ((event.clientX - heroBounds.left) / heroBounds.width - 0.5) * 2
-    const normalizedY = ((event.clientY - heroBounds.top) / heroBounds.height - 0.5) * 2
-
-    pointerX.set(normalizedX)
-    pointerY.set(normalizedY)
-  }
-
-  function handleHeroPointerLeave() {
-    pointerX.set(0)
-    pointerY.set(0)
-  }
-
   const heroCar = cars[0]
 
   return (
     <div className="home-page">
-      <section
-        className="hero hero--premium"
-        onPointerLeave={handleHeroPointerLeave}
-        onPointerMove={handleHeroPointerMove}
-        ref={heroRef}
-      >
-        <MotionDiv
-          className="hero__mesh"
-          style={{ x: meshX, y: meshY }}
-        />
+      <section className="hero hero--premium" ref={heroRef}>
         <MotionDiv
           className="hero__beam hero__beam--one"
-          style={{ x: beamX, y: glowY }}
+          style={{ y: glowY }}
         />
         <MotionDiv
           className="hero__beam hero__beam--two"
-          style={{ x: glowX, y: beamY }}
+          style={{ y: beamY }}
         />
         <MotionDiv
           className="hero__glow hero__glow--one"
-          style={{ x: glowX, y: glowY }}
+          style={{ y: glowY }}
         />
         <MotionDiv
           className="hero__glow hero__glow--two"
-          style={{ x: meshX, y: visualY }}
+          style={{ y: beamY }}
         />
 
         <div className="hero__grid">
-          <div className="hero__content">
-            <MotionSpan
-              animate="visible"
-              className="eyebrow"
-              custom={0}
-              initial="hidden"
-              variants={heroFadeVariants}
-            >
+          <MotionDiv
+            animate="visible"
+            className="hero__content"
+            initial="hidden"
+            variants={heroContentVariants}
+          >
+            <span className="eyebrow">
               Premium rental experience
-            </MotionSpan>
+            </span>
 
-            <MotionHeading
-              aria-label="Premium cars for days that need more than transport."
-              className="hero__headline"
-            >
-              {heroHeadlineLines.map((line, index) => (
-                <span className="hero__headline-line" key={line}>
-                  <MotionSpan
-                    animate="visible"
-                    custom={index}
-                    initial="hidden"
-                    variants={heroLineVariants}
-                  >
-                    {line}
-                  </MotionSpan>
-                </span>
-              ))}
+            <MotionHeading className="hero__headline">
+              Premium cars for days that need more than transport.
             </MotionHeading>
 
-            <MotionParagraph
-              animate="visible"
-              className="hero__description"
-              custom={0.34}
-              initial="hidden"
-              variants={heroFadeVariants}
-            >
+            <p className="hero__description">
               Curated premium cars, transparent daily pricing, and a booking path
               designed to move from interest to confirmed availability without
               friction.
-            </MotionParagraph>
+            </p>
 
-            <MotionDiv
-              animate="visible"
-              className="button-row button-row--hero"
-              custom={0.46}
-              initial="hidden"
-              variants={heroFadeVariants}
-            >
+            <div className="button-row button-row--hero">
               <Link className="button button--primary" to="/catalog">
                 Book now
               </Link>
               <a className="button button--secondary" href="#featured-cars">
                 Check availability
               </a>
-            </MotionDiv>
-
-            <MotionDiv
-              animate="visible"
-              className="hero__booking-path"
-              custom={0.56}
-              initial="hidden"
-              variants={heroFadeVariants}
-            >
-              {bookingSteps.map((step, index) => (
-                <div className="hero__booking-step" key={step}>
-                  <span>{`0${index + 1}`}</span>
-                  <p>{step}</p>
-                </div>
-              ))}
-            </MotionDiv>
-          </div>
+            </div>
+          </MotionDiv>
 
           <MotionDiv
             animate="visible"
             className="hero__visual-stage"
-            custom={0.62}
             initial="hidden"
             variants={heroVisualVariants}
           >
             <MotionDiv
               className="hero__visual-shell"
-              style={{
-                x: visualX,
-                y: visualY,
-                rotateX: visualRotateX,
-                rotateY: visualRotateY,
-              }}
+              style={{ y: visualY }}
             >
-              <MotionDiv
-                className="hero__visual-layer hero__visual-layer--back"
-                style={{ x: backLayerX, y: backLayerY }}
-              />
-              <MotionDiv
-                className="hero__visual-layer hero__visual-layer--mid"
-                style={{ x: midLayerX, y: midLayerY }}
-              />
+              <div className="hero__visual-layer hero__visual-layer--back" />
+              <div className="hero__visual-layer hero__visual-layer--mid" />
 
               <div className="hero__visual">
                 {heroCar ? (
@@ -596,20 +482,6 @@ function Home() {
                       decoding="async"
                       src={heroCar.image}
                     />
-                    <MotionDiv
-                      className="hero__visual-chip hero__visual-chip--top"
-                      style={{ x: chipTopX, y: chipTopY }}
-                    >
-                      <span>Concierge response</span>
-                      <strong>~15 min</strong>
-                    </MotionDiv>
-                    <MotionDiv
-                      className="hero__visual-chip hero__visual-chip--bottom"
-                      style={{ x: chipBottomX, y: chipBottomY }}
-                    >
-                      <span>Verified fleet</span>
-                      <strong>Premium only</strong>
-                    </MotionDiv>
                     <div className="hero__visual-note">
                       <span>{heroCar.brand}</span>
                       <strong>{heroCar.model}</strong>
@@ -645,59 +517,6 @@ function Home() {
             </div>
           </MotionArticle>
         ))}
-      </MotionSection>
-
-      <MotionSection
-        aria-labelledby="featured-cars-heading"
-        className="scene scene--fleet"
-        id="featured-cars"
-        initial="hidden"
-        variants={fleetSectionVariants}
-        viewport={viewportSettings}
-        whileInView="visible"
-      >
-        <MotionDiv
-          className="section-header section-header--split"
-          variants={sectionSlideVariants}
-        >
-          <div>
-            <span className="eyebrow">Featured fleet</span>
-            <h2 id="featured-cars-heading">Check availability for the most requested cars.</h2>
-          </div>
-          <p>
-            The homepage now leads directly into the inventory. Each card keeps the
-            booking path visible and easy to continue.
-          </p>
-        </MotionDiv>
-
-        {isLoading ? <LoadingFleet count={3} /> : null}
-        {!isLoading && errorMessage ? (
-          <div className="empty-state">{errorMessage}</div>
-        ) : null}
-        {!isLoading && !errorMessage ? (
-          <MotionDiv
-            className="cars-grid"
-            variants={fleetCardsContainerVariants}
-          >
-            {cars.map((car) => (
-              <MotionDiv key={car.id} variants={fleetCardRevealVariants}>
-                <CarCard car={car} />
-              </MotionDiv>
-            ))}
-          </MotionDiv>
-        ) : null}
-
-        {!isLoading && !errorMessage ? (
-          <MotionDiv className="section-cta" variants={sectionRevealVariants}>
-            <p className="muted-text">
-              Need more options? Open the full fleet and move straight into the
-              booking flow.
-            </p>
-            <Link className="button button--secondary" to="/catalog">
-              View all cars
-            </Link>
-          </MotionDiv>
-        ) : null}
       </MotionSection>
 
       <MotionSection
@@ -751,6 +570,86 @@ function Home() {
             ))}
           </MotionDiv>
         </div>
+      </MotionSection>
+
+      <MotionSection
+        aria-labelledby="motion-field-heading"
+        className="signal-section scene scene--signal"
+        initial="hidden"
+        variants={signalSectionVariants}
+        viewport={viewportSettings}
+        whileInView="visible"
+      >
+        <div className="signal-section__intro">
+          <span className="eyebrow">Motion field</span>
+          <h2 id="motion-field-heading">
+            Precision moves quietly before it becomes visible.
+          </h2>
+          <p>
+            A controlled field of points responds to scroll with subtle density
+            shifts and directional flow, creating a designed pause between trust
+            and conversion.
+          </p>
+        </div>
+
+        <MotionDiv className="signal-section__visual" variants={signalCanvasVariants}>
+          <DotFieldCanvas />
+        </MotionDiv>
+      </MotionSection>
+
+      <MotionSection
+        aria-labelledby="featured-cars-heading"
+        className="scene scene--fleet"
+        id="featured-cars"
+        initial="hidden"
+        variants={fleetSectionVariants}
+        viewport={viewportSettings}
+        whileInView="visible"
+      >
+        <MotionDiv
+          className="section-header section-header--split"
+          variants={sectionSlideVariants}
+        >
+          <div>
+            <span className="eyebrow">Featured fleet</span>
+            <h2 id="featured-cars-heading">
+              Check availability for the most requested cars.
+            </h2>
+          </div>
+          <p>
+            The fleet now follows the trust and motion layers, so the booking path
+            feels considered before the inventory appears.
+          </p>
+        </MotionDiv>
+
+        {isLoading ? <LoadingFleet count={3} /> : null}
+        {!isLoading && errorMessage ? (
+          <div className="empty-state">{errorMessage}</div>
+        ) : null}
+        {!isLoading && !errorMessage ? (
+          <MotionDiv
+            className="cars-grid"
+            variants={fleetCardsContainerVariants}
+          >
+            {cars.map((car) => (
+              <MotionDiv key={car.id} variants={fleetCardRevealVariants}>
+                <CarCard car={car} />
+              </MotionDiv>
+            ))}
+          </MotionDiv>
+        ) : null}
+
+        {!isLoading && !errorMessage ? (
+          <MotionDiv className="section-cta" variants={sectionRevealVariants}>
+            <p className="muted-text">
+              Need more options? Open the full fleet and move straight into the
+              booking flow.
+            </p>
+            <Link className="button button--secondary" to="/catalog">
+              View all cars
+            </Link>
+          </MotionDiv>
+        ) : null}
       </MotionSection>
 
       <MotionSection
