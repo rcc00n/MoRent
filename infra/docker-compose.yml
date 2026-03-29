@@ -1,0 +1,64 @@
+name: morent
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ../backend
+      dockerfile: ../infra/backend/Dockerfile
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - static_data:/app/staticfiles
+      - media_data:/app/media
+    command: >
+      sh -c "python manage.py migrate &&
+      python manage.py collectstatic --noinput &&
+      gunicorn morent_backend.wsgi:application --bind 0.0.0.0:8000 --workers 3"
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: ../infra/frontend/Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://morent82.duckdns.org/api}
+        VITE_SITE_URL: ${VITE_SITE_URL:-http://morent82.duckdns.org}
+    restart: unless-stopped
+    volumes:
+      - frontend_dist:/frontend-dist
+
+  nginx:
+    build:
+      context: ./nginx
+    restart: unless-stopped
+    depends_on:
+      - backend
+      - frontend
+    ports:
+      - "80:80"
+    volumes:
+      - frontend_dist:/usr/share/nginx/html:ro
+      - static_data:/var/www/backend-static:ro
+      - media_data:/var/www/backend-media:ro
+
+volumes:
+  postgres_data:
+  frontend_dist:
+  static_data:
+  media_data:
