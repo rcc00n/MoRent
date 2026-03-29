@@ -150,7 +150,7 @@ function CarPage() {
             ) : null}
           </div>
 
-          <div className="panel">
+          <div className="panel car-page__details">
             <div className="car-page__summary">
               <div>
                 <h1 className="car-page__title">
@@ -176,6 +176,7 @@ function CarPage() {
 
         <MotionDiv
           animate={{ opacity: 1, x: 0 }}
+          className="car-page__booking"
           initial={{ opacity: 0, x: 20 }}
           transition={{ delay: 0.08, duration: 0.45 }}
         >

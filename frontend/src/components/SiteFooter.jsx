@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
-function FooterLinkGroup({ title, links }) {
+function FooterLinkGroup({ title, links, className = '' }) {
   return (
-    <div className="site-footer__group">
+    <div className={`site-footer__group ${className}`.trim()}>
       <span className="site-footer__eyebrow">{title}</span>
       <div className="site-footer__links">
         {links.map((link) => (
@@ -19,6 +19,10 @@ function FooterLinkGroup({ title, links }) {
 function SiteFooter() {
   const { t } = useTranslation()
   const footerNavigation = t('footer.navigation', { returnObjects: true })
+  const footerContactLinks = [
+    { label: t('footer.requestCar'), to: '/catalog' },
+    { label: t('footer.serviceDetails'), to: '/contacts' },
+  ]
   const currentYear = new Date().getFullYear()
 
   return (
@@ -29,14 +33,9 @@ function SiteFooter() {
             Mo<span>Rent</span>
           </Link>
           <p className="site-footer__title">{t('footer.title')}</p>
-          <p className="site-footer__description">{t('footer.description')}</p>
-          <div className="site-footer__contact-links">
-            <Link to="/catalog">{t('footer.requestCar')}</Link>
-            <Link to="/contacts">{t('footer.serviceDetails')}</Link>
-          </div>
         </div>
 
-        <div className="site-footer__navigation">
+        <div className="site-footer__navigation-panel">
           <FooterLinkGroup
             links={footerNavigation.main}
             title={t('footer.groups.explore')}
@@ -45,11 +44,19 @@ function SiteFooter() {
             links={footerNavigation.company}
             title={t('footer.groups.company')}
           />
-          <FooterLinkGroup
-            links={footerNavigation.legal}
-            title={t('footer.groups.legal')}
-          />
         </div>
+
+        <FooterLinkGroup
+          className="site-footer__group--contact"
+          links={footerContactLinks}
+          title={t('contacts.eyebrow')}
+        />
+
+        <FooterLinkGroup
+          className="site-footer__group--legal"
+          links={footerNavigation.legal}
+          title={t('footer.groups.legal')}
+        />
       </div>
 
       <div className="site-footer__bottom">
