@@ -1,7 +1,8 @@
-from django.conf import settings
 from django.contrib.admin import AdminSite
 from django.db.models import Count, Q
 from django.urls import reverse
+
+from apps.siteconfig.utils import get_site_settings
 
 
 class MoRentAdminSite(AdminSite):
@@ -14,36 +15,37 @@ class MoRentAdminSite(AdminSite):
     def each_context(self, request):
         context = super().each_context(request)
         contact_channels = []
+        site_settings = get_site_settings()
 
-        if settings.BUSINESS_CONTACT_PHONE:
+        if site_settings.phone:
             contact_channels.append(
                 {
                     "label": "Phone",
-                    "value": settings.BUSINESS_CONTACT_PHONE,
+                    "value": site_settings.phone,
                 }
             )
 
-        if settings.BUSINESS_CONTACT_EMAIL:
+        if site_settings.email:
             contact_channels.append(
                 {
                     "label": "Email",
-                    "value": settings.BUSINESS_CONTACT_EMAIL,
+                    "value": site_settings.email,
                 }
             )
 
-        if settings.BUSINESS_CONTACT_WHATSAPP_URL:
+        if site_settings.whatsapp_url:
             contact_channels.append(
                 {
                     "label": "WhatsApp",
-                    "value": settings.BUSINESS_CONTACT_WHATSAPP_URL,
+                    "value": site_settings.whatsapp_url,
                 }
             )
 
-        if settings.BUSINESS_CONTACT_TELEGRAM_URL:
+        if site_settings.telegram_url:
             contact_channels.append(
                 {
                     "label": "Telegram",
-                    "value": settings.BUSINESS_CONTACT_TELEGRAM_URL,
+                    "value": site_settings.telegram_url,
                 }
             )
 
@@ -51,7 +53,8 @@ class MoRentAdminSite(AdminSite):
             {
                 "morent_admin_tagline": "Lead desk, bookings, and fleet operations.",
                 "morent_contact_channels": contact_channels,
-                "morent_service_hours": settings.BUSINESS_SERVICE_HOURS,
+                "morent_service_hours": site_settings.working_hours_en
+                or site_settings.working_hours_ru,
             }
         )
         return context
