@@ -52,7 +52,7 @@ function validateBookingForm(formData, t) {
 }
 
 function BookingForm({ carId, carName }) {
-  const { t } = useTranslation()
+  const { i18n, t } = useTranslation()
   const [formData, setFormData] = useState(initialFormState)
   const [touchedFields, setTouchedFields] = useState(initialTouchedState)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -109,10 +109,13 @@ function BookingForm({ carId, carName }) {
       await createBooking({
         ...formData,
         car: carId,
-        source: 'car-page',
+        preferred_contact_method: 'phone',
+        source: 'car_page',
         source_context: {
-          entry_point: 'booking-form',
+          car_id: carId,
           car_name: carName,
+          entry_point: 'booking_form',
+          locale: i18n.resolvedLanguage,
           page_path: location.pathname,
           page_title: document.title,
         },

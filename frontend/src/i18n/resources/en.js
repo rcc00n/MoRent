@@ -36,6 +36,7 @@ const en = {
       car: 'Unable to load this car.',
       carNotFound: 'Car not found.',
       booking: 'Unable to submit the booking right now.',
+      contact: 'Unable to send the contact request right now.',
     },
     aria: {
       viewCarAvailability: 'View availability for {{carName}}',
@@ -265,6 +266,59 @@ const en = {
     note:
       'Prefer to decide first? The request only checks availability and starts the manager callback.',
   },
+  contactForm: {
+    title: 'Send a consultation or support request',
+    description:
+      'Choose the inquiry type, leave the contact details you want us to use, and add the context needed for a direct reply.',
+    intents: {
+      contact_request: 'Consultation request',
+      support_request: 'Support question',
+    },
+    contactMethods: {
+      phone: 'Phone call',
+      email: 'Email',
+      whatsapp: 'WhatsApp',
+      telegram: 'Telegram',
+    },
+    fields: {
+      name: 'Full name',
+      namePlaceholder: 'Your name',
+      phone: 'Phone',
+      phonePlaceholder: '+7 999 123 45 67',
+      email: 'Email',
+      emailPlaceholder: 'you@example.com',
+      requestType: 'Inquiry type',
+      preferredContactMethod: 'Preferred reply channel',
+      preferredContactMethodPlaceholder: 'Choose if you have a preference',
+      message: 'Message',
+      messagePlaceholder:
+        'Tell the team what you need help with, which route you plan, or what should be confirmed first.',
+    },
+    validation: {
+      nameRequired: 'Enter your name.',
+      nameShort: 'Name looks too short.',
+      contactRequired: 'Add a phone number or email address.',
+      phoneShort: 'Use at least 10 digits for phone follow-up.',
+      emailInvalid: 'Enter a valid email address.',
+      messageRequired: 'Add a short message for the team.',
+      messageShort: 'Add a little more context so the team can reply cleanly.',
+      preferredMethodNeedsEmail: 'Add an email address for email follow-up.',
+      preferredMethodNeedsPhone: 'Add a phone number for the selected contact method.',
+    },
+    feedback: {
+      reviewTitle: 'Please review the contact request',
+      reviewMessage:
+        'A few details still need attention before the team can follow up.',
+      successTitle: 'Request received',
+      successMessage:
+        'The contact request has been saved and is ready for a direct follow-up.',
+      requestErrorTitle: 'Unable to send the contact request',
+    },
+    submitIdle: 'Send request',
+    submitLoading: 'Sending...',
+    note:
+      'Ready to book a specific car already? Use the fleet and car pages for the fastest booking path.',
+  },
   about: {
     eyebrow: 'About MoRent',
     title: 'Premium coastal car rental designed to feel calm, clear, and direct.',
@@ -362,6 +416,44 @@ const en = {
     ctaTitle: 'Need the fastest response?',
     ctaDescription:
       'Open the fleet, choose the car, and send the dates. That gives the team the context needed to confirm the request quickly.',
+    entrySectionTitle: 'Choose the right entry point',
+    entrySectionDescription:
+      'Use the booking flow when dates are ready, or send a cleaner consultation or support request when you need guidance first.',
+    entryCards: [
+      {
+        intent: 'booking',
+        title: 'Booking request',
+        description:
+          'Choose the car, set the dates, and move straight into the booking path.',
+        actionLabel: 'Open the fleet',
+      },
+      {
+        intent: 'contact_request',
+        title: 'Consultation request',
+        description:
+          'Use this when you need help choosing the right car, pickup format, or service fit.',
+        actionLabel: 'Request consultation',
+      },
+      {
+        intent: 'support_request',
+        title: 'Support question',
+        description:
+          'Use this for document questions, request follow-up, or service details before confirmation.',
+        actionLabel: 'Send support question',
+      },
+    ],
+    channelsTitle: 'Direct business channels',
+    channelsDescription:
+      'When configured, direct phone, email, and messenger links stay available alongside the booking path.',
+    channelLabels: {
+      phone: 'Phone',
+      email: 'Email',
+      whatsapp: 'WhatsApp',
+      telegram: 'Telegram',
+    },
+    formSectionTitle: 'Contact the team cleanly',
+    formSectionDescription:
+      'This form is for consultation and support questions. Booking requests with dates still move fastest through the fleet.',
   },
   faq: {
     eyebrow: 'FAQ',

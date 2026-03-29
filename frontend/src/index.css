@@ -1482,7 +1482,8 @@ html[lang='ru'] .hero h1 {
 }
 
 .field input,
-.field textarea {
+.field textarea,
+.field select {
   width: 100%;
   padding: 13px 15px;
   border: 1px solid rgba(151, 180, 234, 0.14);
@@ -1492,15 +1493,21 @@ html[lang='ru'] .hero h1 {
 }
 
 .field--invalid input,
-.field--invalid textarea {
+.field--invalid textarea,
+.field--invalid select {
   border-color: rgba(255, 136, 136, 0.58);
 }
 
 .field input:focus,
-.field textarea:focus {
+.field textarea:focus,
+.field select:focus {
   outline: none;
   border-color: rgba(97, 165, 255, 0.7);
   box-shadow: 0 0 0 4px rgba(46, 125, 255, 0.14);
+}
+
+.field select {
+  appearance: none;
 }
 
 .feedback {
@@ -1783,6 +1790,53 @@ html[lang='ru'] .thank-you h1 {
 .contact-summary {
   display: grid;
   gap: 12px;
+}
+
+.contact-entry-grid,
+.contact-channel-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.contact-entry-card,
+.contact-channel-card {
+  min-height: 100%;
+}
+
+.contact-entry-card .button {
+  width: fit-content;
+  margin-top: 4px;
+}
+
+.contact-channel-card {
+  gap: 12px;
+  text-decoration: none;
+}
+
+.contact-channel-card strong {
+  color: #f6faff;
+  font-size: 1.08rem;
+  line-height: 1.3;
+}
+
+.contact-request-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 0.78fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+  padding: 28px;
+  border: 1px solid rgba(151, 180, 234, 0.11);
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 88% 16%, rgba(92, 148, 255, 0.12), transparent 22%),
+    radial-gradient(circle at 14% 86%, rgba(255, 205, 154, 0.08), transparent 18%),
+    rgba(11, 18, 34, 0.72);
+  backdrop-filter: blur(18px);
+}
+
+.contact-request-form {
+  padding: 24px;
 }
 
 .catalog-intro {
@@ -2152,6 +2206,7 @@ html[lang='ru'] .thank-you h1 {
   .section-header--split,
   .benefits-section__header,
   .scene--destination,
+  .contact-request-shell,
   .closing-cta__panel,
   .car-page,
   .page-hero__grid,
@@ -2184,6 +2239,8 @@ html[lang='ru'] .thank-you h1 {
   .legal-grid,
   .process-grid,
   .car-page__support,
+  .contact-entry-grid,
+  .contact-channel-grid,
   .thank-you__dates,
   .thank-you__steps {
     grid-template-columns: 1fr;
@@ -2331,6 +2388,7 @@ html[lang='ru'] .thank-you h1 {
   .page-hero,
   .catalog-intro,
   .thank-you,
+  .contact-request-shell,
   .site-footer__inner,
   .site-footer__bottom,
   .cta-panel {

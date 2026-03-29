@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "apps.cars",
     "apps.bookings",
+    "apps.siteconfig",
 ]
 
 MIDDLEWARE = [
@@ -118,3 +119,9 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ],
 }
+
+BUSINESS_CONTACT_PHONE = os.getenv("BUSINESS_CONTACT_PHONE", "").strip()
+BUSINESS_CONTACT_EMAIL = os.getenv("BUSINESS_CONTACT_EMAIL", "").strip()
+BUSINESS_CONTACT_WHATSAPP_URL = os.getenv("BUSINESS_CONTACT_WHATSAPP_URL", "").strip()
+BUSINESS_CONTACT_TELEGRAM_URL = os.getenv("BUSINESS_CONTACT_TELEGRAM_URL", "").strip()
+BUSINESS_SERVICE_HOURS = os.getenv("BUSINESS_SERVICE_HOURS", "Daily, 08:00 to 22:00").strip()

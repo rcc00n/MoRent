@@ -15,3 +15,11 @@ export function getCar(id) {
 export function createBooking(payload) {
   return apiClient.post('/bookings/', payload)
 }
+
+export function createContactRequest(payload) {
+  return apiClient.post('/contact-requests/', payload)
+}
+
+export function getSiteContactConfig() {
+  return apiClient.get('/site-config/contact/')
+}

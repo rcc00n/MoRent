@@ -38,7 +38,10 @@ class BookingCreateAPIViewTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         booking = Booking.objects.get()
-        self.assertEqual(booking.source, "car-page")
+        self.assertEqual(booking.source, "car_page")
+        self.assertEqual(booking.request_type, Booking.RequestType.BOOKING)
+        self.assertEqual(booking.status, Booking.LeadStatus.NEW)
+        self.assertEqual(booking.crm_sync_status, Booking.CrmSyncStatus.PENDING)
         self.assertEqual(
             booking.source_context,
             {
@@ -65,3 +68,47 @@ class BookingCreateAPIViewTests(APITestCase):
         booking = Booking.objects.get()
         self.assertEqual(booking.source, "website")
         self.assertEqual(booking.source_context, {})
+
+
+class ContactLeadCreateAPIViewTests(APITestCase):
+    def test_create_contact_request_with_email_only(self):
+        response = self.client.post(
+            reverse("contact-request-create"),
+            {
+                "name": "Marina Guest",
+                "email": "guest@example.com",
+                "message": "Need help choosing the right car for a resort transfer.",
+                "request_type": "contact_request",
+                "preferred_contact_method": "email",
+                "source": "contacts-page",
+                "source_context": {
+                    "entry_point": "contact-form",
+                    "locale": "en",
+                },
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        lead = Booking.objects.get()
+        self.assertEqual(lead.request_type, Booking.RequestType.CONTACT)
+        self.assertEqual(lead.email, "guest@example.com")
+        self.assertEqual(lead.phone, "")
+        self.assertIsNone(lead.car)
+        self.assertEqual(lead.source, "contacts_page")
+
+    def test_create_support_request_requires_contact_channel(self):
+        response = self.client.post(
+            reverse("contact-request-create"),
+            {
+                "name": "Marina Guest",
+                "message": "Need help with an existing enquiry.",
+                "request_type": "support_request",
+            },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("phone", response.data)
+        self.assertIn("email", response.data)
