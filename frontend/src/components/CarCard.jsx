@@ -18,7 +18,7 @@ function CarCard({ car }) {
             <h2 className="car-card__title">
               {car.brand} {car.model}
             </h2>
-            <p className="muted-text">{car.description}</p>
+            <p className="car-card__description muted-text">{car.description}</p>
           </div>
           <span
             className={
