@@ -15,7 +15,11 @@ function CustomCursor() {
   const cursorRef = useRef(null)
 
   useEffect(() => {
-    if (window.matchMedia('(pointer: coarse), (hover: none)').matches) {
+    if (
+      window.matchMedia(
+        '(pointer: coarse), (hover: none), (max-width: 1180px), (prefers-reduced-motion: reduce)',
+      ).matches
+    ) {
       return undefined
     }
 
@@ -41,6 +45,23 @@ function CustomCursor() {
       state.active = Boolean(target instanceof Element && target.closest(interactiveSelector))
     }
 
+    const stop = () => {
+      if (!frameId) {
+        return
+      }
+
+      window.cancelAnimationFrame(frameId)
+      frameId = 0
+    }
+
+    const start = () => {
+      if (frameId) {
+        return
+      }
+
+      frameId = window.requestAnimationFrame(render)
+    }
+
     const render = () => {
       state.currentX += (state.targetX - state.currentX) * 0.16
       state.currentY += (state.targetY - state.currentY) * 0.16
@@ -48,7 +69,14 @@ function CustomCursor() {
       cursorNode.style.opacity = state.visible ? (state.active ? '0.56' : '0.28') : '0'
       cursorNode.style.transform = `translate3d(${state.currentX}px, ${state.currentY}px, 0) translate(-50%, -50%) scale(${state.active ? 1.48 : 1})`
 
-      frameId = window.requestAnimationFrame(render)
+      const deltaX = Math.abs(state.targetX - state.currentX)
+      const deltaY = Math.abs(state.targetY - state.currentY)
+
+      if (state.visible || deltaX > 0.12 || deltaY > 0.12) {
+        frameId = window.requestAnimationFrame(render)
+      } else {
+        frameId = 0
+      }
     }
 
     const handlePointerMove = (event) => {
@@ -56,23 +84,25 @@ function CustomCursor() {
       state.targetY = event.clientY
       state.visible = true
       updateInteractiveState(event.target)
+      start()
     }
 
     const handleMouseLeave = () => {
       state.visible = false
       state.active = false
+      start()
     }
 
     const handleMouseOver = (event) => {
       updateInteractiveState(event.target)
+      start()
     }
 
     const handleBlur = () => {
       state.visible = false
       state.active = false
+      start()
     }
-
-    frameId = window.requestAnimationFrame(render)
 
     window.addEventListener('pointermove', handlePointerMove, { passive: true })
     window.addEventListener('blur', handleBlur)
@@ -80,7 +110,7 @@ function CustomCursor() {
     document.addEventListener('mouseleave', handleMouseLeave)
 
     return () => {
-      window.cancelAnimationFrame(frameId)
+      stop()
       window.removeEventListener('pointermove', handlePointerMove)
       window.removeEventListener('blur', handleBlur)
       document.removeEventListener('mouseover', handleMouseOver)

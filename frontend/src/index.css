@@ -399,8 +399,8 @@ code {
 }
 
 .scene--destination {
-  gap: 18px;
-  padding: 22px;
+  gap: 14px;
+  padding: 18px;
   grid-template-columns: minmax(0, 1.18fr) minmax(300px, 0.82fr);
   align-items: center;
   background:
@@ -431,11 +431,9 @@ code {
   max-height: 85vh;
   padding: clamp(28px, 4vw, 48px);
   background:
-    radial-gradient(circle at top left, rgba(92, 148, 255, 0.22), transparent 34%),
-    radial-gradient(circle at 76% 14%, rgba(91, 92, 255, 0.12), transparent 24%),
-    radial-gradient(circle at 82% 76%, rgba(255, 205, 154, 0.12), transparent 18%),
-    linear-gradient(145deg, rgba(31, 84, 194, 0.18) 0%, rgba(24, 26, 61, 0.1) 36%, rgba(9, 17, 33, 0.78) 100%),
-    linear-gradient(180deg, rgba(8, 14, 27, 0.99) 0%, rgba(7, 14, 28, 0.96) 42%, rgba(6, 12, 23, 0.95) 100%);
+    radial-gradient(circle at 18% 6%, rgba(92, 148, 255, 0.18), transparent 30%),
+    radial-gradient(circle at 82% 74%, rgba(255, 205, 154, 0.08), transparent 18%),
+    linear-gradient(138deg, rgba(17, 39, 79, 0.44) 0%, rgba(8, 16, 31, 0.88) 42%, rgba(6, 12, 23, 0.97) 100%);
 }
 
 .hero__destination-plane,
@@ -447,22 +445,21 @@ code {
 .hero__destination-plane {
   inset: 0;
   background:
-    linear-gradient(90deg, rgba(6, 11, 21, 0.84) 8%, rgba(6, 11, 21, 0.46) 44%, rgba(6, 11, 21, 0.78) 100%),
-    linear-gradient(180deg, rgba(8, 12, 22, 0.18), rgba(8, 12, 22, 0.82) 92%),
+    linear-gradient(90deg, rgba(6, 11, 21, 0.88) 8%, rgba(6, 11, 21, 0.54) 44%, rgba(6, 11, 21, 0.82) 100%),
+    linear-gradient(180deg, rgba(8, 12, 22, 0.12), rgba(8, 12, 22, 0.78) 92%),
     var(--hero-destination-image) center right / cover no-repeat;
-  opacity: 0.32;
-  mix-blend-mode: screen;
+  opacity: 0.26;
   mask-image: linear-gradient(90deg, rgba(0, 0, 0, 0.22), rgba(0, 0, 0, 0.92) 28%, rgba(0, 0, 0, 1));
 }
 
 .hero__horizon-glow {
   left: 8%;
   bottom: 12%;
-  width: clamp(260px, 28vw, 440px);
-  height: clamp(100px, 12vw, 180px);
+  width: clamp(220px, 24vw, 380px);
+  height: clamp(84px, 10vw, 150px);
   border-radius: 999px;
-  background: radial-gradient(circle, rgba(255, 210, 160, 0.18), rgba(111, 209, 198, 0.08) 54%, transparent 74%);
-  filter: blur(34px);
+  background: radial-gradient(circle, rgba(255, 210, 160, 0.14), rgba(111, 209, 198, 0.04) 56%, transparent 76%);
+  filter: blur(24px);
 }
 
 .hero__mesh,
@@ -486,46 +483,46 @@ code {
 }
 
 .hero__beam {
-  width: 260px;
-  height: 260px;
+  width: 220px;
+  height: 220px;
   border-radius: 999px;
-  filter: blur(16px);
+  filter: blur(12px);
 }
 
 .hero__beam--one {
-  top: 10%;
-  left: 52%;
-  background: linear-gradient(135deg, rgba(115, 172, 255, 0.2), rgba(115, 172, 255, 0));
+  top: 12%;
+  left: 54%;
+  background: linear-gradient(135deg, rgba(115, 172, 255, 0.16), rgba(115, 172, 255, 0));
 }
 
 .hero__beam--two {
-  bottom: -8%;
-  right: 10%;
-  background: linear-gradient(135deg, rgba(255, 214, 158, 0.16), rgba(115, 172, 255, 0.03));
+  bottom: -6%;
+  right: 12%;
+  background: linear-gradient(135deg, rgba(255, 214, 158, 0.1), rgba(115, 172, 255, 0.02));
 }
 
 .hero__glow {
   position: absolute;
   inset: auto;
   border-radius: 999px;
-  filter: blur(24px);
+  filter: blur(18px);
   pointer-events: none;
 }
 
 .hero__glow--one {
   top: -12%;
   right: -8%;
-  width: 360px;
-  height: 360px;
-  background: radial-gradient(circle, rgba(46, 125, 255, 0.34) 0%, transparent 68%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(46, 125, 255, 0.24) 0%, transparent 68%);
 }
 
 .hero__glow--two {
   bottom: -16%;
   left: -10%;
-  width: 280px;
-  height: 280px;
-  background: radial-gradient(circle, rgba(255, 207, 160, 0.16) 0%, transparent 68%);
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(255, 207, 160, 0.1) 0%, transparent 68%);
 }
 
 .hero__grid {
@@ -932,7 +929,7 @@ code {
 .destination-section__media {
   position: relative;
   overflow: hidden;
-  min-height: clamp(284px, 28vw, 320px);
+  min-height: clamp(248px, 24vw, 286px);
   border-radius: 26px;
   border: 1px solid rgba(180, 205, 244, 0.14);
   background:
@@ -959,14 +956,14 @@ code {
 
 .destination-section__content {
   display: grid;
-  gap: 10px;
+  gap: 8px;
   align-content: center;
-  max-width: 400px;
+  max-width: 380px;
 }
 
 .destination-section__content h2 {
   margin: 0;
-  font-size: clamp(2rem, 3.3vw, 3rem);
+  font-size: clamp(1.9rem, 3vw, 2.7rem);
   line-height: 0.98;
   letter-spacing: -0.05em;
 }
@@ -974,7 +971,7 @@ code {
 .destination-section__content p {
   margin: 0;
   color: rgba(226, 234, 249, 0.76);
-  line-height: 1.52;
+  line-height: 1.48;
 }
 
 .signal-section {
@@ -1147,7 +1144,7 @@ code {
   inset: 12% 10% 18%;
   border-radius: 999px;
   background: radial-gradient(circle, rgba(81, 146, 255, 0.14), transparent 66%);
-  filter: blur(32px);
+  filter: blur(24px);
 }
 
 .signal-section__visual::after {
@@ -1675,12 +1672,12 @@ code {
   }
 
   .scene--destination {
-    gap: 16px;
-    padding: 20px;
+    gap: 14px;
+    padding: 17px;
   }
 
   .destination-section__media {
-    min-height: 280px;
+    min-height: 236px;
   }
 }
 
@@ -1745,15 +1742,15 @@ code {
   }
 
   .scene--destination {
-    padding: 18px;
+    padding: 16px;
   }
 
   .destination-section__media {
-    min-height: 236px;
+    min-height: 208px;
   }
 
   .destination-section__content {
-    gap: 8px;
+    gap: 6px;
     max-width: none;
   }
 
