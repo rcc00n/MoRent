@@ -8,10 +8,12 @@ import {
 
 import CarCard from '../components/CarCard'
 import DotFieldCanvas from '../components/DotFieldCanvas'
+import FaqList from '../components/FaqList'
 import LoadingFleet from '../components/LoadingFleet'
 import MagneticAction from '../components/MagneticAction'
 import coastalResortScene from '../assets/coastal-resort-scene.webp'
 import coastalRoadHero from '../assets/coastal-road-hero.webp'
+import { faqItems } from '../content/siteContent'
 import { getCars } from '../shared/api'
 import {
   resetInteractiveGlow,
@@ -661,6 +663,36 @@ function Home() {
               <p>{item.description}</p>
             </MotionAnchor>
           ))}
+        </MotionDiv>
+      </MotionSection>
+
+      <MotionSection
+        className="faq-preview scene scene--fleet"
+        initial="hidden"
+        variants={sectionRevealVariants}
+        viewport={viewportSettings}
+        whileInView="visible"
+      >
+        <MotionDiv
+          className="section-header section-header--split"
+          variants={sectionSlideVariants}
+        >
+          <div>
+            <h2>Answers before the request starts.</h2>
+          </div>
+          <p>
+            Clear terms, visible rates, and a short review flow keep the booking path
+            readable.
+          </p>
+        </MotionDiv>
+
+        <FaqList items={faqItems.slice(0, 4)} />
+
+        <MotionDiv className="section-cta" variants={sectionRevealVariants}>
+          <p className="muted-text">Need the full detail set before you choose the car?</p>
+          <MagneticAction className="button button--secondary" to="/faq">
+            Open the full FAQ
+          </MagneticAction>
         </MotionDiv>
       </MotionSection>
 

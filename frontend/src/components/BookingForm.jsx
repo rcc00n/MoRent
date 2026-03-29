@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { startTransition, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import { createBooking } from '../shared/api'
 
@@ -64,6 +65,7 @@ function BookingForm({ carId, carName }) {
   const [touchedFields, setTouchedFields] = useState(initialTouchedState)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [feedback, setFeedback] = useState(null)
+  const navigate = useNavigate()
   const today = new Date().toISOString().slice(0, 10)
   const fieldErrors = validateBookingForm(formData)
 
@@ -116,12 +118,19 @@ function BookingForm({ carId, carName }) {
         car: carId,
       })
 
+      const successState = {
+        carName,
+        startDate: formData.start_date,
+        endDate: formData.end_date,
+      }
+
       setFormData(initialFormState)
       setTouchedFields(initialTouchedState)
-      setFeedback({
-        type: 'success',
-        title: 'Request received',
-        message: 'We will confirm availability and contact you shortly.',
+
+      startTransition(() => {
+        navigate('/request-received', {
+          state: successState,
+        })
       })
     } catch (error) {
       setFeedback({

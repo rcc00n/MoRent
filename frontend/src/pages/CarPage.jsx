@@ -109,6 +109,30 @@ function CarPage() {
       >
         <BookingForm carId={car.id} carName={`${car.brand} ${car.model}`} />
       </MotionDiv>
+
+      <div className="car-page__support">
+        <article className="info-card">
+          <h2>What happens after the request?</h2>
+          <p>
+            The team reviews availability, confirms the timing, and arranges the pickup
+            details directly.
+          </p>
+        </article>
+        <article className="info-card">
+          <h2>Need the booking details first?</h2>
+          <p>
+            Review the booking flow and FAQ before you submit the dates.
+          </p>
+          <div className="button-row">
+            <Link className="button button--secondary" to="/how-it-works">
+              How it works
+            </Link>
+            <Link className="button button--secondary" to="/faq">
+              FAQ
+            </Link>
+          </div>
+        </article>
+      </div>
     </section>
   )
 }

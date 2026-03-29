@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { Link } from 'react-router-dom'
 
 import CarCard from '../components/CarCard'
 import LoadingFleet from '../components/LoadingFleet'
@@ -41,18 +42,47 @@ function Catalog() {
   }, [])
 
   return (
-    <MotionSection
-      animate={{ opacity: 1, y: 0 }}
-      className="catalog-layout"
-      initial={{ opacity: 0, y: 18 }}
-      transition={{ duration: 0.45 }}
-    >
-      <div className="section-header">
-        <h1>Available cars</h1>
-        <p>
-          Open a car, check the dates, and send your request directly.
-        </p>
-      </div>
+    <div className="catalog-layout">
+      <MotionSection
+        animate={{ opacity: 1, y: 0 }}
+        className="catalog-intro scene scene--fleet"
+        initial={{ opacity: 0, y: 18 }}
+        transition={{ duration: 0.45 }}
+      >
+        <div className="section-header section-header--split">
+          <div>
+            <h1>Premium fleet with visible daily rates.</h1>
+          </div>
+          <p>
+            Choose the car first, review the daily rate, and move into the request only
+            when the timing works for the trip.
+          </p>
+        </div>
+
+        <div className="info-grid info-grid--compact">
+          <article className="info-card">
+            <h2>Visible pricing</h2>
+            <p>Daily rates stay clear before the request starts.</p>
+          </article>
+          <article className="info-card">
+            <h2>Fast review</h2>
+            <p>Most requests are checked within about 15 minutes during service hours.</p>
+          </article>
+          <article className="info-card">
+            <h2>Pickup support</h2>
+            <p>Hotel, airport, and private handoff points are agreed after confirmation.</p>
+          </article>
+        </div>
+
+        <div className="button-row">
+          <Link className="button button--secondary" to="/how-it-works">
+            How booking works
+          </Link>
+          <Link className="button button--secondary" to="/contacts">
+            Service details
+          </Link>
+        </div>
+      </MotionSection>
 
       {isLoading ? <LoadingFleet count={6} /> : null}
       {!isLoading && errorMessage ? (
@@ -68,7 +98,7 @@ function Catalog() {
           </div>
         </>
       ) : null}
-    </MotionSection>
+    </div>
   )
 }
 

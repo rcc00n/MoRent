@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigationType } from 'react-router-dom'
 
 import CustomCursor from '../components/CustomCursor'
 import Navbar from '../components/Navbar'
+import SiteFooter from '../components/SiteFooter'
 
 const MotionMain = motion.main
 
@@ -78,6 +79,7 @@ function AppLayout() {
           <Outlet />
         </MotionMain>
       </AnimatePresence>
+      <SiteFooter />
     </div>
   )
 }
