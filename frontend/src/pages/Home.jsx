@@ -18,6 +18,7 @@ import {
 } from '../shared/interactiveSurface'
 
 const MotionArticle = motion.article
+const MotionAnchor = motion.a
 const MotionDiv = motion.div
 const MotionHeading = motion.h1
 const MotionSection = motion.section
@@ -32,37 +33,35 @@ const proofItems = [
     description: 'Availability confirmations move fast.',
   },
   {
+    value: 'Daily',
+    title: 'Visible day rates',
+    description: 'Rates stay readable before the request begins.',
+  },
+  {
     value: '100%',
     title: 'Verified fleet',
     description: 'Every listed car is checked before it goes live.',
   },
-  {
-    value: '24/7',
-    title: 'Premium support',
-    description: 'Support stays close from request to return.',
-  },
 ]
 
-const benefitItems = [
+const processItems = [
   {
-    title: 'Request in minutes.',
-    description: 'Choose dates and send the request without account setup.',
-    tone: 'signal',
-  },
-  {
-    title: 'Premium cars with clear rates.',
-    description: 'High-end models, day rates, and real availability in view.',
+    title: 'See the car.',
+    description: 'Open the featured fleet and view the exact car before you send anything.',
+    href: '#featured-cars',
     tone: 'fleet',
   },
   {
-    title: 'A real manager confirms the handoff.',
-    description: 'Support stays personal after the request is sent.',
-    tone: 'support',
+    title: 'Trust the rate.',
+    description: 'Visible day rates stay in view before the booking form opens.',
+    href: '#rate-clarity',
+    tone: 'pricing',
   },
   {
-    title: 'Pricing stays visible from the start.',
-    description: 'No hidden step before dates or contact.',
-    tone: 'pricing',
+    title: 'Send the request.',
+    description: 'Choose the dates and start confirmation in minutes.',
+    href: '#booking-path',
+    tone: 'signal',
   },
 ]
 
@@ -494,6 +493,7 @@ function Home() {
 
       <MotionSection
         className="proof-strip scene scene--proof"
+        id="rate-clarity"
         initial="hidden"
         variants={proofSectionVariants}
         viewport={viewportSettings}
@@ -555,9 +555,12 @@ function Home() {
           </MotionDiv>
 
           <MotionDiv className="benefits-grid" variants={benefitCardsContainerVariants}>
-            {benefitItems.map((item) => (
-              <MotionArticle
-                className="benefit-card interactive-surface interactive-surface--feature"
+            {processItems.map((item) => (
+              <MotionAnchor
+                aria-label={`Jump to ${item.title.replace('.', '').toLowerCase()}`}
+                className="benefit-card benefit-card--link interactive-surface interactive-surface--feature"
+                data-cursor="interactive"
+                href={item.href}
                 key={item.title}
                 onPointerLeave={resetInteractiveGlow}
                 onPointerMove={updateInteractiveGlow}
@@ -572,7 +575,7 @@ function Home() {
                 </div>
                 <h3>{item.title}</h3>
                 <p>{item.description}</p>
-              </MotionArticle>
+              </MotionAnchor>
             ))}
           </MotionDiv>
         </div>
