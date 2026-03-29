@@ -852,6 +852,8 @@ code {
 }
 
 .car-card {
+  position: relative;
+  cursor: pointer;
   overflow: hidden;
   transition:
     transform 240ms ease,
@@ -1156,6 +1158,22 @@ code {
   object-fit: cover;
 }
 
+.car-card__link {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+}
+
+.car-card__link:focus-visible {
+  outline: 2px solid rgba(169, 208, 255, 0.88);
+  outline-offset: -2px;
+}
+
+.car-card__content {
+  display: grid;
+}
+
 .car-card__body {
   display: grid;
   gap: var(--space-4);
@@ -1209,6 +1227,10 @@ code {
   font-size: 1.22rem;
   font-weight: 800;
   color: #f7faff;
+}
+
+.car-card__cta {
+  pointer-events: none;
 }
 
 .animated-metric {

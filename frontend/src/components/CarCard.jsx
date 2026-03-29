@@ -42,6 +42,8 @@ const imageMotion = {
 }
 
 function CarCard({ car }) {
+  const carName = `${car.brand} ${car.model}`
+
   return (
     <MotionArticle
       animate="rest"
@@ -53,37 +55,43 @@ function CarCard({ car }) {
       variants={cardMotion}
       whileHover="hover"
     >
-      <div className="car-card__media-wrap">
-        <MotionImage
-          alt={`${car.brand} ${car.model}`}
-          className="car-card__media"
-          decoding="async"
-          loading="lazy"
-          src={car.image}
-          variants={imageMotion}
-        />
-      </div>
-      <div className="car-card__body">
-        <div className="car-card__top">
-          <div>
-            <h2 className="car-card__title">
-              {car.brand} {car.model}
-            </h2>
-            <p className="car-card__description muted-text">{car.description}</p>
-          </div>
-          <span
-            className={
-              car.available ? 'badge badge--available' : 'badge badge--unavailable'
-            }
-          >
-            {car.available ? 'Available' : 'Booked'}
-          </span>
+      <Link
+        aria-label={`View availability for ${carName}`}
+        className="car-card__link"
+        to={`/car/${car.id}`}
+      />
+
+      <div className="car-card__content">
+        <div className="car-card__media-wrap">
+          <MotionImage
+            alt={carName}
+            className="car-card__media"
+            decoding="async"
+            loading="lazy"
+            src={car.image}
+            variants={imageMotion}
+          />
         </div>
-        <div className="price-row">
-          <span className="price">{formatPrice(car.price_per_day)}</span>
-          <Link className="button button--primary" to={`/car/${car.id}`}>
-            Check availability
-          </Link>
+        <div className="car-card__body">
+          <div className="car-card__top">
+            <div>
+              <h2 className="car-card__title">{carName}</h2>
+              <p className="car-card__description muted-text">{car.description}</p>
+            </div>
+            <span
+              className={
+                car.available ? 'badge badge--available' : 'badge badge--unavailable'
+              }
+            >
+              {car.available ? 'Available' : 'Booked'}
+            </span>
+          </div>
+          <div className="price-row">
+            <span className="price">{formatPrice(car.price_per_day)}</span>
+            <span aria-hidden="true" className="button button--primary car-card__cta">
+              Check availability
+            </span>
+          </div>
         </div>
       </div>
     </MotionArticle>
