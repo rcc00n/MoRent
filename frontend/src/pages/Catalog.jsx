@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 
 import CarCard from '../components/CarCard'
+import LoadingFleet from '../components/LoadingFleet'
 import { getCars } from '../shared/api'
+
+const MotionSection = motion.section
 
 function Catalog() {
   const [cars, setCars] = useState([])
@@ -37,7 +41,12 @@ function Catalog() {
   }, [])
 
   return (
-    <section className="catalog-layout">
+    <MotionSection
+      animate={{ opacity: 1, y: 0 }}
+      className="catalog-layout"
+      initial={{ opacity: 0, y: 18 }}
+      transition={{ duration: 0.45 }}
+    >
       <div className="section-header">
         <span className="eyebrow">Catalog</span>
         <h1>Available cars</h1>
@@ -46,7 +55,7 @@ function Catalog() {
         </p>
       </div>
 
-      {isLoading ? <div className="empty-state">Loading catalog...</div> : null}
+      {isLoading ? <LoadingFleet count={6} /> : null}
       {!isLoading && errorMessage ? (
         <div className="empty-state">{errorMessage}</div>
       ) : null}
@@ -60,7 +69,7 @@ function Catalog() {
           </div>
         </>
       ) : null}
-    </section>
+    </MotionSection>
   )
 }
 

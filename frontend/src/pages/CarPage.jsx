@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import { Link, useParams } from 'react-router-dom'
 
 import BookingForm from '../components/BookingForm'
 import { getCar } from '../shared/api'
+
+const MotionDiv = motion.div
 
 function formatPrice(price) {
   return `${Number(price).toFixed(0)} / day`
@@ -43,7 +46,13 @@ function CarPage() {
   }, [id])
 
   if (isLoading) {
-    return <div className="empty-state">Loading car details...</div>
+    return (
+      <div className="loading-shell loading-shell--panel" aria-hidden="true">
+        <div className="loading-line loading-line--wide"></div>
+        <div className="loading-line"></div>
+        <div className="loading-line loading-line--short"></div>
+      </div>
+    )
   }
 
   if (errorMessage || !car) {
@@ -59,8 +68,13 @@ function CarPage() {
 
   return (
     <section className="car-page">
-      <div className="car-page__content">
-        <div className="panel car-page__gallery">
+      <MotionDiv
+        animate={{ opacity: 1, x: 0 }}
+        className="car-page__content"
+        initial={{ opacity: 0, x: -20 }}
+        transition={{ duration: 0.45 }}
+      >
+        <div className="panel car-page__gallery panel--visual">
           <img
             alt={`${car.brand} ${car.model}`}
             className="car-page__image"
@@ -87,9 +101,15 @@ function CarPage() {
           </div>
           <p className="price">{formatPrice(car.price_per_day)}</p>
         </div>
-      </div>
+      </MotionDiv>
 
-      <BookingForm carId={car.id} carName={`${car.brand} ${car.model}`} />
+      <MotionDiv
+        animate={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, x: 20 }}
+        transition={{ delay: 0.08, duration: 0.45 }}
+      >
+        <BookingForm carId={car.id} carName={`${car.brand} ${car.model}`} />
+      </MotionDiv>
     </section>
   )
 }

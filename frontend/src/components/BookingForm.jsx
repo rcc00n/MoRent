@@ -139,7 +139,14 @@ function BookingForm({ carId, carName }) {
       ) : null}
 
       <button className="button button--primary" disabled={isSubmitting} type="submit">
-        {isSubmitting ? 'Sending...' : 'Send booking request'}
+        {isSubmitting ? (
+          <>
+            <span aria-hidden="true" className="button__spinner"></span>
+            Sending...
+          </>
+        ) : (
+          'Send booking request'
+        )}
       </button>
     </form>
   )

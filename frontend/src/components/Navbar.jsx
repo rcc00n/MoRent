@@ -7,25 +7,30 @@ function Navbar() {
         <NavLink className="brand" to="/">
           Mo<span>Rent</span>
         </NavLink>
-        <nav className="nav-links" aria-label="Primary">
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? 'nav-link active' : 'nav-link'
-            }
-            end
-            to="/"
-          >
-            Home
+        <div className="navbar__actions">
+          <nav className="nav-links" aria-label="Primary">
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? 'nav-link active' : 'nav-link'
+              }
+              end
+              to="/"
+            >
+              Home
+            </NavLink>
+            <NavLink
+              className={({ isActive }) =>
+                isActive ? 'nav-link active' : 'nav-link'
+              }
+              to="/catalog"
+            >
+              Catalog
+            </NavLink>
+          </nav>
+          <NavLink className="button button--primary button--small" to="/catalog">
+            Book now
           </NavLink>
-          <NavLink
-            className={({ isActive }) =>
-              isActive ? 'nav-link active' : 'nav-link'
-            }
-            to="/catalog"
-          >
-            Catalog
-          </NavLink>
-        </nav>
+        </div>
       </div>
     </header>
   )
