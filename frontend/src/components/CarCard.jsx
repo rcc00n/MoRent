@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { enrichCarMedia } from '../content/mediaLibrary'
 import {
@@ -10,8 +11,8 @@ import {
 const MotionArticle = motion.article
 const MotionImage = motion.img
 
-function formatPrice(price) {
-  return `${Number(price).toFixed(0)} / day`
+function formatPrice(price, suffix) {
+  return `${Number(price).toFixed(0)} ${suffix}`
 }
 
 const cardMotion = {
@@ -43,8 +44,14 @@ const imageMotion = {
 }
 
 function CarCard({ car }) {
+  const { t } = useTranslation()
   const displayCar = enrichCarMedia(car)
   const carName = `${displayCar.brand} ${displayCar.model}`
+  const description = displayCar.translationKey
+    ? t(`cars.${displayCar.translationKey}.description`, {
+        defaultValue: displayCar.description,
+      })
+    : displayCar.description
 
   return (
     <MotionArticle
@@ -58,7 +65,7 @@ function CarCard({ car }) {
       whileHover="hover"
     >
       <Link
-        aria-label={`View availability for ${carName}`}
+        aria-label={t('common.aria.viewCarAvailability', { carName })}
         className="car-card__link"
         to={`/car/${displayCar.id}`}
       />
@@ -78,7 +85,7 @@ function CarCard({ car }) {
           <div className="car-card__top">
             <div>
               <h2 className="car-card__title">{carName}</h2>
-              <p className="car-card__description muted-text">{displayCar.description}</p>
+              <p className="car-card__description muted-text">{description}</p>
             </div>
             <span
               className={
@@ -87,13 +94,17 @@ function CarCard({ car }) {
                   : 'badge badge--unavailable'
               }
             >
-              {displayCar.available ? 'Available' : 'Booked'}
+              {displayCar.available
+                ? t('common.status.available')
+                : t('common.status.booked')}
             </span>
           </div>
           <div className="price-row">
-            <span className="price">{formatPrice(displayCar.price_per_day)}</span>
+            <span className="price">
+              {formatPrice(displayCar.price_per_day, t('common.pricing.perDay'))}
+            </span>
             <span aria-hidden="true" className="button button--primary car-card__cta">
-              Check availability
+              {t('common.actions.checkAvailability')}
             </span>
           </div>
         </div>

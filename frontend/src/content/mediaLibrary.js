@@ -15,6 +15,7 @@ export const pageMedia = {
 
 const carMediaRegistry = {
   'BMW|X5': {
+    translationKey: 'bmwX5',
     primaryImage:
       `${wikiBase}/thumb/e/e9/BMW_G05_LCI_X5_xDrive50e_M_Sport_Dravit_Grey_Metallic_%281%29.jpg/1920px-BMW_G05_LCI_X5_xDrive50e_M_Sport_Dravit_Grey_Metallic_%281%29.jpg`,
     gallery: [
@@ -24,6 +25,7 @@ const carMediaRegistry = {
     ],
   },
   'Mercedes-Benz|E-Class': {
+    translationKey: 'mercedesEClass',
     primaryImage:
       `${wikiBase}/thumb/0/06/MERCEDES-BENZ_E-CLASS_%28W213%29_China.jpg/1920px-MERCEDES-BENZ_E-CLASS_%28W213%29_China.jpg`,
     gallery: [
@@ -33,6 +35,7 @@ const carMediaRegistry = {
     ],
   },
   'Porsche|Cayenne': {
+    translationKey: 'porscheCayenne',
     primaryImage:
       `${wikiBase}/thumb/8/87/2023_Porsche_Cayenne_S_IMG_0521.jpg/1920px-2023_Porsche_Cayenne_S_IMG_0521.jpg`,
     gallery: [
@@ -50,6 +53,7 @@ function getCarRegistryKey(car) {
 export function getCarMedia(car) {
   return (
     carMediaRegistry[getCarRegistryKey(car)] || {
+      translationKey: null,
       primaryImage: car.image,
       gallery: car.image ? [car.image] : [],
     }
@@ -61,6 +65,7 @@ export function enrichCarMedia(car) {
 
   return {
     ...car,
+    translationKey: media.translationKey,
     image: media.primaryImage || car.image,
     primaryImage: media.primaryImage || car.image,
     gallery: media.gallery.length ? media.gallery : [media.primaryImage || car.image].filter(Boolean),

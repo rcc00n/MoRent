@@ -1,30 +1,31 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import PageVisualStack from '../components/PageVisualStack'
 import { pageMedia } from '../content/mediaLibrary'
-import { bookingProcessSteps } from '../content/siteContent'
 
 function HowItWorks() {
+  const { t } = useTranslation()
+  const bookingProcessSteps = t('howItWorks.steps', { returnObjects: true })
+  const highlightCards = t('howItWorks.highlights', { returnObjects: true })
+
   return (
     <div className="content-page">
       <section className="page-hero scene scene--closing">
         <div className="page-hero__grid">
           <div className="page-hero__content">
-            <span className="page-eyebrow">How It Works</span>
-            <h1>A short booking path built for premium trips, not admin.</h1>
-            <p>
-              MoRent keeps the process intentionally simple so the client sees the fleet,
-              understands the rate, and reaches a confirmed handoff without extra steps.
-            </p>
+            <span className="page-eyebrow">{t('howItWorks.eyebrow')}</span>
+            <h1>{t('howItWorks.title')}</h1>
+            <p>{t('howItWorks.description')}</p>
           </div>
 
           <PageVisualStack
             primary={pageMedia.coastalHighway}
-            primaryAlt="Scenic coastal road representing the route from request to drive"
-            primaryCaption="Short request path, premium drive, direct confirmation"
+            primaryAlt={t('howItWorks.visuals.primaryAlt')}
+            primaryCaption={t('howItWorks.visuals.primaryCaption')}
             secondary={pageMedia.sunsetArrival}
-            secondaryAlt="Arrival area supporting coordinated pickup"
-            secondaryCaption="Pickup timing agreed after the team review"
+            secondaryAlt={t('howItWorks.visuals.secondaryAlt')}
+            secondaryCaption={t('howItWorks.visuals.secondaryCaption')}
           />
         </div>
       </section>
@@ -40,41 +41,26 @@ function HowItWorks() {
       </section>
 
       <section className="info-grid">
-        <article className="info-card">
-          <h2>Visible rates first</h2>
-          <p>
-            The daily rate is shown before the request starts, which keeps the decision
-            clear and commercially honest.
-          </p>
-        </article>
-        <article className="info-card">
-          <h2>No payment at request stage</h2>
-          <p>
-            The online request is an availability check and booking signal. Final
-            payment handling happens only after manual confirmation.
-          </p>
-        </article>
-        <article className="info-card">
-          <h2>Pickup arranged after review</h2>
-          <p>
-            Airport arrival, hotel delivery, and private pickup details are agreed once
-            the requested car and dates are confirmed.
-          </p>
-        </article>
+        {highlightCards.map((item) => (
+          <article className="info-card" key={item.title}>
+            <h2>{item.title}</h2>
+            <p>{item.description}</p>
+          </article>
+        ))}
       </section>
 
       <section className="cta-panel">
         <div>
-          <h2>Ready to start the request?</h2>
-          <p>Open the fleet and move straight into the car that fits the trip.</p>
+          <h2>{t('howItWorks.ctaTitle')}</h2>
+          <p>{t('howItWorks.ctaDescription')}</p>
         </div>
 
         <div className="button-row">
           <Link className="button button--primary" to="/catalog">
-            Open the fleet
+            {t('common.actions.openFleet')}
           </Link>
           <Link className="button button--secondary" to="/faq">
-            Booking questions
+            {t('howItWorks.ctaFaq')}
           </Link>
         </div>
       </section>

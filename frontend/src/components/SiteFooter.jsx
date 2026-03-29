@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-
-import { footerContext, footerNavigation } from '../content/siteContent'
+import { useTranslation } from 'react-i18next'
 
 function FooterLinkGroup({ title, links }) {
   return (
@@ -18,6 +17,10 @@ function FooterLinkGroup({ title, links }) {
 }
 
 function SiteFooter() {
+  const { t } = useTranslation()
+  const footerNavigation = t('footer.navigation', { returnObjects: true })
+  const currentYear = new Date().getFullYear()
+
   return (
     <footer className="site-footer">
       <div className="site-footer__inner">
@@ -25,24 +28,33 @@ function SiteFooter() {
           <Link className="brand" to="/">
             Mo<span>Rent</span>
           </Link>
-          <p className="site-footer__title">{footerContext.title}</p>
-          <p className="site-footer__description">{footerContext.description}</p>
+          <p className="site-footer__title">{t('footer.title')}</p>
+          <p className="site-footer__description">{t('footer.description')}</p>
           <div className="site-footer__contact-links">
-            <Link to="/catalog">Request a car</Link>
-            <Link to="/contacts">Service details</Link>
+            <Link to="/catalog">{t('footer.requestCar')}</Link>
+            <Link to="/contacts">{t('footer.serviceDetails')}</Link>
           </div>
         </div>
 
         <div className="site-footer__navigation">
-          <FooterLinkGroup links={footerNavigation.main} title="Explore" />
-          <FooterLinkGroup links={footerNavigation.company} title="Company" />
-          <FooterLinkGroup links={footerNavigation.legal} title="Legal" />
+          <FooterLinkGroup
+            links={footerNavigation.main}
+            title={t('footer.groups.explore')}
+          />
+          <FooterLinkGroup
+            links={footerNavigation.company}
+            title={t('footer.groups.company')}
+          />
+          <FooterLinkGroup
+            links={footerNavigation.legal}
+            title={t('footer.groups.legal')}
+          />
         </div>
       </div>
 
       <div className="site-footer__bottom">
-        <p>Coastal service area with resort, hotel, and airport pickup by arrangement.</p>
-        <p>© {new Date().getFullYear()} MoRent. All rights reserved.</p>
+        <p>{t('footer.context')}</p>
+        <p>{t('footer.copyright', { year: currentYear })}</p>
       </div>
     </footer>
   )

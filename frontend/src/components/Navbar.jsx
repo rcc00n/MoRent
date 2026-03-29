@@ -1,33 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { NavLink, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
+import LanguageSwitcher from './LanguageSwitcher'
 const MotionAside = motion.aside
 const MotionDiv = motion.div
-
-const primaryLinks = [
-  {
-    label: 'Home',
-    to: '/',
-    end: true,
-  },
-  {
-    label: 'Fleet',
-    to: '/catalog',
-  },
-  {
-    label: 'How It Works',
-    to: '/how-it-works',
-  },
-  {
-    label: 'About',
-    to: '/about',
-  },
-  {
-    label: 'Contacts',
-    to: '/contacts',
-  },
-]
 
 const navLinkClassName = ({ isActive }) =>
   isActive ? 'nav-link active' : 'nav-link'
@@ -37,8 +15,11 @@ const drawerLinkClassName = ({ isActive }) =>
 
 function Navbar() {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
+  const { t } = useTranslation()
   const location = useLocation()
   const previousLocationRef = useRef(`${location.pathname}${location.hash}`)
+  const primaryLinks = t('nav.links', { returnObjects: true })
+  const mobileExtraLinks = t('nav.mobileExtraLinks', { returnObjects: true })
 
   useEffect(() => {
     const nextLocation = `${location.pathname}${location.hash}`
@@ -96,7 +77,7 @@ function Navbar() {
             Mo<span>Rent</span>
           </NavLink>
           <div className="navbar__actions">
-            <nav className="nav-links" aria-label="Primary">
+            <nav className="nav-links" aria-label={t('nav.primaryLabel')}>
               {primaryLinks.map((link) => (
                 <NavLink
                   className={navLinkClassName}
@@ -108,14 +89,17 @@ function Navbar() {
                 </NavLink>
               ))}
             </nav>
+            <LanguageSwitcher />
             <NavLink className="button button--primary button--small" to="/catalog">
-              Book now
+              {t('common.actions.bookNow')}
             </NavLink>
           </div>
           <button
             aria-controls="mobile-navigation-drawer"
             aria-expanded={isDrawerOpen}
-            aria-label={isDrawerOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-label={
+              isDrawerOpen ? t('nav.closeMenu') : t('nav.openMenu')
+            }
             className={`navbar__menu-toggle${isDrawerOpen ? ' is-open' : ''}`}
             onClick={toggleDrawer}
             type="button"
@@ -136,7 +120,7 @@ function Navbar() {
             initial={{ opacity: 0 }}
           >
             <button
-              aria-label="Close navigation menu"
+              aria-label={t('nav.closeMenu')}
               className="mobile-drawer__backdrop"
               onClick={closeDrawer}
               type="button"
@@ -151,9 +135,9 @@ function Navbar() {
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             >
               <div className="mobile-drawer__header">
-                <span>Navigate</span>
+                <span>{t('nav.navigate')}</span>
                 <button
-                  aria-label="Close navigation menu"
+                  aria-label={t('nav.closeMenu')}
                   className="mobile-drawer__close"
                   onClick={closeDrawer}
                   type="button"
@@ -163,7 +147,12 @@ function Navbar() {
                 </button>
               </div>
 
-              <nav aria-label="Mobile primary" className="mobile-drawer__nav">
+              <LanguageSwitcher className="language-switcher--drawer" />
+
+              <nav
+                aria-label={t('nav.mobilePrimaryLabel')}
+                className="mobile-drawer__nav"
+              >
                 {primaryLinks.map((link) => (
                   <NavLink
                     className={drawerLinkClassName}
@@ -175,20 +164,16 @@ function Navbar() {
                     {link.label}
                   </NavLink>
                 ))}
-                <NavLink
-                  className={drawerLinkClassName}
-                  onClick={closeDrawer}
-                  to="/faq"
-                >
-                  FAQ
-                </NavLink>
-                <NavLink
-                  className={drawerLinkClassName}
-                  onClick={closeDrawer}
-                  to="/catalog"
-                >
-                  Book now
-                </NavLink>
+                {mobileExtraLinks.map((link) => (
+                  <NavLink
+                    className={drawerLinkClassName}
+                    key={link.to}
+                    onClick={closeDrawer}
+                    to={link.to}
+                  >
+                    {link.label}
+                  </NavLink>
+                ))}
               </nav>
             </MotionAside>
           </MotionDiv>

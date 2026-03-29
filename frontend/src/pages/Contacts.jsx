@@ -1,47 +1,41 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import PageVisualStack from '../components/PageVisualStack'
 import { pageMedia } from '../content/mediaLibrary'
-import { contactHighlights } from '../content/siteContent'
 
 function Contacts() {
+  const { t } = useTranslation()
+  const contactHighlights = t('contacts.highlights', { returnObjects: true })
+  const contactSummary = t('contacts.summary', { returnObjects: true })
+
   return (
     <div className="content-page">
       <section className="page-hero scene scene--destination">
         <div className="page-hero__grid">
           <div className="page-hero__content">
-            <span className="page-eyebrow">Contacts</span>
-            <h1>Contact the team and plan the request with the right pickup context.</h1>
-            <p>
-              The site is the main booking channel. Once the request is in, the team
-              follows up directly to confirm availability, pickup timing, and the handoff
-              point.
-            </p>
+            <span className="page-eyebrow">{t('contacts.eyebrow')}</span>
+            <h1>{t('contacts.title')}</h1>
+            <p>{t('contacts.description')}</p>
           </div>
 
           <PageVisualStack
             primary={pageMedia.sunsetArrival}
-            primaryAlt="Premium arrival forecourt for airport and hotel pickup coordination"
-            primaryCaption="Airport and hotel pickup agreed after review"
+            primaryAlt={t('contacts.visuals.primaryAlt')}
+            primaryCaption={t('contacts.visuals.primaryCaption')}
             secondary={pageMedia.coastalHighway}
-            secondaryAlt="Coastal route supporting the wider service area"
-            secondaryCaption="Service built around resort, hotel, and private handoff"
+            secondaryAlt={t('contacts.visuals.secondaryAlt')}
+            secondaryCaption={t('contacts.visuals.secondaryCaption')}
           />
         </div>
 
         <div className="contact-summary">
-          <div className="contact-summary__item">
-            <span>Primary channel</span>
-            <strong>Online booking request</strong>
-          </div>
-          <div className="contact-summary__item">
-            <span>Service hours</span>
-            <strong>Daily, 08:00 to 22:00</strong>
-          </div>
-          <div className="contact-summary__item">
-            <span>Coverage</span>
-            <strong>Resort, hotel, airport, and private pickup by arrangement</strong>
-          </div>
+          {contactSummary.map((item) => (
+            <div className="contact-summary__item" key={item.label}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -58,19 +52,16 @@ function Contacts() {
 
       <section className="cta-panel" id="request">
         <div>
-          <h2>Need the fastest response?</h2>
-          <p>
-            Open the fleet, choose the car, and send the dates. That gives the team the
-            context needed to confirm the request quickly.
-          </p>
+          <h2>{t('contacts.ctaTitle')}</h2>
+          <p>{t('contacts.ctaDescription')}</p>
         </div>
 
         <div className="button-row">
           <Link className="button button--primary" to="/catalog">
-            Start a request
+            {t('common.actions.startRequest')}
           </Link>
           <Link className="button button--secondary" to="/faq">
-            Read the FAQ
+            {t('common.actions.readFaq')}
           </Link>
         </div>
       </section>

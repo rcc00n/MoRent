@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import CarCard from '../components/CarCard'
 import LoadingFleet from '../components/LoadingFleet'
@@ -11,9 +12,11 @@ import { getCars } from '../shared/api'
 const MotionSection = motion.section
 
 function Catalog() {
+  const { t } = useTranslation()
   const [cars, setCars] = useState([])
   const [isLoading, setIsLoading] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [hasLoadError, setHasLoadError] = useState(false)
+  const infoCards = t('catalog.infoCards', { returnObjects: true })
 
   useEffect(() => {
     let isMounted = true
@@ -27,7 +30,7 @@ function Catalog() {
         }
       } catch {
         if (isMounted) {
-          setErrorMessage('Unable to load the catalog.')
+          setHasLoadError(true)
         }
       } finally {
         if (isMounted) {
@@ -54,57 +57,50 @@ function Catalog() {
         <div className="catalog-intro__top">
           <div className="section-header section-header--split">
             <div>
-              <h1>Premium fleet with visible daily rates.</h1>
+              <h1>{t('catalog.title')}</h1>
             </div>
-            <p>
-              Choose the car first, review the daily rate, and move into the request
-              only when the timing works for the trip.
-            </p>
+            <p>{t('catalog.description')}</p>
           </div>
 
           <PageVisualStack
             className="catalog-intro__visual"
             primary={pageMedia.coastalHighway}
-            primaryAlt="Premium coastal highway for resort arrivals and scenic drives"
-            primaryCaption="Coastal arrival routes planned around your pickup"
+            primaryAlt={t('catalog.visuals.primaryAlt')}
+            primaryCaption={t('catalog.visuals.primaryCaption')}
             secondary={pageMedia.mercedesInterior}
-            secondaryAlt="Premium interior prepared for a direct handoff"
-            secondaryCaption="Comfort-first fleet presentation before the request"
+            secondaryAlt={t('catalog.visuals.secondaryAlt')}
+            secondaryCaption={t('catalog.visuals.secondaryCaption')}
           />
         </div>
 
         <div className="info-grid info-grid--compact">
-          <article className="info-card">
-            <h2>Visible pricing</h2>
-            <p>Daily rates stay clear before the request starts.</p>
-          </article>
-          <article className="info-card">
-            <h2>Fast review</h2>
-            <p>Most requests are checked within about 15 minutes during service hours.</p>
-          </article>
-          <article className="info-card">
-            <h2>Pickup support</h2>
-            <p>Hotel, airport, and private handoff points are agreed after confirmation.</p>
-          </article>
+          {infoCards.map((card) => (
+            <article className="info-card" key={card.title}>
+              <h2>{card.title}</h2>
+              <p>{card.description}</p>
+            </article>
+          ))}
         </div>
 
         <div className="button-row">
           <Link className="button button--secondary" to="/how-it-works">
-            How booking works
+            {t('common.actions.howBookingWorks')}
           </Link>
           <Link className="button button--secondary" to="/contacts">
-            Service details
+            {t('common.actions.serviceDetails')}
           </Link>
         </div>
       </MotionSection>
 
       {isLoading ? <LoadingFleet count={6} /> : null}
-      {!isLoading && errorMessage ? (
-        <div className="empty-state">{errorMessage}</div>
+      {!isLoading && hasLoadError ? (
+        <div className="empty-state">{t('common.errors.catalog')}</div>
       ) : null}
-      {!isLoading && !errorMessage ? (
+      {!isLoading && !hasLoadError ? (
         <>
-          <p className="muted-text">{cars.length} cars available right now.</p>
+          <p className="muted-text">
+            {t('common.labels.carsAvailable', { count: cars.length })}
+          </p>
           <div className="cars-grid">
             {cars.map((car) => (
               <CarCard car={car} key={car.id} />

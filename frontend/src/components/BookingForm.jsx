@@ -1,5 +1,6 @@
 import { startTransition, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import { createBooking } from '../shared/api'
 
@@ -17,50 +18,41 @@ const initialTouchedState = {
   end_date: false,
 }
 
-function extractErrorMessage(error) {
-  if (!error?.response?.data) {
-    return 'Unable to submit the booking right now.'
-  }
-
-  const entries = Object.entries(error.response.data)
-  if (!entries.length) {
-    return 'Unable to submit the booking right now.'
-  }
-
-  const [, value] = entries[0]
-  return Array.isArray(value) ? value[0] : value
+function extractErrorMessage(_error, fallbackMessage) {
+  return fallbackMessage
 }
 
-function validateBookingForm(formData) {
+function validateBookingForm(formData, t) {
   const errors = {}
   const phoneDigits = formData.phone.replace(/\D/g, '')
 
   if (!formData.name.trim()) {
-    errors.name = 'Enter the driver name.'
+    errors.name = t('bookingForm.validation.nameRequired')
   } else if (formData.name.trim().length < 2) {
-    errors.name = 'Name looks too short.'
+    errors.name = t('bookingForm.validation.nameShort')
   }
 
   if (!formData.phone.trim()) {
-    errors.phone = 'Enter a phone number.'
+    errors.phone = t('bookingForm.validation.phoneRequired')
   } else if (phoneDigits.length < 10) {
-    errors.phone = 'Use at least 10 digits for contact.'
+    errors.phone = t('bookingForm.validation.phoneShort')
   }
 
   if (!formData.start_date) {
-    errors.start_date = 'Choose a start date.'
+    errors.start_date = t('bookingForm.validation.startDateRequired')
   }
 
   if (!formData.end_date) {
-    errors.end_date = 'Choose an end date.'
+    errors.end_date = t('bookingForm.validation.endDateRequired')
   } else if (formData.start_date && formData.end_date < formData.start_date) {
-    errors.end_date = 'End date must be after the start date.'
+    errors.end_date = t('bookingForm.validation.endDateAfterStart')
   }
 
   return errors
 }
 
 function BookingForm({ carId, carName }) {
+  const { t } = useTranslation()
   const [formData, setFormData] = useState(initialFormState)
   const [touchedFields, setTouchedFields] = useState(initialTouchedState)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -68,7 +60,7 @@ function BookingForm({ carId, carName }) {
   const location = useLocation()
   const navigate = useNavigate()
   const today = new Date().toISOString().slice(0, 10)
-  const fieldErrors = validateBookingForm(formData)
+  const fieldErrors = validateBookingForm(formData, t)
 
   function handleChange(event) {
     const { name, value } = event.target
@@ -106,8 +98,8 @@ function BookingForm({ carId, carName }) {
     if (Object.keys(fieldErrors).length) {
       setFeedback({
         type: 'error',
-        title: 'Please review the form',
-        message: 'A few fields still need attention before we can check availability.',
+        title: t('bookingForm.feedback.reviewTitle'),
+        message: t('bookingForm.feedback.reviewMessage'),
       })
       setIsSubmitting(false)
       return
@@ -143,8 +135,8 @@ function BookingForm({ carId, carName }) {
     } catch (error) {
       setFeedback({
         type: 'error',
-        title: 'Unable to send the request',
-        message: extractErrorMessage(error),
+        title: t('bookingForm.feedback.requestErrorTitle'),
+        message: extractErrorMessage(error, t('common.errors.booking')),
       })
     } finally {
       setIsSubmitting(false)
@@ -154,9 +146,9 @@ function BookingForm({ carId, carName }) {
   return (
     <form className="booking-form" onSubmit={handleSubmit}>
       <div>
-        <h2>Check availability for {carName}</h2>
+        <h2>{t('bookingForm.title', { carName })}</h2>
         <p className="muted-text">
-          Send your dates and contact details. No payment is required to request the car.
+          {t('bookingForm.description')}
         </p>
       </div>
 
@@ -168,14 +160,14 @@ function BookingForm({ carId, carName }) {
               : 'field field--full'
           }
         >
-          <label htmlFor="name">Full name</label>
+          <label htmlFor="name">{t('bookingForm.fields.name')}</label>
           <input
             aria-invalid={Boolean(touchedFields.name && fieldErrors.name)}
             id="name"
             name="name"
             onBlur={handleBlur}
             onChange={handleChange}
-            placeholder="Your name"
+            placeholder={t('bookingForm.fields.namePlaceholder')}
             required
             value={formData.name}
           />
@@ -191,14 +183,14 @@ function BookingForm({ carId, carName }) {
               : 'field field--full'
           }
         >
-          <label htmlFor="phone">Phone</label>
+          <label htmlFor="phone">{t('bookingForm.fields.phone')}</label>
           <input
             aria-invalid={Boolean(touchedFields.phone && fieldErrors.phone)}
             id="phone"
             name="phone"
             onBlur={handleBlur}
             onChange={handleChange}
-            placeholder="+7 999 123 45 67"
+            placeholder={t('bookingForm.fields.phonePlaceholder')}
             required
             type="tel"
             value={formData.phone}
@@ -215,7 +207,7 @@ function BookingForm({ carId, carName }) {
               : 'field'
           }
         >
-          <label htmlFor="start_date">Start date</label>
+          <label htmlFor="start_date">{t('bookingForm.fields.startDate')}</label>
           <input
             aria-invalid={Boolean(touchedFields.start_date && fieldErrors.start_date)}
             id="start_date"
@@ -239,7 +231,7 @@ function BookingForm({ carId, carName }) {
               : 'field'
           }
         >
-          <label htmlFor="end_date">End date</label>
+          <label htmlFor="end_date">{t('bookingForm.fields.endDate')}</label>
           <input
             aria-invalid={Boolean(touchedFields.end_date && fieldErrors.end_date)}
             id="end_date"
@@ -276,15 +268,14 @@ function BookingForm({ carId, carName }) {
           {isSubmitting ? (
             <>
               <span aria-hidden="true" className="button__spinner"></span>
-              Checking...
+              {t('bookingForm.submitLoading')}
             </>
           ) : (
-            'Book now'
+            t('bookingForm.submitIdle')
           )}
         </button>
         <p className="booking-form__note muted-text">
-          Prefer to decide first? The request only checks availability and starts the
-          manager callback.
+          {t('bookingForm.note')}
         </p>
       </div>
     </form>

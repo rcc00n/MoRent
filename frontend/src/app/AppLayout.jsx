@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Outlet, useLocation, useNavigationType } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import CustomCursor from '../components/CustomCursor'
 import Navbar from '../components/Navbar'
@@ -35,10 +36,15 @@ const pageTransitionVariants = {
 }
 
 function AppLayout() {
+  const { i18n } = useTranslation()
   const location = useLocation()
   const navigationType = useNavigationType()
   const siteUrl = getRuntimeSiteUrl()
-  const pageMetadata = getPageMetadata(location.pathname, siteUrl)
+  const pageMetadata = getPageMetadata(
+    location.pathname,
+    siteUrl,
+    i18n.resolvedLanguage,
+  )
 
   useEffect(() => {
     if (location.hash) {

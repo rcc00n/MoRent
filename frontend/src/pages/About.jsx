@@ -1,31 +1,31 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import PageVisualStack from '../components/PageVisualStack'
 import { pageMedia } from '../content/mediaLibrary'
-import { aboutPrinciples, aboutStats } from '../content/siteContent'
 
 function About() {
+  const { t } = useTranslation()
+  const aboutStats = t('about.stats', { returnObjects: true })
+  const aboutPrinciples = t('about.principles', { returnObjects: true })
+
   return (
     <div className="content-page">
       <section className="page-hero scene scene--fleet">
         <div className="page-hero__grid">
           <div className="page-hero__content">
-            <span className="page-eyebrow">About MoRent</span>
-            <h1>Premium coastal car rental designed to feel calm, clear, and direct.</h1>
-            <p>
-              MoRent is built around a short decision path: visible daily rates, a
-              curated fleet, and direct request handling for resort arrivals, hotel
-              delivery, and private pickup coordination.
-            </p>
+            <span className="page-eyebrow">{t('about.eyebrow')}</span>
+            <h1>{t('about.title')}</h1>
+            <p>{t('about.description')}</p>
           </div>
 
           <PageVisualStack
             primary={pageMedia.sunsetCoast}
-            primaryAlt="Sunset coastal road matching the MoRent premium travel mood"
-            primaryCaption="Calm travel mood, premium fleet, direct handoff"
+            primaryAlt={t('about.visuals.primaryAlt')}
+            primaryCaption={t('about.visuals.primaryCaption')}
             secondary={pageMedia.compactCoastal}
-            secondaryAlt="Seafront coastal road used to frame the premium resort context"
-            secondaryCaption="Built for hotel arrivals and coastal escapes"
+            secondaryAlt={t('about.visuals.secondaryAlt')}
+            secondaryCaption={t('about.visuals.secondaryCaption')}
           />
         </div>
 
@@ -42,12 +42,9 @@ function About() {
       <section className="page-section">
         <div className="section-header section-header--split">
           <div>
-            <h2>Why the service feels different</h2>
+            <h2>{t('about.sectionTitle')}</h2>
           </div>
-          <p>
-            The business is structured around fewer cars, clearer pricing, and a manual
-            handoff process that protects the premium experience.
-          </p>
+          <p>{t('about.sectionDescription')}</p>
         </div>
 
         <div className="info-grid">
@@ -62,19 +59,16 @@ function About() {
 
       <section className="cta-panel">
         <div>
-          <h2>Ready to choose the car?</h2>
-          <p>
-            The fleet stays concise on purpose. Open the catalog and send the request
-            when the timing feels right.
-          </p>
+          <h2>{t('about.ctaTitle')}</h2>
+          <p>{t('about.ctaDescription')}</p>
         </div>
 
         <div className="button-row">
           <Link className="button button--primary" to="/catalog">
-            View the fleet
+            {t('common.actions.viewFleet')}
           </Link>
           <Link className="button button--secondary" to="/contacts">
-            Contact details
+            {t('common.actions.contactDetails')}
           </Link>
         </div>
       </section>

@@ -1,4 +1,4 @@
-import { faqItems } from '../content/siteContent.js'
+import { getDictionary } from '../i18n/resources/index.js'
 import {
   buildAbsoluteUrl,
   normalizePathname,
@@ -7,17 +7,14 @@ import {
 
 const pageMetadataRegistry = {
   '/': {
-    title: 'MoRent | Premium Coastal Car Rental With Visible Daily Rates',
-    description:
-      'Discover premium coastal car rental with visible daily rates, a curated fleet, and a fast request flow for resort, hotel, and airport pickup.',
-    structuredData: (siteUrl) => [
+    key: 'home',
+    structuredData: (siteUrl, dictionary) => [
       {
         '@context': 'https://schema.org',
         '@type': 'Organization',
         name: SITE_NAME,
         url: buildAbsoluteUrl('/', siteUrl),
-        description:
-          'Premium coastal car rental with visible daily rates and direct booking requests.',
+        description: dictionary.metadata.organizationDescription,
       },
       {
         '@context': 'https://schema.org',
@@ -28,33 +25,23 @@ const pageMetadataRegistry = {
     ],
   },
   '/catalog': {
-    title: 'Fleet | Premium Coastal Rental Cars With Visible Rates | MoRent',
-    description:
-      'Browse the MoRent fleet, compare visible daily rates, and request premium cars for coastal, resort, and airport pickup plans.',
+    key: 'catalog',
   },
   '/how-it-works': {
-    title: 'How Booking Works | Fast Premium Car Request Flow | MoRent',
-    description:
-      'See how MoRent booking requests work, from choosing the car and dates to direct confirmation and coordinated pickup.',
+    key: 'howItWorks',
   },
   '/about': {
-    title: 'About MoRent | Premium Coastal Car Rental',
-    description:
-      'Learn how MoRent approaches premium coastal car rental with a curated fleet, visible rates, and direct request handling.',
+    key: 'about',
   },
   '/contacts': {
-    title: 'Contacts | Coastal Pickup and Booking Support | MoRent',
-    description:
-      'Find MoRent service details, booking support information, service hours, and pickup coordination guidance for your request.',
+    key: 'contacts',
   },
   '/faq': {
-    title: 'FAQ | Premium Car Rental Questions Answered | MoRent',
-    description:
-      'Read concise answers about booking, visible daily rates, confirmation timing, pickup arrangement, and required documents.',
-    structuredData: () => ({
+    key: 'faq',
+    structuredData: (_siteUrl, dictionary) => ({
       '@context': 'https://schema.org',
       '@type': 'FAQPage',
-      mainEntity: faqItems.map((item) => ({
+      mainEntity: dictionary.faq.items.map((item) => ({
         '@type': 'Question',
         name: item.question,
         acceptedAnswer: {
@@ -65,64 +52,75 @@ const pageMetadataRegistry = {
     }),
   },
   '/terms': {
-    title: 'Terms and Legal Information | MoRent',
-    description:
-      'Review MoRent rental terms, booking confirmation notes, pricing guidance, vehicle use rules, and cancellation principles.',
+    key: 'terms',
   },
   '/privacy': {
-    title: 'Privacy Policy | Booking Request Data Handling | MoRent',
-    description:
-      'Understand how MoRent handles booking request data, service follow-up, and operational information used for enquiries.',
+    key: 'privacy',
   },
   '/request-received': {
-    title: 'Request Received | MoRent',
-    description:
-      'Your booking request has been received and is being reviewed by the MoRent team.',
+    key: 'requestReceived',
     robots: 'noindex,follow',
     shouldIndex: false,
   },
 }
 
-const defaultMetadata = {
-  title: 'MoRent | Premium Car Rental',
-  description:
-    'Explore premium car rental with a curated fleet, visible daily rates, and a direct booking request flow.',
-}
-
-export function getPageMetadata(pathname, siteUrl) {
-  const normalizedPathname = normalizePathname(pathname)
-  const pageMetadata = pageMetadataRegistry[normalizedPathname] || defaultMetadata
+function getLocalizedPageCopy(pathname, language) {
+  const dictionary = getDictionary(language)
+  const registryEntry =
+    pageMetadataRegistry[normalizePathname(pathname)] || {}
+  const metadataKey = registryEntry.key
 
   return {
-    title: pageMetadata.title,
-    description: pageMetadata.description,
-    robots: pageMetadata.robots || 'index,follow',
+    dictionary,
+    entry: registryEntry,
+    pageCopy: metadataKey
+      ? dictionary.metadata.pages[metadataKey]
+      : dictionary.metadata.default,
+  }
+}
+
+export function getPageMetadata(pathname, siteUrl, language = 'en') {
+  const normalizedPathname = normalizePathname(pathname)
+  const { dictionary, entry, pageCopy } = getLocalizedPageCopy(
+    normalizedPathname,
+    language,
+  )
+
+  return {
+    title: pageCopy.title,
+    description: pageCopy.description,
+    robots: entry.robots || 'index,follow',
     canonicalUrl: buildAbsoluteUrl(normalizedPathname, siteUrl),
     url: buildAbsoluteUrl(normalizedPathname, siteUrl),
-    ogType: pageMetadata.ogType || 'website',
-    shouldIndex: pageMetadata.shouldIndex !== false,
-    structuredData: pageMetadata.structuredData
-      ? pageMetadata.structuredData(siteUrl)
+    ogType: entry.ogType || 'website',
+    shouldIndex: entry.shouldIndex !== false,
+    structuredData: entry.structuredData
+      ? entry.structuredData(siteUrl, dictionary)
       : null,
   }
 }
 
-export function getStaticPageEntries(siteUrl) {
+export function getStaticPageEntries(siteUrl, language = 'en') {
   return Object.keys(pageMetadataRegistry).map((pathname) => ({
     pathname,
-    metadata: getPageMetadata(pathname, siteUrl),
+    metadata: getPageMetadata(pathname, siteUrl, language),
   }))
 }
 
-export function getCarPageMetadata(car, siteUrl) {
+export function getCarPageMetadata(car, siteUrl, language = 'en') {
+  const dictionary = getDictionary(language)
+  const localizedCarDescription =
+    (car.translationKey && dictionary.cars?.[car.translationKey]?.description) ||
+    car.description
   const carName = `${car.brand} ${car.model}`
   const canonicalUrl = buildAbsoluteUrl(`/car/${car.id}`, siteUrl)
+  const metadataCopy = dictionary.metadata.pages.car
 
   return {
-    title: `${carName} | Premium Rental Car | MoRent`,
+    title: metadataCopy.title.replace('{{carName}}', carName),
     description:
-      car.description ||
-      `View ${carName}, review the daily rate, and send a direct booking request with MoRent.`,
+      localizedCarDescription ||
+      metadataCopy.fallbackDescription.replace('{{carName}}', carName),
     robots: 'index,follow',
     canonicalUrl,
     url: canonicalUrl,
@@ -137,8 +135,7 @@ export function getCarPageMetadata(car, siteUrl) {
       },
       model: car.model,
       description:
-        car.description ||
-        `Premium rental car available through the MoRent booking request flow.`,
+        localizedCarDescription || metadataCopy.structuredFallbackDescription,
       url: canonicalUrl,
     },
   }

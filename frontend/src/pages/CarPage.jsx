@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link, useParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import BookingForm from '../components/BookingForm'
 import Seo from '../components/Seo'
@@ -11,16 +12,17 @@ import { getCar } from '../shared/api'
 
 const MotionDiv = motion.div
 
-function formatPrice(price) {
-  return `${Number(price).toFixed(0)} / day`
+function formatPrice(price, suffix) {
+  return `${Number(price).toFixed(0)} ${suffix}`
 }
 
 function CarPage() {
   const { id } = useParams()
+  const { i18n, t } = useTranslation()
   const [car, setCar] = useState(null)
   const [activeImage, setActiveImage] = useState('')
   const [isLoading, setIsLoading] = useState(true)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [hasLoadError, setHasLoadError] = useState(false)
   const siteUrl = getRuntimeSiteUrl()
 
   useEffect(() => {
@@ -37,7 +39,7 @@ function CarPage() {
         }
       } catch {
         if (isMounted) {
-          setErrorMessage('Unable to load this car.')
+          setHasLoadError(true)
         }
       } finally {
         if (isMounted) {
@@ -56,14 +58,18 @@ function CarPage() {
   const galleryImages = [...new Set([car?.primaryImage, ...(car?.gallery || [])].filter(Boolean))]
   const currentImage =
     galleryImages.find((image) => image === activeImage) || galleryImages[0] || car?.image
+  const carDescription =
+    car?.translationKey
+      ? t(`cars.${car.translationKey}.description`, { defaultValue: car.description })
+      : car?.description
 
   if (isLoading) {
     return (
       <>
         <Seo
           canonicalUrl={`${siteUrl}/catalog`}
-          description="Open the premium MoRent fleet, review car details, and send a direct booking request."
-          title="Premium Rental Car Details | MoRent"
+          description={t('metadata.pages.carLoading.description')}
+          title={t('metadata.pages.carLoading.title')}
           url={`${siteUrl}/catalog`}
         />
         <div className="loading-shell loading-shell--panel" aria-hidden="true">
@@ -75,26 +81,27 @@ function CarPage() {
     )
   }
 
-  if (errorMessage || !car) {
+  if (hasLoadError || !car) {
     return (
       <>
         <Seo
           canonicalUrl={`${siteUrl}/catalog`}
-          description="The requested car could not be loaded. Browse the active premium fleet instead."
-          title="Car Not Found | MoRent"
+          description={t('metadata.pages.carNotFound.description')}
+          title={t('metadata.pages.carNotFound.title')}
           url={`${siteUrl}/catalog`}
         />
         <div className="empty-state">
-          <p>{errorMessage || 'Car not found.'}</p>
+          <p>{hasLoadError ? t('common.errors.car') : t('common.errors.carNotFound')}</p>
           <Link className="button button--secondary" to="/catalog">
-            Back to catalog
+            {t('common.actions.backToCatalog')}
           </Link>
         </div>
       </>
     )
   }
 
-  const pageMetadata = getCarPageMetadata(car, siteUrl)
+  const pageMetadata = getCarPageMetadata(car, siteUrl, i18n.resolvedLanguage)
+  const supportCards = t('carPage.supportCards', { returnObjects: true })
 
   return (
     <>
@@ -117,7 +124,10 @@ function CarPage() {
               <div className="car-page__gallery-strip">
                 {galleryImages.map((image, index) => (
                   <button
-                    aria-label={`View ${car.brand} ${car.model} photo ${index + 1}`}
+                    aria-label={t('common.aria.viewCarPhoto', {
+                      carName: `${car.brand} ${car.model}`,
+                      index: index + 1,
+                    })}
                     className={
                       image === currentImage
                         ? 'car-page__thumbnail is-active'
@@ -146,17 +156,21 @@ function CarPage() {
                 <h1 className="car-page__title">
                   {car.brand} {car.model}
                 </h1>
-                <p className="muted-text">{car.description}</p>
+                <p className="muted-text">{carDescription}</p>
               </div>
               <span
                 className={
                   car.available ? 'badge badge--available' : 'badge badge--unavailable'
                 }
               >
-                {car.available ? 'Available' : 'Booked'}
+                {car.available
+                  ? t('common.status.available')
+                  : t('common.status.booked')}
               </span>
             </div>
-            <p className="price">{formatPrice(car.price_per_day)}</p>
+            <p className="price">
+              {formatPrice(car.price_per_day, t('common.pricing.perDay'))}
+            </p>
           </div>
         </MotionDiv>
 
@@ -170,23 +184,18 @@ function CarPage() {
 
         <div className="car-page__support">
           <article className="info-card">
-            <h2>What happens after the request?</h2>
-            <p>
-              The team reviews availability, confirms the timing, and arranges the pickup
-              details directly.
-            </p>
+            <h2>{supportCards[0].title}</h2>
+            <p>{supportCards[0].description}</p>
           </article>
           <article className="info-card">
-            <h2>Need the booking details first?</h2>
-            <p>
-              Review the booking flow and FAQ before you submit the dates.
-            </p>
+            <h2>{supportCards[1].title}</h2>
+            <p>{supportCards[1].description}</p>
             <div className="button-row">
               <Link className="button button--secondary" to="/how-it-works">
-                How it works
+                {t('common.actions.howItWorks')}
               </Link>
               <Link className="button button--secondary" to="/faq">
-                FAQ
+                {t('common.actions.readFaq')}
               </Link>
             </div>
           </article>

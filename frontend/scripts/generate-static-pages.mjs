@@ -123,7 +123,7 @@ Sitemap: ${buildAbsoluteUrl('/sitemap.xml', siteUrl)}
 
 async function main() {
   const baseHtml = await readFile(indexHtmlPath, 'utf8')
-  const pageEntries = getStaticPageEntries(siteUrl)
+  const pageEntries = getStaticPageEntries(siteUrl, 'en')
 
   await Promise.all(
     pageEntries.map((entry) =>

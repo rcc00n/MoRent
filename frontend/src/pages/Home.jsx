@@ -5,6 +5,7 @@ import {
   useScroll,
   useTransform,
 } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
 
 import CarCard from '../components/CarCard'
 import DotFieldCanvas from '../components/DotFieldCanvas'
@@ -13,7 +14,6 @@ import LoadingFleet from '../components/LoadingFleet'
 import MagneticAction from '../components/MagneticAction'
 import coastalRoadHero from '../assets/coastal-road-hero.webp'
 import { enrichCarMedia, pageMedia } from '../content/mediaLibrary'
-import { faqItems } from '../content/siteContent'
 import { getCars } from '../shared/api'
 import {
   resetInteractiveGlow,
@@ -29,51 +29,6 @@ const MotionSection = motion.section
 
 const premiumEase = [0.22, 1, 0.36, 1]
 const viewportSettings = { once: true, amount: 0.24 }
-
-const proofItems = [
-  {
-    value: '15 min',
-    title: 'Average response',
-    description: 'Availability moves fast.',
-  },
-  {
-    value: 'Daily',
-    title: 'Visible day rates',
-    description: 'Rates stay readable first.',
-  },
-  {
-    value: '100%',
-    title: 'Verified fleet',
-    description: 'Every listed car is checked.',
-  },
-]
-
-const processItems = [
-  {
-    title: 'See the car.',
-    description: 'Open the fleet and inspect the exact car first.',
-    href: '#featured-cars',
-    tone: 'fleet',
-  },
-  {
-    title: 'Trust the rate.',
-    description: 'Read the day rate before the request starts.',
-    href: '#rate-clarity',
-    tone: 'pricing',
-  },
-  {
-    title: 'Send the request.',
-    description: 'Choose the dates and send confirmation in minutes.',
-    href: '#booking-path',
-    tone: 'signal',
-  },
-]
-
-const bookingSteps = [
-  'Choose the car',
-  'Check the dates',
-  'Send the request',
-]
 
 const heroContentVariants = {
   hidden: {
@@ -332,8 +287,8 @@ const closingStepVariants = {
 let featuredCarsCache = null
 let featuredCarsRequest = null
 
-function formatPrice(price) {
-  return `${Number(price).toFixed(0)} / day`
+function formatPrice(price, suffix) {
+  return `${Number(price).toFixed(0)} ${suffix}`
 }
 
 function loadFeaturedCars() {
@@ -357,9 +312,10 @@ function loadFeaturedCars() {
 }
 
 function Home() {
+  const { t } = useTranslation()
   const [cars, setCars] = useState(() => featuredCarsCache ?? [])
   const [isLoading, setIsLoading] = useState(() => featuredCarsCache === null)
-  const [errorMessage, setErrorMessage] = useState('')
+  const [hasLoadError, setHasLoadError] = useState(false)
   const heroRef = useRef(null)
   const shouldReduceMotion = useReducedMotion()
   const { scrollYProgress } = useScroll({
@@ -372,6 +328,10 @@ function Home() {
   const beamY = useTransform(scrollYProgress, [0, 1], [0, -8])
   const coastalY = useTransform(scrollYProgress, [0, 1], [0, shouldReduceMotion ? 0 : 18])
   const visualY = useTransform(scrollYProgress, [0, 1], [0, -6])
+  const proofItems = t('home.benefits.proofItems', { returnObjects: true })
+  const processItems = t('home.benefits.processItems', { returnObjects: true })
+  const bookingSteps = t('home.closing.steps', { returnObjects: true })
+  const faqItems = t('faq.items', { returnObjects: true })
 
   useEffect(() => {
     let active = true
@@ -395,7 +355,7 @@ function Home() {
           return
         }
 
-        setErrorMessage('Unable to load featured cars.')
+        setHasLoadError(true)
       })
       .finally(() => {
         if (active) {
@@ -450,19 +410,17 @@ function Home() {
             variants={heroContentVariants}
           >
             <MotionHeading className="hero__headline">
-              Premium coastal car rental with visible rates and a fast booking path.
+              {t('home.hero.title')}
             </MotionHeading>
 
-            <p className="hero__description">
-              Choose the car, check the day rate, and send the request before pickup.
-            </p>
+            <p className="hero__description">{t('home.hero.description')}</p>
 
             <div className="button-row button-row--hero">
               <MagneticAction className="button button--primary" to="/catalog">
-                Book now
+                {t('common.actions.bookNow')}
               </MagneticAction>
               <MagneticAction className="button button--secondary" href="#featured-cars">
-                Check availability
+                {t('common.actions.checkAvailability')}
               </MagneticAction>
             </div>
           </MotionDiv>
@@ -490,7 +448,9 @@ function Home() {
                       src={heroCar.image}
                     />
                     <div className="hero__visual-note">
-                      <strong>{formatPrice(heroCar.price_per_day)}</strong>
+                      <strong>
+                        {formatPrice(heroCar.price_per_day, t('common.pricing.perDay'))}
+                      </strong>
                     </div>
                   </>
                 ) : (
@@ -511,9 +471,7 @@ function Home() {
         whileInView="visible"
       >
         <div className="signal-section__intro">
-          <h2 id="motion-field-heading">
-            A grand tourer in motion.
-          </h2>
+          <h2 id="motion-field-heading">{t('home.signal.title')}</h2>
         </div>
 
         <MotionDiv className="signal-section__visual" variants={signalCanvasVariants}>
@@ -534,20 +492,16 @@ function Home() {
           variants={sectionSlideVariants}
         >
           <div>
-            <h2 id="featured-cars-heading">
-              Check availability for the cars booked first.
-            </h2>
+            <h2 id="featured-cars-heading">{t('home.featured.title')}</h2>
           </div>
-          <p>
-            Open any car and move straight into dates.
-          </p>
+          <p>{t('home.featured.description')}</p>
         </MotionDiv>
 
         {isLoading ? <LoadingFleet count={3} /> : null}
-        {!isLoading && errorMessage ? (
-          <div className="empty-state">{errorMessage}</div>
+        {!isLoading && hasLoadError ? (
+          <div className="empty-state">{t('common.errors.featuredCars')}</div>
         ) : null}
-        {!isLoading && !errorMessage ? (
+        {!isLoading && !hasLoadError ? (
           <MotionDiv
             className="cars-grid"
             variants={fleetCardsContainerVariants}
@@ -560,11 +514,11 @@ function Home() {
           </MotionDiv>
         ) : null}
 
-        {!isLoading && !errorMessage ? (
+        {!isLoading && !hasLoadError ? (
           <MotionDiv className="section-cta" variants={sectionRevealVariants}>
-            <p className="muted-text">Need more options? Open the full fleet.</p>
+            <p className="muted-text">{t('home.featured.moreOptions')}</p>
             <MagneticAction className="button button--secondary" to="/catalog">
-              View all cars
+              {t('common.actions.viewAllCars')}
             </MagneticAction>
           </MotionDiv>
         ) : null}
@@ -584,7 +538,7 @@ function Home() {
           variants={sectionSlideVariants}
         >
           <MotionImage
-            alt="Seafront resort with a calm bay and sunset light"
+            alt={t('home.destination.imageAlt')}
             className="destination-section__image"
             decoding="async"
             loading="lazy"
@@ -595,10 +549,8 @@ function Home() {
         </MotionDiv>
 
         <MotionDiv className="destination-section__content" variants={sectionRevealVariants}>
-          <h2>Seafront light. Calm pickup. Premium cars ready for the coast.</h2>
-          <p>
-            Resort calm, direct booking, and a clean handoff from arrival to the road.
-          </p>
+          <h2>{t('home.destination.title')}</h2>
+          <p>{t('home.destination.description')}</p>
         </MotionDiv>
       </MotionSection>
 
@@ -615,10 +567,8 @@ function Home() {
             className="benefits-section__intro"
             variants={benefitsIntroVariants}
           >
-            <h2>See the car. Trust the rate. Send the request.</h2>
-            <p>
-              Exact fleet, readable day rates, direct confirmation.
-            </p>
+            <h2>{t('home.benefits.title')}</h2>
+            <p>{t('home.benefits.description')}</p>
           </MotionDiv>
 
           <MotionDiv className="benefits-proof" variants={benefitCardsContainerVariants}>
@@ -643,7 +593,7 @@ function Home() {
         <MotionDiv className="benefits-grid" variants={benefitCardsContainerVariants}>
           {processItems.map((item) => (
             <MotionAnchor
-              aria-label={`Jump to ${item.title.replace('.', '').toLowerCase()}`}
+              aria-label={item.title}
               className="benefit-card benefit-card--link interactive-surface interactive-surface--feature"
               data-cursor="interactive"
               href={item.href}
@@ -678,20 +628,17 @@ function Home() {
           variants={sectionSlideVariants}
         >
           <div>
-            <h2>Answers before the request starts.</h2>
+            <h2>{t('home.faqPreview.title')}</h2>
           </div>
-          <p>
-            Clear terms, visible rates, and a short review flow keep the booking path
-            readable.
-          </p>
+          <p>{t('home.faqPreview.description')}</p>
         </MotionDiv>
 
         <FaqList items={faqItems.slice(0, 4)} />
 
         <MotionDiv className="section-cta" variants={sectionRevealVariants}>
-          <p className="muted-text">Need the full detail set before you choose the car?</p>
+          <p className="muted-text">{t('home.faqPreview.moreDetails')}</p>
           <MagneticAction className="button button--secondary" to="/faq">
-            Open the full FAQ
+            {t('common.actions.openFullFaq')}
           </MagneticAction>
         </MotionDiv>
       </MotionSection>
@@ -705,10 +652,8 @@ function Home() {
       >
         <MotionDiv className="closing-cta__panel" variants={closingPanelVariants}>
           <div className="closing-cta__content">
-            <h2>Choose the dates. We confirm the rest.</h2>
-            <p>
-              Pick the car, choose the dates, send the request.
-            </p>
+            <h2>{t('home.closing.title')}</h2>
+            <p>{t('home.closing.description')}</p>
           </div>
 
           <div className="closing-cta__actions">
@@ -723,10 +668,10 @@ function Home() {
 
             <div className="button-row">
               <MagneticAction className="button button--primary" to="/catalog">
-                Book now
+                {t('common.actions.bookNow')}
               </MagneticAction>
               <MagneticAction className="button button--secondary" href="#featured-cars">
-                Check availability
+                {t('common.actions.checkAvailability')}
               </MagneticAction>
             </div>
           </div>

@@ -1,31 +1,30 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import PageVisualStack from '../components/PageVisualStack'
 import { pageMedia } from '../content/mediaLibrary'
-import { privacySections } from '../content/siteContent'
 
 function Privacy() {
+  const { t } = useTranslation()
+  const privacySections = t('privacy.sections', { returnObjects: true })
+
   return (
     <div className="content-page">
       <section className="page-hero scene scene--benefits">
         <div className="page-hero__grid">
           <div className="page-hero__content">
-            <span className="page-eyebrow">Privacy</span>
-            <h1>Privacy policy for booking requests and service follow-up.</h1>
-            <p>
-              MoRent keeps personal data collection focused on what is needed to review
-              availability, confirm the request, and manage future operational
-              workflows.
-            </p>
+            <span className="page-eyebrow">{t('privacy.eyebrow')}</span>
+            <h1>{t('privacy.title')}</h1>
+            <p>{t('privacy.description')}</p>
           </div>
 
           <PageVisualStack
             primary={pageMedia.mercedesInterior}
-            primaryAlt="Premium car interior supporting privacy and request-handling context"
-            primaryCaption="Only the details needed to review the request"
+            primaryAlt={t('privacy.visuals.primaryAlt')}
+            primaryCaption={t('privacy.visuals.primaryCaption')}
             secondary={pageMedia.sunsetArrival}
-            secondaryAlt="Arrival setting linked to service follow-up and request handling"
-            secondaryCaption="Operational follow-up stays tied to the booking journey"
+            secondaryAlt={t('privacy.visuals.secondaryAlt')}
+            secondaryCaption={t('privacy.visuals.secondaryCaption')}
           />
         </div>
       </section>
@@ -45,19 +44,16 @@ function Privacy() {
 
       <section className="cta-panel">
         <div>
-          <h2>Continue with the booking path</h2>
-          <p>
-            When you are ready, open the fleet and send the request with the dates you
-            want reviewed.
-          </p>
+          <h2>{t('privacy.ctaTitle')}</h2>
+          <p>{t('privacy.ctaDescription')}</p>
         </div>
 
         <div className="button-row">
           <Link className="button button--primary" to="/catalog">
-            View the fleet
+            {t('common.actions.viewFleet')}
           </Link>
           <Link className="button button--secondary" to="/terms">
-            Rental terms
+            {t('common.actions.rentalTerms')}
           </Link>
         </div>
       </section>

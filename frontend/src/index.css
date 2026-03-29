@@ -218,10 +218,43 @@ code {
   color: var(--color-text-muted);
   font-size: 0.95rem;
   font-weight: 600;
+  text-align: center;
+  line-height: 1.1;
 }
 
 .nav-link.active,
 .nav-link:hover {
+  color: var(--color-text);
+  background: rgba(46, 125, 255, 0.16);
+}
+
+.language-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  border: 1px solid rgba(151, 180, 234, 0.1);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.language-switcher--drawer {
+  width: fit-content;
+}
+
+.language-switcher__button {
+  min-width: 44px;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.language-switcher__button.is-active {
   color: var(--color-text);
   background: rgba(46, 125, 255, 0.16);
 }
@@ -314,6 +347,7 @@ code {
 .mobile-drawer__link {
   display: flex;
   align-items: center;
+  justify-content: center;
   min-height: 52px;
   padding: 0 16px;
   border: 1px solid rgba(177, 205, 255, 0.1);
@@ -558,6 +592,11 @@ code {
   line-height: 0.94;
 }
 
+html[lang='ru'] .hero h1 {
+  max-width: 12.5ch;
+  font-size: clamp(2.4rem, 4.2vw, 4.3rem);
+}
+
 .section-header h1 {
   font-size: clamp(3rem, 5.6vw, 5.2rem);
   line-height: 0.98;
@@ -737,8 +776,9 @@ code {
   border: 1px solid transparent;
   border-radius: 999px;
   font-weight: 700;
-  line-height: 1;
-  white-space: nowrap;
+  line-height: 1.15;
+  white-space: normal;
+  text-align: center;
   cursor: pointer;
   transition:
     transform 180ms ease,
@@ -1626,6 +1666,12 @@ code {
   font-size: clamp(2.3rem, 4vw, 4.1rem);
   line-height: 0.96;
   letter-spacing: -0.05em;
+}
+
+html[lang='ru'] .page-hero__content h1,
+html[lang='ru'] .thank-you h1 {
+  max-width: 15ch;
+  font-size: clamp(2.1rem, 3.7vw, 3.8rem);
 }
 
 .page-hero__content p,

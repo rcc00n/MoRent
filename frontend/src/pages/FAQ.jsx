@@ -1,31 +1,31 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import FaqList from '../components/FaqList'
 import PageVisualStack from '../components/PageVisualStack'
 import { pageMedia } from '../content/mediaLibrary'
-import { faqItems } from '../content/siteContent'
 
 function FAQ() {
+  const { t } = useTranslation()
+  const faqItems = t('faq.items', { returnObjects: true })
+
   return (
     <div className="content-page">
       <section className="page-hero scene scene--benefits">
         <div className="page-hero__grid">
           <div className="page-hero__content">
-            <span className="page-eyebrow">FAQ</span>
-            <h1>Questions people ask before they send the request.</h1>
-            <p>
-              This page keeps the booking path readable: how requests work, what gets
-              confirmed first, and what to expect after submission.
-            </p>
+            <span className="page-eyebrow">{t('faq.eyebrow')}</span>
+            <h1>{t('faq.title')}</h1>
+            <p>{t('faq.description')}</p>
           </div>
 
           <PageVisualStack
             primary={pageMedia.mercedesInterior}
-            primaryAlt="Premium interior image supporting comfort and service clarity"
-            primaryCaption="Clear answers before the booking starts"
+            primaryAlt={t('faq.visuals.primaryAlt')}
+            primaryCaption={t('faq.visuals.primaryCaption')}
             secondary={pageMedia.compactCoastal}
-            secondaryAlt="Coastal arrival route reinforcing the premium travel context"
-            secondaryCaption="Questions answered before arrival and pickup"
+            secondaryAlt={t('faq.visuals.secondaryAlt')}
+            secondaryCaption={t('faq.visuals.secondaryCaption')}
           />
         </div>
       </section>
@@ -36,18 +36,16 @@ function FAQ() {
 
       <section className="cta-panel">
         <div>
-          <h2>Ready to move from answers to availability?</h2>
-          <p>
-            Open the fleet and send the request when the car and dates look right.
-          </p>
+          <h2>{t('faq.ctaTitle')}</h2>
+          <p>{t('faq.ctaDescription')}</p>
         </div>
 
         <div className="button-row">
           <Link className="button button--primary" to="/catalog">
-            View the fleet
+            {t('common.actions.viewFleet')}
           </Link>
           <Link className="button button--secondary" to="/contacts">
-            Contact details
+            {t('common.actions.contactDetails')}
           </Link>
         </div>
       </section>

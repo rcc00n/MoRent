@@ -1,9 +1,10 @@
 import { Link, useLocation } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import PageVisualStack from '../components/PageVisualStack'
 import { pageMedia } from '../content/mediaLibrary'
 
-function formatDate(value) {
+function formatDate(value, locale) {
   if (!value) {
     return null
   }
@@ -14,7 +15,7 @@ function formatDate(value) {
     return value
   }
 
-  return new Intl.DateTimeFormat('en', {
+  return new Intl.DateTimeFormat(locale, {
     month: 'short',
     day: 'numeric',
     year: 'numeric',
@@ -22,65 +23,66 @@ function formatDate(value) {
 }
 
 function RequestReceived() {
+  const { i18n, t } = useTranslation()
   const { state } = useLocation()
-  const startDate = formatDate(state?.startDate)
-  const endDate = formatDate(state?.endDate)
+  const locale = i18n.resolvedLanguage === 'ru' ? 'ru-RU' : 'en-US'
+  const startDate = formatDate(state?.startDate, locale)
+  const endDate = formatDate(state?.endDate, locale)
+  const steps = t('requestReceived.steps', { returnObjects: true })
 
   return (
     <div className="content-page">
       <section className="thank-you scene scene--closing">
         <div className="thank-you__hero">
           <div className="thank-you__intro">
-            <span className="page-eyebrow">Request received</span>
-            <h1>Your request is in. We will review the availability next.</h1>
+            <span className="page-eyebrow">{t('requestReceived.eyebrow')}</span>
+            <h1>{t('requestReceived.title')}</h1>
             <p>
               {state?.carName
-                ? `${state.carName} has been added to the request queue.`
-                : 'The booking request has been saved and sent to the team for review.'}{' '}
-              No payment is taken at this stage.
+                ? t('requestReceived.descriptionWithCar', { carName: state.carName })
+                : t('requestReceived.descriptionWithoutCar')}{' '}
+              {t('requestReceived.descriptionEnd')}
             </p>
           </div>
 
           <PageVisualStack
             primary={pageMedia.sunsetArrival}
-            primaryAlt="Arrival forecourt visual reinforcing the booking confirmation mood"
-            primaryCaption="The team reviews timing, car, and pickup context next"
+            primaryAlt={t('requestReceived.visuals.primaryAlt')}
+            primaryCaption={t('requestReceived.visuals.primaryCaption')}
             secondary={pageMedia.sunsetCoast}
-            secondaryAlt="Calm coastal road representing the next step after confirmation"
-            secondaryCaption="Once confirmed, the trip moves from request to handoff"
+            secondaryAlt={t('requestReceived.visuals.secondaryAlt')}
+            secondaryCaption={t('requestReceived.visuals.secondaryCaption')}
           />
         </div>
 
         {startDate || endDate ? (
           <div className="thank-you__dates">
             <div>
-              <span>Requested start</span>
-              <strong>{startDate || 'To be confirmed'}</strong>
+              <span>{t('requestReceived.dates.start')}</span>
+              <strong>{startDate || t('common.labels.toBeConfirmed')}</strong>
             </div>
             <div>
-              <span>Requested end</span>
-              <strong>{endDate || 'To be confirmed'}</strong>
+              <span>{t('requestReceived.dates.end')}</span>
+              <strong>{endDate || t('common.labels.toBeConfirmed')}</strong>
             </div>
           </div>
         ) : null}
 
         <div className="thank-you__steps">
-          <div className="thank-you__step">
-            <strong>1. Review</strong>
-            <p>The team checks the car, timing, and pickup context.</p>
-          </div>
-          <div className="thank-you__step">
-            <strong>2. Confirmation</strong>
-            <p>You receive the next-step message with the final handoff plan.</p>
-          </div>
+          {steps.map((step) => (
+            <div className="thank-you__step" key={step.title}>
+              <strong>{step.title}</strong>
+              <p>{step.description}</p>
+            </div>
+          ))}
         </div>
 
         <div className="button-row">
           <Link className="button button--primary" to="/catalog">
-            Back to the fleet
+            {t('common.actions.backToFleet')}
           </Link>
           <Link className="button button--secondary" to="/">
-            Return home
+            {t('common.actions.returnHome')}
           </Link>
         </div>
       </section>

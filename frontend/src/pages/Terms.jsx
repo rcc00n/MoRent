@@ -1,30 +1,30 @@
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 
 import PageVisualStack from '../components/PageVisualStack'
 import { pageMedia } from '../content/mediaLibrary'
-import { termsSections } from '../content/siteContent'
 
 function Terms() {
+  const { t } = useTranslation()
+  const termsSections = t('terms.sections', { returnObjects: true })
+
   return (
     <div className="content-page">
       <section className="page-hero scene scene--fleet">
         <div className="page-hero__grid">
           <div className="page-hero__content">
-            <span className="page-eyebrow">Terms</span>
-            <h1>Rental terms and legal information for MoRent requests.</h1>
-            <p>
-              This summary explains how booking requests, pricing review, vehicle use,
-              and booking changes are handled before a confirmed rental begins.
-            </p>
+            <span className="page-eyebrow">{t('terms.eyebrow')}</span>
+            <h1>{t('terms.title')}</h1>
+            <p>{t('terms.description')}</p>
           </div>
 
           <PageVisualStack
             primary={pageMedia.sunsetCoast}
-            primaryAlt="Premium coastal landscape used to frame legal and booking context"
-            primaryCaption="Clear operating terms before confirmation"
+            primaryAlt={t('terms.visuals.primaryAlt')}
+            primaryCaption={t('terms.visuals.primaryCaption')}
             secondary={pageMedia.coastalHighway}
-            secondaryAlt="Coastal road matching the MoRent driving context"
-            secondaryCaption="Rates, vehicle use, and timing explained clearly"
+            secondaryAlt={t('terms.visuals.secondaryAlt')}
+            secondaryCaption={t('terms.visuals.secondaryCaption')}
           />
         </div>
       </section>
@@ -44,19 +44,16 @@ function Terms() {
 
       <section className="cta-panel">
         <div>
-          <h2>Need the practical side of the process?</h2>
-          <p>
-            The FAQ and booking flow explain what happens before handoff, while privacy
-            handling is described separately.
-          </p>
+          <h2>{t('terms.ctaTitle')}</h2>
+          <p>{t('terms.ctaDescription')}</p>
         </div>
 
         <div className="button-row">
           <Link className="button button--secondary" to="/privacy">
-            Privacy policy
+            {t('common.actions.privacyPolicy')}
           </Link>
           <Link className="button button--primary" to="/faq">
-            Read the FAQ
+            {t('common.actions.readFaq')}
           </Link>
         </div>
       </section>
