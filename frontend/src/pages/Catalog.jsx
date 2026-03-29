@@ -57,10 +57,8 @@ function Catalog() {
         transition={{ duration: 0.45 }}
       >
         <div className="catalog-intro__top">
-          <div className="section-header section-header--split">
-            <div>
-              <h1>{t('catalog.title')}</h1>
-            </div>
+          <div className="section-header catalog-intro__header">
+            <h1 className="catalog-intro__title">{t('catalog.title')}</h1>
             <p>{t('catalog.description')}</p>
           </div>
 

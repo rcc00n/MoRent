@@ -1630,6 +1630,11 @@ html[lang='ru'] .hero h1 {
   align-items: center;
 }
 
+.catalog-intro__top {
+  grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.88fr);
+  gap: 30px;
+}
+
 .page-hero__content,
 .page-hero__aside,
 .thank-you__intro {
@@ -1843,6 +1848,25 @@ html[lang='ru'] .thank-you h1 {
   display: grid;
   gap: 18px;
   padding: 28px;
+}
+
+.catalog-intro__header {
+  gap: 14px;
+  align-content: start;
+}
+
+.catalog-intro__title {
+  max-width: 14.5ch;
+  text-wrap: balance;
+}
+
+html[lang='ru'] .catalog-intro__title {
+  max-width: 16.5ch;
+  font-size: clamp(2.9rem, 5vw, 5rem);
+}
+
+.catalog-intro__header p {
+  max-width: 35ch;
 }
 
 .catalog-intro__visual {
