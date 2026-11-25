@@ -1,16 +1,17 @@
-# React + Vite
+# MoRent frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19, React Router 7, Vite, i18next and API-backed rental/content views.
+The authoritative setup and evidence map is the [root README](../README.md).
 
-Currently, two official plugins are available:
+```bash
+npm ci
+VITE_API_URL=http://127.0.0.1:8000/api VITE_SITE_URL=http://localhost:5173 npm run dev
+npm run lint
+VITE_SITE_URL=https://example.invalid npm run build
+```
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+`VITE_API_URL` selects the Django API base. `VITE_SITE_URL` controls generated
+canonical/social URLs and sitemap output. Both are public build-time configuration,
+never secrets. The build runs `scripts/generate-static-pages.mjs` after Vite.
+It does not connect to production or publish anything. `npm run preview` serves the
+built files locally; it does not replace the backend.
