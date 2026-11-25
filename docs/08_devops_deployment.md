@@ -1,8 +1,11 @@
+> Historical planning document. Current runnable scope: [root README](../README.md).
+> Planned claims and integrations require verification; example host values are non-operational.
+
 # More Rent — devops and deployment
 
 ## 1. Infrastructure input
-- Domain: `morent82.duckdns.org`
-- Server IP: `89.111.171.91`
+- Domain: `rental.example.invalid`
+- Server IP: `192.0.2.10`
 - Agent has SSH key to the server
 
 ## 2. Target deployment scheme

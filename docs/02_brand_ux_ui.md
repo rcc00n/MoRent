@@ -1,3 +1,6 @@
+> Historical planning document. Current runnable scope: [root README](../README.md).
+> Planned claims and integrations require verification; example host values are non-operational.
+
 # More Rent — brand, UX, UI, motion
 
 ## 1. Визуальное направление

@@ -1,3 +1,6 @@
+> Historical planning document. Current runnable scope: [root README](../README.md).
+> Planned claims and integrations require verification; example host values are non-operational.
+
 # More Rent — пакет задач для coding agent
 
 Этот пакет собран на основе клиентского брифа и твоих вводных.
@@ -17,8 +20,8 @@
 ## Ключевые вводные
 - Проект: сайт автопроката **«Море Рент»**
 - Регион: Россия
-- Домен: `morent82.duckdns.org`
-- IP сервера: `89.111.171.91`
+- Домен: `rental.example.invalid`
+- IP сервера: `192.0.2.10`
 - Стек: **Django + React + Vite + PostgreSQL**
 - Основной цвет: **синий**
 - Нужны: сильный визуал, 3D-эффекты, плавные переходы, кастомный курсор, excellent SEO, user-friendly UX

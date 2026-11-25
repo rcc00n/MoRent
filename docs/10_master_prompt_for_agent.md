@@ -1,3 +1,6 @@
+> Historical planning document. Current runnable scope: [root README](../README.md).
+> Planned claims and integrations require verification; example host values are non-operational.
+
 # Master prompt for coding agent
 
 You are building a premium car rental website for a Russian brand called **More Rent**.
@@ -5,8 +8,8 @@ You are building a premium car rental website for a Russian brand called **More 
 ## Project context
 - Brand: More Rent
 - Region: Russia
-- Domain: `morent82.duckdns.org`
-- Server IP: `89.111.171.91`
+- Domain: `rental.example.invalid`
+- Server IP: `192.0.2.10`
 - Stack: **Django + React + Vite + PostgreSQL**
 - Main brand color: **blue**
 - Style direction: premium, modern, high-trust, visually strong, with tasteful 3D effects and smooth transitions
